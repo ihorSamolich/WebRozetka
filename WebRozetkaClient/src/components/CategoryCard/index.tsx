@@ -39,7 +39,7 @@ const CategoryCard: React.FC<Category> = (props) => {
             <CardMedia
                 component="img"
                 height="200"
-                image={image ? `http://localhost:5135/images/${image}` : NotImage}
+                image={image ? `https://rozetka.itstep.click/images/${image}` : NotImage}
                 alt={name}
                 style={{objectFit: 'contain'}}
             />

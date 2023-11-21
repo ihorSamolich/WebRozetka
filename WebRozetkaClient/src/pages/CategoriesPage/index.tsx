@@ -34,8 +34,8 @@ const CategoriesPage: React.FC = () => {
 
                     {status === Status.SUCCESS && (
                         <Grid color='#234444' container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                            {categories.map((category) => (
-                                <Grid sx={{ display: 'flex', justifyContent: 'center' }} item xs={6} sm={4} key={category.id}>
+                            {categories.map((category, index) => (
+                                <Grid sx={{ display: 'flex', justifyContent: 'center' }} item xs={6} sm={4} key={index}>
                                     <CategoryCard {...category} />
                                 </Grid>
                             ))}

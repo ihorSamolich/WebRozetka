@@ -36,6 +36,8 @@ const CreateCategoryPage: React.FC = () => {
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         try {
+            console.log(data);
+            
             const action = await dispatch(addCategory(data));
 
             if (addCategory.rejected.match(action)) {
