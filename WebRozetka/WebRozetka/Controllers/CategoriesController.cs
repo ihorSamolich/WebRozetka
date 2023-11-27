@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +19,13 @@ namespace WebRozetka.Controllers
     {
         private readonly AppEFContext _appEFContext;
         private readonly IMapper _mapper;
+        private readonly IValidator<CategoryCreateViewModel> _validator;
 
-        public CategoriesController(AppEFContext appEFContext, IMapper mapper)
+        public CategoriesController(AppEFContext appEFContext, IMapper mapper, IValidator<CategoryCreateViewModel> validator)
         {
             _appEFContext = appEFContext;
             _mapper = mapper;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -35,27 +39,46 @@ namespace WebRozetka.Controllers
             return Ok(list);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetCategoryById(int id)
+        {
+            var category = _appEFContext.Categories.Find(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(category);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CategoryCreateViewModel model)
         {
-            if (model == null)
+            try
             {
-                return BadRequest("Invalid data provided");
-            }
+                ValidationResult result = await _validator.ValidateAsync(model);
 
-            var category = _mapper.Map<CategoryEntity>(model);
-            category.IsDeleted = false;
-            category.DateCreated = DateTime.UtcNow;
+                if (!result.IsValid)
+                {
+                    var errors = string.Join("\n", result.Errors.Select(e => e.ErrorMessage));
+                    return BadRequest(errors);
+                }
 
-            if (model.Image != null)
-            {
+                var category = _mapper.Map<CategoryEntity>(model);
+                category.IsDeleted = false;
+                category.DateCreated = DateTime.UtcNow;
                 category.Image = await ImageWorker.SaveImageAsync(model.Image);
+
+                await _appEFContext.Categories.AddAsync(category);
+                await _appEFContext.SaveChangesAsync();
+
+                return Created($"/api/categories/{category.Id}", category);
             }
-
-            await _appEFContext.Categories.AddAsync(category);
-            await _appEFContext.SaveChangesAsync();
-
-            return Ok(category);
+            catch (Exception)
+            {
+                return StatusCode(500, "Невідома помилка сервера!");
+            }
         }
 
     }

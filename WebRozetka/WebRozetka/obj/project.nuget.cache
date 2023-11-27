@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "/OQLOmI6rPVfvFbS65rTPu/1tqWxdnjTEMOxpCYjoDHVmHS6jVy5WaMo+O2pRuW2y8dCY3+wsFPxW1aQtz4Hqg==",
+  "dgSpecHash": "Tg/LCQ+81r3hHG2nxCdynzXcKmI00bOpwdp7gSriX5So+k9CNTvQEB3ORB/SSSO3rWnvxzn61P64ZI8+bNOD1g==",
   "success": true,
   "projectFilePath": "C:\\Users\\ihors\\OneDrive\\Рабочий стол\\webRozetkaGit\\WebRozetka\\WebRozetka\\WebRozetka.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ihors\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\ihors\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
+    "C:\\Users\\ihors\\.nuget\\packages\\fluentvalidation\\11.5.1\\fluentvalidation.11.5.1.nupkg.sha512",
+    "C:\\Users\\ihors\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
+    "C:\\Users\\ihors\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.1\\fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",
     "C:\\Users\\ihors\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\ihors\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.3\\microsoft.aspnetcore.openapi.7.0.3.nupkg.sha512",
     "C:\\Users\\ihors\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

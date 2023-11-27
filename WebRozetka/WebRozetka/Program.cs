@@ -1,7 +1,11 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using System;
 using WebRozetka.Data;
+using WebRozetka.FluentValidation.Categories;
 using WebRozetka.Mapper;
+using WebRozetka.Models.Category;
 
 namespace WebRozetka
 {
@@ -20,15 +24,20 @@ namespace WebRozetka
             builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(typeof(AppMapProfile));
             builder.Services.AddCors();
+            builder.Services.AddScoped<IValidator<CategoryCreateViewModel>, CategoryCreateValidation>();
+
 
             var app = builder.Build();
 
             // Конфігурація Сваггера.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    app.UseSwagger();
+            //    app.UseSwaggerUI();
+            //}
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             // Статичні файли.
             var dir = Path.Combine(Directory.GetCurrentDirectory(), "images");
@@ -54,6 +63,11 @@ namespace WebRozetka
             // 
             app.UseAuthorization();
             app.MapControllers();
+
+
+            app.SeedData();
+
+
             app.Run();
         }
     }

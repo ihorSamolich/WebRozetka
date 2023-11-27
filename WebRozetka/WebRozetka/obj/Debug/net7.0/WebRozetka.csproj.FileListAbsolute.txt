@@ -91,3 +91,6 @@ C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRoze
 C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\obj\Debug\net7.0\WebRozetka.genruntimeconfig.cache
 C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\obj\Debug\net7.0\ref\WebRozetka.dll
 C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\obj\Debug\net7.0\WebRozetka.sourcelink.json
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\bin\Debug\net7.0\FluentValidation.dll
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\bin\Debug\net7.0\FluentValidation.AspNetCore.dll
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\bin\Debug\net7.0\FluentValidation.DependencyInjectionExtensions.dll

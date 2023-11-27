@@ -7,10 +7,9 @@ type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
 type PendingAction = ReturnType<GenericAsyncThunk['pending']>
 type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
 
-
 const initialState: ICategoryState = {
     items: [],
-    status: Status.LOADING,
+    status: Status.IDLE,
 };
 function isPendingAction(action: AnyAction): action is PendingAction {
     return action.type.endsWith('/pending')

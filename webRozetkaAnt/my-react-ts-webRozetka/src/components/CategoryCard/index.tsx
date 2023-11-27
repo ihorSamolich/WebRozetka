@@ -5,7 +5,7 @@ import {ICategoryItem} from "interfaces/categories";
 import { Image } from 'antd';
 import { EditOutlined,  SettingOutlined } from '@ant-design/icons';
 import NotImage from 'assets/imagenot.png';
-import {API_URL} from "constants/index.ts";
+import {APP_ENV} from "../../env";
 
 const CategoryCard : React.FC<ICategoryItem> = (props) => {
     const {id, name, image, description} = props;
@@ -19,7 +19,7 @@ const CategoryCard : React.FC<ICategoryItem> = (props) => {
                     <Image
                         style={{height: '200px', objectFit: 'cover'}}
                         alt={name}
-                        src={image ? `${API_URL}images/${image}` : NotImage}
+                        src={image ? `${APP_ENV.BASE_URL}images/${image}` : NotImage}
                     />
                 }
                 actions={[

@@ -13,14 +13,16 @@ export const addCategory = createAsyncThunk<ICategoryItem, ICategoryCreate, { re
     'category/addCategory',
     async (payload: ICategoryCreate, { rejectWithValue }) => {
         try {
-            const formData = new FormData();
-            formData.append('name', payload.name);
-            formData.append('description', payload.description);
-            formData.append('image', payload.image || '');
-            const response = await apiClient.post<ICategoryItem>('/api/categories', formData);
+            const response =
+                await apiClient.post<ICategoryItem>("/api/categories", payload,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data"
+                        }
+                    });
             return response.data;
-        } catch (error) {
-            return rejectWithValue('Сервер недоступний. Спробуйте знову пізніше.');
+        } catch (error : any) {
+            return rejectWithValue(error.response.data);
         }
     }
 );

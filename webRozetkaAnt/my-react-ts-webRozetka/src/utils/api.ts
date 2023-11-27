@@ -1,10 +1,10 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import {API_URL} from "constants/index.ts";
+import {APP_ENV} from "../env";
 
 interface IApiClientConfig extends AxiosRequestConfig {
     baseURL: string;
 }
 
 export const apiClient: AxiosInstance = axios.create({
-    baseURL: API_URL,
+    baseURL: APP_ENV.BASE_URL,
 } as IApiClientConfig);

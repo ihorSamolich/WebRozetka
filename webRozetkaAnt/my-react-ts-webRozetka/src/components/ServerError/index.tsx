@@ -7,6 +7,7 @@ const ServerError: React.FC = () => {
         <Result
             title="Помилка сервера"
             subTitle="Вибачте, сталася помилка на сервері."
+            status={500}
             extra={
                 <Button type="primary">
                     <Link to="/">На головну</Link>
