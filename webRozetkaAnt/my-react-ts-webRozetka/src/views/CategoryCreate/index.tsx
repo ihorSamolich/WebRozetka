@@ -40,9 +40,10 @@ const CategoryCreate: React.FC = () => {
         if (values.image) {
             values.image = values.image.file;
         }
-        const response = await dispatch((addCategory(values)));
 
-        console.log(response)
+        console.log(values)
+
+        const response = await dispatch((addCategory(values)));
 
         if (response.meta.requestStatus === 'fulfilled') {
             handleSuccess();
@@ -52,12 +53,25 @@ const CategoryCreate: React.FC = () => {
         }
     };
     const handleError = (error: any) => {
-        const errorList = error?.payload?.toString();
-        messageApi.open({
-            type: 'error',
-            duration: 10,
-            content: errorList,
-        });
+        const errorsObject = error?.payload?.errors;
+        let errorList = '';
+        if (errorsObject) {
+            for (const field in errorsObject) {
+                const fieldErrors = errorsObject[field];
+                errorList += fieldErrors.map((errorMessage: string) => `${errorMessage} `);
+            }
+            messageApi.open({
+                type: 'error',
+                duration: 10,
+                content: errorList,
+            });
+        } else {
+            messageApi.open({
+                type: 'error',
+                duration: 10,
+                content: 'Непередбачувана помилка сервера!',
+            });
+        }
     };
     const handleSuccess = () => {
         messageApi.open({

@@ -1,19 +1,22 @@
 import {AnyAction, AsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {ICategoryState} from "interfaces/categories";
 import {Status} from "interfaces/enums";
-import {addCategory, getCategories} from "store/categories/categories.actions.ts";
+import {
+    addCategory,
+    deleteCategory,
+    getCategories,
+    getCategoryById,
+    updateCategory
+} from "store/categories/categories.actions.ts";
 
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
-type PendingAction = ReturnType<GenericAsyncThunk['pending']>
 type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
 
 const initialState: ICategoryState = {
     items: [],
+    selectedItem: null,
     status: Status.IDLE,
 };
-function isPendingAction(action: AnyAction): action is PendingAction {
-    return action.type.endsWith('/pending')
-}
 function isRejectedAction(action: AnyAction): action is RejectedAction {
     return action.type.endsWith('/rejected')
 }
@@ -27,11 +30,31 @@ export const categorySlice = createSlice({
                 state.status = Status.SUCCESS;
                 state.items = action.payload;
             })
+            .addCase(getCategories.pending, (state) => {
+                state.status = Status.LOADING;
+            })
+            .addCase(getCategoryById.fulfilled, (state, action) => {
+                state.status = Status.SUCCESS;
+                state.selectedItem = action.payload;
+            })
+            .addCase(getCategoryById.pending, (state) => {
+                state.status = Status.LOADING;
+            })
             .addCase(addCategory.fulfilled, (state, action) => {
                 state.status = Status.SUCCESS;
                 state.items.push(action.payload)
             })
-            .addMatcher(isPendingAction, (state) => {
+            .addCase(addCategory.pending, (state) => {
+                state.status = Status.LOADING;
+            })
+            .addCase(deleteCategory.fulfilled, (state, action) => {
+                state.items = state.items.filter(item => item.id !== action.payload);
+                state.status = Status.SUCCESS;
+            })
+            .addCase(updateCategory.fulfilled, (state) => {
+                state.status = Status.SUCCESS;
+            })
+            .addCase(updateCategory.pending, (state) => {
                 state.status = Status.LOADING;
             })
             .addMatcher(isRejectedAction, (state) => {

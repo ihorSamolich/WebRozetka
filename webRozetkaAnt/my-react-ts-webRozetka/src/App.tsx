@@ -2,12 +2,12 @@ import * as React from "react";
 import {useState} from "react";
 import {PRIMARY_BLUE_COLOR} from "./constants"
 import {
-  AppstoreOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  HomeOutlined,
-  AppstoreAddOutlined,
-  BuildOutlined,
+    AppstoreOutlined,
+    MenuFoldOutlined,
+    MenuUnfoldOutlined,
+    HomeOutlined,
+    AppstoreAddOutlined,
+    BuildOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import {Layout, Menu, Button, theme, ConfigProvider, Switch} from 'antd';
@@ -16,6 +16,7 @@ import {Link, Route, Routes} from "react-router-dom";
 import CategoryCreate from "views/CategoryCreate";
 import NotFound from "views/NotFound";
 import Home from "views/Home";
+import CategoryEdit from "views/CategoryEdit";
 const { Header,Footer, Sider, Content } = Layout;
 
 const items: MenuProps["items"] = [
@@ -115,10 +116,13 @@ const App : React.FC = () => {
                         }}
                     >
                         <Routes>
-                            <Route path='/' element={<Home/>}/>
-                            <Route path='categories/all' element={<CategoriesList/>}/>
-                            <Route path='categories/create' element={<CategoryCreate/>}/>
-                            <Route path='*' element={<NotFound/>}/>
+                            <Route path='/' element={<Home />} />
+                            <Route path='/categories/'>
+                                <Route path='all' element={<CategoriesList />} />
+                                <Route path='create' element={<CategoryCreate />} />
+                                <Route path='edit/:id' element={<CategoryEdit />} />
+                            </Route>
+                            <Route path='*' element={<NotFound />} />
                         </Routes>
                     </Content>
                     <Footer style={{textAlign: 'center'}}>Ant Design ©2023 Created by Ant UED</Footer>

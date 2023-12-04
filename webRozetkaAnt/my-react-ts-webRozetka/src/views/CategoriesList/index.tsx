@@ -7,7 +7,6 @@ import SkeletonCategoryCard from "components/SkeletonCategoryCard";
 import ServerError from "components/ServerError";
 import {Status} from "interfaces/enums";
 
-
 const CategoriesList : React.FC = () => {
     const dispatch = useAppDispatch();
     const categories = useAppSelector((state) => state.category.items);

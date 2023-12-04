@@ -19,13 +19,11 @@ namespace WebRozetka.Controllers
     {
         private readonly AppEFContext _appEFContext;
         private readonly IMapper _mapper;
-        private readonly IValidator<CategoryCreateViewModel> _validator;
 
-        public CategoriesController(AppEFContext appEFContext, IMapper mapper, IValidator<CategoryCreateViewModel> validator)
+        public CategoriesController(AppEFContext appEFContext, IMapper mapper)
         {
             _appEFContext = appEFContext;
             _mapper = mapper;
-            _validator = validator;
         }
 
         [HttpGet]
@@ -42,7 +40,9 @@ namespace WebRozetka.Controllers
         [HttpGet("{id}")]
         public IActionResult GetCategoryById(int id)
         {
-            var category = _appEFContext.Categories.Find(id);
+            var category = _appEFContext.Categories
+                .Where(c => !c.IsDeleted)
+                .SingleOrDefault(c => c.Id == id);
 
             if (category == null)
             {
@@ -57,14 +57,6 @@ namespace WebRozetka.Controllers
         {
             try
             {
-                ValidationResult result = await _validator.ValidateAsync(model);
-
-                if (!result.IsValid)
-                {
-                    var errors = string.Join("\n", result.Errors.Select(e => e.ErrorMessage));
-                    return BadRequest(errors);
-                }
-
                 var category = _mapper.Map<CategoryEntity>(model);
                 category.IsDeleted = false;
                 category.DateCreated = DateTime.UtcNow;
@@ -81,5 +73,56 @@ namespace WebRozetka.Controllers
             }
         }
 
+        [HttpPut]
+        public async Task<IActionResult> Edit([FromForm] CategoryEditViewModel model)
+        {
+            try
+            {
+                var category = _appEFContext.Categories
+                    .Where(c => !c.IsDeleted)
+                    .SingleOrDefault(x => x.Id == model.Id);
+                if (category == null)
+                {
+                    return NotFound();
+                }
+
+                if (model.Image != null)
+                {
+                    string fileRemove = Path.Combine(Directory.GetCurrentDirectory(), "images", category.Image);
+                    if (System.IO.File.Exists(fileRemove))
+                    {
+                        System.IO.File.Delete(fileRemove);
+                    }
+                    category.Image = await ImageWorker.SaveImageAsync(model.Image);
+                }
+
+                category.Name = model.Name;
+
+                category.Description = model.Description;
+
+
+                await _appEFContext.SaveChangesAsync();
+                return Created($"/api/categories/{category.Id}", category);
+            }
+            catch (Exception)
+            {
+                return Ok();
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var category = _appEFContext.Categories
+                .Where(c => !c.IsDeleted)
+                .SingleOrDefault(x => x.Id == id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            category.IsDeleted = true;
+            await _appEFContext.SaveChangesAsync();
+            return Ok();
+        }
     }
 }

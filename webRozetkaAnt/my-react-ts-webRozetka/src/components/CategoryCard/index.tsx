@@ -1,14 +1,26 @@
 import React from 'react';
-import {Card, Col} from "antd";
+import {Card, Col, Popconfirm} from "antd";
 import Meta from "antd/es/card/Meta";
 import {ICategoryItem} from "interfaces/categories";
 import { Image } from 'antd';
-import { EditOutlined,  SettingOutlined } from '@ant-design/icons';
+import { EditOutlined,  DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import NotImage from 'assets/imagenot.png';
 import {APP_ENV} from "../../env";
+import { deleteCategory} from "store/categories/categories.actions.ts";
+import {useAppDispatch} from "hooks/index.ts";
+import {Link} from "react-router-dom";
+
 
 const CategoryCard : React.FC<ICategoryItem> = (props) => {
+
+    const dispatch = useAppDispatch()
     const {id, name, image, description} = props;
+
+
+    const handleDeleteCategory = async () => {
+        await dispatch((deleteCategory(id)));
+    }
+
     return (
         <Col style={{padding: 10}} key={id} xxl={4} xl={6} lg={8} md={12} sm={24}>
             <Card
@@ -23,8 +35,20 @@ const CategoryCard : React.FC<ICategoryItem> = (props) => {
                     />
                 }
                 actions={[
-                    <SettingOutlined key="setting"/>,
-                    <EditOutlined key="edit"/>,
+                    <Popconfirm
+                        title="Видалення категорії"
+                        description="Підтвердити видалення категорії?"
+                        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                        cancelText="Ні"
+                        okText="Так"
+                        onConfirm={handleDeleteCategory}
+                    >
+                        <DeleteOutlined key="delete"/>
+                    </Popconfirm>,
+
+                    <Link to={`/categories/edit/${id}`}>
+                        <EditOutlined key="edit"/>
+                    </Link>,
                 ]}
             >
                 <Meta

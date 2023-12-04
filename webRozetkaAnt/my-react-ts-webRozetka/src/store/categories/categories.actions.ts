@@ -9,6 +9,14 @@ export const getCategories = createAsyncThunk<ICategoryItem[]>(
     }
 );
 
+export const getCategoryById = createAsyncThunk(
+    'category/getCategoryById',
+    async (categoryId: number) => {
+        const response = await apiClient.get<ICategoryItem>(`/api/categories/${categoryId}`);
+        return response.data;
+    }
+);
+
 export const addCategory = createAsyncThunk<ICategoryItem, ICategoryCreate, { rejectValue: string }>(
     'category/addCategory',
     async (payload: ICategoryCreate, { rejectWithValue }) => {
@@ -26,3 +34,33 @@ export const addCategory = createAsyncThunk<ICategoryItem, ICategoryCreate, { re
         }
     }
 );
+
+export const deleteCategory = createAsyncThunk(
+    'category/deleteCategory',
+    async (categoryId: number, { rejectWithValue }) => {
+        try {
+            await apiClient.delete(`/api/categories/${categoryId}`);
+            return categoryId;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const updateCategory = createAsyncThunk<void, ICategoryItem, { rejectValue: string }>(
+    'category/updateCategory',
+    async (payload: ICategoryItem, { rejectWithValue }) => {
+        try {
+                await apiClient.put<ICategoryItem>("/api/categories", payload,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data"
+                        }
+                    });
+            return;
+        } catch (error : any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+

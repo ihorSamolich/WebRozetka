@@ -1,4 +1,5 @@
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using System;
@@ -24,8 +25,11 @@ namespace WebRozetka
             builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(typeof(AppMapProfile));
             builder.Services.AddCors();
-            builder.Services.AddScoped<IValidator<CategoryCreateViewModel>, CategoryCreateValidation>();
 
+            //builder.Services.AddScoped<IValidator<CategoryCreateViewModel>, CategoryCreateValidation>();
+
+            builder.Services.AddFluentValidationAutoValidation();
+            builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
             var app = builder.Build();
 
