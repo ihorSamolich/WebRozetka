@@ -16,9 +16,7 @@ const Home: React.FC = () => {
                     <img src="https://uploads-ssl.webflow.com/602a49b4c90708f6641a192e/62aaec4339a8f3b14347736a_123_ant-design.259fccdbe1.png" alt="Ant Design" style={{ maxHeight: '5em' }}></img>
                 </Typography.Title>
 
-
                 <Typography.Title level={2} style={{ textAlign: 'center' }}>
-
                     <Button
                         size="large"
                         type="primary"

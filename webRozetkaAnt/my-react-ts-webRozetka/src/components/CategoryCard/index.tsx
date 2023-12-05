@@ -1,21 +1,18 @@
 import React from 'react';
-import {Card, Col, Popconfirm} from "antd";
+import {Card, Col, Popconfirm,Image} from "antd";
 import Meta from "antd/es/card/Meta";
 import {ICategoryItem} from "interfaces/categories";
-import { Image } from 'antd';
 import { EditOutlined,  DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import NotImage from 'assets/imagenot.png';
-import {APP_ENV} from "../../env";
-import { deleteCategory} from "store/categories/categories.actions.ts";
-import {useAppDispatch} from "hooks/index.ts";
+import {APP_ENV} from "env";
+import {deleteCategory} from "store/categories/categories.actions.ts";
+import {useAppDispatch} from "hooks";
 import {Link} from "react-router-dom";
 
 
 const CategoryCard : React.FC<ICategoryItem> = (props) => {
-
     const dispatch = useAppDispatch()
     const {id, name, image, description} = props;
-
 
     const handleDeleteCategory = async () => {
         await dispatch((deleteCategory(id)));

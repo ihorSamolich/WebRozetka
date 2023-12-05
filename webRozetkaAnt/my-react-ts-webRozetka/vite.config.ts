@@ -14,6 +14,7 @@ export default defineConfig({
       views : '/src/views',
       assets : '/src/assets',
       constants : '/src/constants',
+      env : '/src/env',
     },
   },
 });

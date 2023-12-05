@@ -6,21 +6,19 @@ import type { UploadFile } from 'antd/es/upload/interface';
 import TextArea from "antd/es/input/TextArea";
 import {ICategoryCreate} from "interfaces/categories";
 import {addCategory} from "store/categories/categories.actions.ts";
-import {useAppDispatch, useAppSelector} from "hooks/index.ts";
+import {useAppDispatch, useAppSelector, useNotification} from "hooks";
 import {Status} from "interfaces/enums";
 
 const CategoryCreate: React.FC = () => {
     const [previewOpen, setPreviewOpen] = useState<boolean>(false);
     const [previewImage, setPreviewImage] = useState('');
     const [messageApi, contextHolder] = message.useMessage();
-
+    const { handleSuccess, handleError } = useNotification(messageApi);
     const status = useAppSelector((state) => state.category.status);
-
     const [file, setFile] = useState<UploadFile | null>();
     const [form] = Form.useForm<ICategoryCreate>();
     const dispatch = useAppDispatch();
 
-    const handleCancel = () => setPreviewOpen(false);
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
             file.preview = URL.createObjectURL(file.originFileObj as RcFile);
@@ -41,45 +39,16 @@ const CategoryCreate: React.FC = () => {
             values.image = values.image.file;
         }
 
-        console.log(values)
-
         const response = await dispatch((addCategory(values)));
 
         if (response.meta.requestStatus === 'fulfilled') {
-            handleSuccess();
+            handleSuccess('Категорію успішно створено!');
             onClear();
         } else {
             handleError(response)
         }
     };
-    const handleError = (error: any) => {
-        const errorsObject = error?.payload?.errors;
-        let errorList = '';
-        if (errorsObject) {
-            for (const field in errorsObject) {
-                const fieldErrors = errorsObject[field];
-                errorList += fieldErrors.map((errorMessage: string) => `${errorMessage} `);
-            }
-            messageApi.open({
-                type: 'error',
-                duration: 10,
-                content: errorList,
-            });
-        } else {
-            messageApi.open({
-                type: 'error',
-                duration: 10,
-                content: 'Непередбачувана помилка сервера!',
-            });
-        }
-    };
-    const handleSuccess = () => {
-        messageApi.open({
-            type: 'success',
-            duration: 10,
-            content: 'Категорію успішно створено!',
-        });
-    };
+
     const onClear = () => {
         form.resetFields();
         setFile(null)
@@ -150,7 +119,7 @@ const CategoryCreate: React.FC = () => {
                         </Upload>
                     </Form.Item>
 
-                    <Modal open={previewOpen} footer={null} onCancel={handleCancel}>
+                    <Modal open={previewOpen} footer={null} onCancel={() => setPreviewOpen(false)}>
                         <img alt="example" style={{width: '100%'}} src={previewImage}/>
                     </Modal>
 

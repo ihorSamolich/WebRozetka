@@ -23,6 +23,7 @@
       "views/*" :["views/*"],
       "assets/*" :["assets/*"],
       "constants/*" :["constants/*"],
+      "env/*" :["env/*"]
     },
     /* Linting */
     "strict": true,

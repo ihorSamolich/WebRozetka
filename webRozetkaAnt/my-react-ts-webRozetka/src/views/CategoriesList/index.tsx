@@ -1,19 +1,12 @@
-import React, {useEffect} from 'react';
-import {useAppDispatch, useAppSelector} from "hooks/index.ts";
-import {getCategories} from "store/categories/categories.actions.ts";
+import React from 'react';
+import {useAppSelector,useCategories} from "hooks";
 import {Divider, Pagination, Row} from "antd";
-import CategoryCard from "components/CategoryCard";
-import SkeletonCategoryCard from "components/SkeletonCategoryCard";
-import ServerError from "components/ServerError";
+import {CategoryCard, SkeletonCategoryCard, ServerError} from "components";
 import {Status} from "interfaces/enums";
 
 const CategoriesList : React.FC = () => {
-    const dispatch = useAppDispatch();
-    const categories = useAppSelector((state) => state.category.items);
     const status = useAppSelector((state) => state.category.status);
-    useEffect(() => {
-        dispatch(getCategories());
-    }, [dispatch]);
+    const categories = useCategories();
 
     if (status === Status.ERROR){
         return <ServerError/>

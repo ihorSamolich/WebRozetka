@@ -27,15 +27,15 @@ export const categorySlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getCategories.fulfilled, (state, action) => {
-                state.status = Status.SUCCESS;
                 state.items = action.payload;
+                state.status = Status.SUCCESS;
             })
             .addCase(getCategories.pending, (state) => {
                 state.status = Status.LOADING;
             })
             .addCase(getCategoryById.fulfilled, (state, action) => {
-                state.status = Status.SUCCESS;
                 state.selectedItem = action.payload;
+                state.status = Status.SUCCESS;
             })
             .addCase(getCategoryById.pending, (state) => {
                 state.status = Status.LOADING;
