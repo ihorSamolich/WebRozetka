@@ -57,9 +57,9 @@ const SideMenu : React.FC<ISideMenu> = (props) => {
     const {collapsed} = props;
 
     return (
-        <Sider trigger={null} collapsible collapsed={collapsed}>
-            <div className="demo-logo-vertical"/>
+        <Sider style={{position: "sticky", width: '100%'}} trigger={null} collapsible collapsed={collapsed}>
             <Menu
+                style={{position: 'sticky', top: 0}}
                 theme="dark"
                 mode="inline"
                 items={items}

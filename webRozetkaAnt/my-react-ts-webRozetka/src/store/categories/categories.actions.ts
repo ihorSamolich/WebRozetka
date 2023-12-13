@@ -9,55 +9,53 @@ export const getCategories = createAsyncThunk<ICategoryItem[]>(
     }
 );
 
-export const getCategoryById = createAsyncThunk(
+export const getCategoryById = createAsyncThunk<ICategoryItem, number>(
     'category/getCategoryById',
-    async (categoryId: number) => {
+    async (categoryId) => {
         const response = await apiClient.get<ICategoryItem>(`/api/categories/${categoryId}`);
         return response.data;
     }
 );
 
-export const addCategory = createAsyncThunk<ICategoryItem, ICategoryCreate, { rejectValue: string }>(
+export const deleteCategory = createAsyncThunk<number,number>(
+    'category/deleteCategory',
+    async (categoryId) => {
+        await apiClient.delete(`/api/categories/${categoryId}`);
+        return categoryId;
+    }
+);
+
+export const addCategory = createAsyncThunk<ICategoryItem, ICategoryCreate>(
     'category/addCategory',
     async (payload: ICategoryCreate, { rejectWithValue }) => {
         try {
-            const response =
+            const {data} =
                 await apiClient.post<ICategoryItem>("/api/categories", payload,
                     {
                         headers: {
                             "Content-Type": "multipart/form-data"
                         }
                     });
-            return response.data;
-        } catch (error : any) {
+            return data;
+        }
+        catch (error: any) {
             return rejectWithValue(error.response.data);
         }
     }
 );
 
-export const deleteCategory = createAsyncThunk(
-    'category/deleteCategory',
-    async (categoryId: number, { rejectWithValue }) => {
-        try {
-            await apiClient.delete(`/api/categories/${categoryId}`);
-            return categoryId;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data);
-        }
-    }
-);
+
 
 export const updateCategory = createAsyncThunk<void, ICategoryItem, { rejectValue: string }>(
     'category/updateCategory',
     async (payload: ICategoryItem, { rejectWithValue }) => {
         try {
-                await apiClient.put<ICategoryItem>("/api/categories", payload,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data"
-                        }
-                    });
-            return;
+            await apiClient.put("/api/categories", payload,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                });
         } catch (error : any) {
             return rejectWithValue(error.response.data);
         }

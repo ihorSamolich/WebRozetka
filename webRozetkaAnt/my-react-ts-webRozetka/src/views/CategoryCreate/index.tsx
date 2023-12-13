@@ -8,6 +8,8 @@ import {ICategoryCreate} from "interfaces/categories";
 import {addCategory} from "store/categories/categories.actions.ts";
 import {useAppDispatch, useAppSelector, useNotification} from "hooks";
 import {Status} from "interfaces/enums";
+import {unwrapResult} from "@reduxjs/toolkit";
+import {useNavigate} from "react-router-dom";
 
 const CategoryCreate: React.FC = () => {
     const [previewOpen, setPreviewOpen] = useState<boolean>(false);
@@ -18,6 +20,7 @@ const CategoryCreate: React.FC = () => {
     const [file, setFile] = useState<UploadFile | null>();
     const [form] = Form.useForm<ICategoryCreate>();
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
@@ -35,17 +38,20 @@ const CategoryCreate: React.FC = () => {
         onClear();
     };
     const onFinish = async (values: any) => {
+
         if (values.image) {
             values.image = values.image.file;
         }
 
-        const response = await dispatch((addCategory(values)));
-
-        if (response.meta.requestStatus === 'fulfilled') {
+        try {
+            const result = await dispatch(addCategory(values));
+            unwrapResult(result);
             handleSuccess('Категорію успішно створено!');
-            onClear();
-        } else {
-            handleError(response)
+            setTimeout(() => {
+                navigate('/categories/all');
+            }, 1000);
+        } catch (error) {
+            handleError(error);
         }
     };
 
@@ -95,27 +101,20 @@ const CategoryCreate: React.FC = () => {
                         <TextArea/>
                     </Form.Item>
 
-                    <Form.Item
-                        label="Фото"
-                        name="image"
-                    >
+                    <Form.Item label="Фото" name="image">
                         <Upload
                             beforeUpload={() => false}
                             maxCount={1}
-                            id='image'
                             listType="picture-card"
                             onChange={handleChange}
                             onPreview={handlePreview}
                             fileList={file ? [file] : []}
                             accept="image/*"
                         >
-                            {file ? null :
-                                (
-                                    <div>
-                                        <PlusOutlined/>
-                                        <div style={{marginTop: 8}}>Upload</div>
-                                    </div>)
-                            }
+                            <div>
+                                <PlusOutlined />
+                                <div style={{ marginTop: 8 }}>{file ? 'Change' : 'Upload'}</div>
+                            </div>
                         </Upload>
                     </Form.Item>
 

@@ -14,7 +14,7 @@ export const useNotification = (messageApi : MessageInstance) => {
     };
 
     const handleError = (error: any) => {
-        const errorsObject = error?.payload?.errors;
+        const errorsObject = error?.errors;
         let errorList = '';
 
         if (errorsObject) {

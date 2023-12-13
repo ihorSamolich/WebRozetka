@@ -14,12 +14,13 @@ type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
 
 const initialState: ICategoryState = {
     items: [],
-    selectedItem: null,
+    error: null,
     status: Status.IDLE,
 };
 function isRejectedAction(action: AnyAction): action is RejectedAction {
     return action.type.endsWith('/rejected')
 }
+
 export const categorySlice = createSlice({
     name: 'category',
     initialState,
@@ -31,18 +32,18 @@ export const categorySlice = createSlice({
                 state.status = Status.SUCCESS;
             })
             .addCase(getCategories.pending, (state) => {
+                state.items = [];
                 state.status = Status.LOADING;
             })
-            .addCase(getCategoryById.fulfilled, (state, action) => {
-                state.selectedItem = action.payload;
+            .addCase(getCategoryById.fulfilled, (state) => {
                 state.status = Status.SUCCESS;
             })
             .addCase(getCategoryById.pending, (state) => {
                 state.status = Status.LOADING;
             })
             .addCase(addCategory.fulfilled, (state, action) => {
+                state.items.push(action.payload);
                 state.status = Status.SUCCESS;
-                state.items.push(action.payload)
             })
             .addCase(addCategory.pending, (state) => {
                 state.status = Status.LOADING;
@@ -57,8 +58,9 @@ export const categorySlice = createSlice({
             .addCase(updateCategory.pending, (state) => {
                 state.status = Status.LOADING;
             })
-            .addMatcher(isRejectedAction, (state) => {
+            .addMatcher(isRejectedAction, (state,action) => {
                 state.status = Status.ERROR;
+                state.error = action;
             })
     },
 });

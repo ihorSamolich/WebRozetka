@@ -94,3 +94,9 @@ C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRoze
 C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\bin\Debug\net7.0\FluentValidation.dll
 C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\bin\Debug\net7.0\FluentValidation.AspNetCore.dll
 C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\bin\Debug\net7.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\bin\Debug\net7.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\bin\Debug\net7.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\bin\Debug\net7.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetka\WebRozetka\bin\Debug\net7.0\Microsoft.Extensions.Options.dll

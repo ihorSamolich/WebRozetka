@@ -1,8 +1,8 @@
-import React from 'react';
-import {useAppSelector,useCategories} from "hooks";
+import {useAppSelector, useCategories} from "hooks";
 import {Divider, Pagination, Row} from "antd";
 import {CategoryCard, SkeletonCategoryCard, ServerError} from "components";
 import {Status} from "interfaces/enums";
+import React from "react";
 
 const CategoriesList : React.FC = () => {
     const status = useAppSelector((state) => state.category.status);

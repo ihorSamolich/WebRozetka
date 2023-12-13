@@ -1,9 +1,11 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using System;
 using WebRozetka.Data;
+using WebRozetka.Data.Entities.Identity;
 using WebRozetka.FluentValidation.Categories;
 using WebRozetka.Mapper;
 using WebRozetka.Models.Category;
@@ -26,10 +28,21 @@ namespace WebRozetka
             builder.Services.AddAutoMapper(typeof(AppMapProfile));
             builder.Services.AddCors();
 
-            //builder.Services.AddScoped<IValidator<CategoryCreateViewModel>, CategoryCreateValidation>();
-
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
+            builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
+            {
+                options.Stores.MaxLengthForKeys = 128;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 5;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.SignIn.RequireConfirmedEmail = true;
+            })
+              .AddEntityFrameworkStores<AppEFContext>()
+              .AddDefaultTokenProviders();
 
             var app = builder.Build();
 

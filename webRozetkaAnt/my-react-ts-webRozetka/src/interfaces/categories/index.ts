@@ -15,6 +15,6 @@ export interface ICategoryCreate {
 
 export interface ICategoryState {
     items: ICategoryItem[],
-    selectedItem: ICategoryItem | null,
+    error: object | null,
     status: Status;
 }

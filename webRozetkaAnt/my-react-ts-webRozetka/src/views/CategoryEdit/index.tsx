@@ -4,14 +4,14 @@ import {Button, Divider, Form, Input, Image, Row, Spin, Upload, message} from "a
 import TextArea from "antd/es/input/TextArea";
 import {useAppDispatch, useAppSelector} from "hooks/reduxHooks";
 import {ICategoryItem} from "interfaces/categories";
-import {updateCategory} from "store/categories/categories.actions.ts";
+import {getCategoryById, updateCategory} from "store/categories/categories.actions.ts";
 import {useNavigate, useParams} from "react-router-dom";
 import {UploadOutlined} from "@ant-design/icons";
 import {UploadFile} from "antd/es/upload/interface";
 import {RcFile, UploadProps} from "antd/es/upload";
 import {APP_ENV} from "../../env";
 import {useNotification} from "hooks/notificationHook";
-import {useCategory} from "hooks/categoriesHooks";
+import {unwrapResult} from "@reduxjs/toolkit";
 
 const CategoryEdit : React.FC = () => {
     const dispatch = useAppDispatch();
@@ -22,26 +22,34 @@ const CategoryEdit : React.FC = () => {
     const [file, setFile] = useState<UploadFile | null>(null);
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
-    const { handleSuccess, handleError } = useNotification(messageApi);
-    const categoryItem = useCategory(Number(id));
+    const {handleSuccess, handleError} = useNotification(messageApi);
+    const [category, setCategory] = useState<ICategoryItem | null>(null)
 
     useEffect(() => {
-        setDefaultData()
-    }, [categoryItem]);
+        dispatch(getCategoryById(Number(id)))
+            .then((action) => {
+                const data = action.payload as ICategoryItem;
 
-    const setDefaultData = () => {
-        if (categoryItem) {
-            form.setFieldsValue({
-                id: categoryItem.id,
-                name: categoryItem.name,
-                description: categoryItem.description,
-                image: categoryItem.image,
-            });
-            setPreviewImage(`${APP_ENV.BASE_URL}images/${categoryItem.image}`);
+                if (data) {
+                    setCategory(data);
+                    setDefaultData(data);
+                } else {
+                    throw new Error();
+                }
+            })
+            .catch(()=> {
+                    navigate('/categories/all');
+                }
+            )
+    }, [id]);
+
+    const setDefaultData = (data : ICategoryItem) => {
+        if (data) {
+            form.setFieldsValue(data);
+            setPreviewImage(`${APP_ENV.BASE_URL}images/${data.image}`);
         }
     }
-
-    const handlePreview = (file: UploadFile ) => {
+    const handlePreview = (file: UploadFile) => {
         if (file) {
             if (!file.url && !file.preview) {
                 file.preview = URL.createObjectURL(file.originFileObj as RcFile);
@@ -50,34 +58,34 @@ const CategoryEdit : React.FC = () => {
             setPreviewImage(file.url || (file.preview as string));
         } else {
             setFile(null);
-            setPreviewImage(`${APP_ENV.BASE_URL}images/${categoryItem?.image}`);
+            setPreviewImage(`${APP_ENV.BASE_URL}images/${category?.image}`);
         }
     };
-
-    const handleChange: UploadProps['onChange'] = ({ fileList: newFile }) => {
+    const handleChange: UploadProps['onChange'] = ({fileList: newFile}) => {
         const newFileList = newFile.slice(-1);
         setFile(newFileList[0]);
         handlePreview(newFileList[0]);
     };
 
     const onFinish = async (values: any) => {
-        values.image = file?.originFileObj;
-        const response = await dispatch(updateCategory(values));
+        values.image = values.image.file;
 
-        if (response.meta.requestStatus === 'fulfilled') {
+        try {
+            const result = await dispatch(updateCategory(values));
+            unwrapResult(result);
             handleSuccess('Категорію успішно оновлено!');
-
             setTimeout(() => {
                 navigate('/categories/all');
-            }, 3000);
-
-        } else {
-            handleError(response)
+            }, 1000);
+        } catch (error) {
+            handleError(error);
         }
     };
 
     const onCancel = () => {
-        setDefaultData();
+        if (category) {
+            setDefaultData(category);
+        }
         setFile(null);
     };
 
@@ -133,27 +141,26 @@ const CategoryEdit : React.FC = () => {
                         <TextArea/>
                     </Form.Item>
 
-                    <Form.Item label="Фото" htmlFor="image">
-                        <Row style={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
-                            <Image height={100} src={previewImage || 'https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg'} style={{ borderRadius: 10 }} />
+                    <Row style={{display: 'flex', alignItems: 'center', flexWrap: 'nowrap'}}>
 
-                            <Row style={{ marginLeft: 10 }}>
-                                <Upload
-                                    id="image"
-                                    name="image"
-                                    beforeUpload={() => false}
-                                    listType="picture"
-                                    maxCount={1}
-                                    onChange={handleChange}
-                                    fileList={file ? [file] : []}
-                                    accept="image/*"
-                                >
-                                    <Button icon={<UploadOutlined />}>Обрати нове фото</Button>
-                                </Upload>
-                            </Row>
-                        </Row>
-                    </Form.Item>
+                        <Image height={120}
+                               src={previewImage || 'https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg'}
+                               style={{borderRadius: 10}}/>
 
+                        <Form.Item name="image" style={{margin: 0, marginLeft: 10}}>
+                            <Upload
+                                name="logo"
+                                beforeUpload={() => false}
+                                listType="picture"
+                                maxCount={1}
+                                onChange={handleChange}
+                                fileList={file ? [file] : []}
+                                accept="image/*"
+                            >
+                                <Button icon={<UploadOutlined/>}>Обрати нове фото</Button>
+                            </Upload>
+                        </Form.Item>
+                    </Row>
                     <Row style={{display: 'flex', justifyContent: 'center'}}>
                         <Button style={{margin: 10}} type="primary" htmlType="submit">
                             Save
@@ -166,6 +173,6 @@ const CategoryEdit : React.FC = () => {
             </Row>
         </Spin>
     );
-};
+}
 
 export default CategoryEdit;
