@@ -23,6 +23,8 @@ export const useNotification = (messageApi : MessageInstance) => {
                 errorList += fieldErrors.map((errorMessage: string) => `${errorMessage} `);
             }
             showMessage('error', errorList);
+        } else if (error.length > 0){
+            showMessage('error', error)
         } else {
             showMessage('error', 'Непередбачувана помилка сервера!');
         }

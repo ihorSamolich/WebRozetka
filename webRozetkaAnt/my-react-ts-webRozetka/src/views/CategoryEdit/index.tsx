@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Status} from "interfaces/enums";
+import {Status} from "constants/enums";
 import {Button, Divider, Form, Input, Image, Row, Spin, Upload, message} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {useAppDispatch, useAppSelector} from "hooks/reduxHooks";
@@ -28,7 +28,7 @@ const CategoryEdit : React.FC = () => {
     useEffect(() => {
         dispatch(getCategoryById(Number(id)))
             .then((action) => {
-                const data = action.payload as ICategoryItem;
+                const data   = action.payload as ICategoryItem;
 
                 if (data) {
                     setCategory(data);
@@ -78,6 +78,7 @@ const CategoryEdit : React.FC = () => {
                 navigate('/categories/all');
             }, 1000);
         } catch (error) {
+            console.log(error)
             handleError(error);
         }
     };

@@ -1,14 +1,20 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Text;
 using WebRozetka.Data;
 using WebRozetka.Data.Entities.Identity;
 using WebRozetka.FluentValidation.Categories;
+using WebRozetka.Interfaces;
 using WebRozetka.Mapper;
 using WebRozetka.Models.Category;
+using WebRozetka.Services;
 
 namespace WebRozetka
 {
@@ -31,6 +37,9 @@ namespace WebRozetka
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
+
+
+            // IDENTITY SETTINGS
             builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
             {
                 options.Stores.MaxLengthForKeys = 128;
@@ -43,6 +52,35 @@ namespace WebRozetka
             })
               .AddEntityFrameworkStores<AppEFContext>()
               .AddDefaultTokenProviders();
+            // -- IDENTITY SETTINGS
+
+
+            // JWT SETTINGS
+            builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+            var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("JwtSecretKey")));
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(config =>
+            {
+                config.RequireHttpsMetadata = false;
+                config.SaveToken = true;
+                config.TokenValidationParameters = new TokenValidationParameters()
+                {
+
+                    IssuerSigningKey = signinKey,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero,
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                };
+            });
+            // -- JWT SETTINGS
+
 
             var app = builder.Build();
 
@@ -76,14 +114,12 @@ namespace WebRozetka
                 .AllowAnyMethod()
                 .AllowCredentials()
             );
+            // -- Налаштування CORS
 
-            // 
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
-
-
             app.SeedData();
-
 
             app.Run();
         }

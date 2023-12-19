@@ -1,6 +1,6 @@
 import {AnyAction, AsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {ICategoryState} from "interfaces/categories";
-import {Status} from "interfaces/enums";
+import {Status} from "constants/enums";
 import {
     addCategory,
     deleteCategory,

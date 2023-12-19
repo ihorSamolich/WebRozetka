@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ namespace WebRozetka.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly AppEFContext _appEFContext;
@@ -106,7 +108,7 @@ namespace WebRozetka.Controllers
             }
             catch (Exception)
             {
-                return Ok();
+                return NotFound();
             }
         }
 

@@ -1,14 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import {PRIMARY_BLUE_COLOR} from "constants/index.ts";
 import {Button, Switch} from "antd";
-import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
+import {MenuFoldOutlined, MenuUnfoldOutlined,UserOutlined, PoweroffOutlined} from "@ant-design/icons";
 import {Header} from "antd/es/layout/layout";
 import {ITopHeader} from "interfaces/design";
+import {Link} from "react-router-dom";
+import {useAppDispatch, useAppSelector} from "hooks/reduxHooks";
+import ButtonGroup from "antd/es/button/button-group";
+import {logout} from "store/accounts/accounts.slice.ts";
+
 
 const TopHeader: React.FC<ITopHeader> = (props) => {
     const {collapsed, setCollapsed, themeMode, setThemeMode} = props;
     const [show, setShow] = useState<boolean>(true);
     const [lastScrollY, setLastScrollY] = useState<number>(0);
+    const {isLogin, user} = useAppSelector(state => state.account)
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         window.addEventListener("scroll", controlNavbar);
@@ -30,6 +37,10 @@ const TopHeader: React.FC<ITopHeader> = (props) => {
         }
         setLastScrollY(window.scrollY);
     };
+
+    const handleLogout = () => {
+        dispatch(logout());
+    }
 
     return (
         <Header style={{
@@ -53,6 +64,27 @@ const TopHeader: React.FC<ITopHeader> = (props) => {
                     height: 64,
                 }}
             />
+
+            {isLogin ? (
+                <ButtonGroup>
+                    <Button type="primary" icon={<UserOutlined />}>
+                        {user?.name}
+                    </Button>
+                    <Button
+                        type="primary"
+                        icon={<PoweroffOutlined />}
+                        onClick={() => handleLogout()}
+                    />
+                </ButtonGroup>
+
+            ) : (
+                <Link to="/account/login" style={{ color: "inherit", textDecoration: "none" }}>
+                    <Button type="primary" icon={<UserOutlined />}>
+                        Увійти
+                    </Button>
+                </Link>
+            )}
+
             <Switch
                 style={{marginRight: 24}}
                 checkedChildren="Light"

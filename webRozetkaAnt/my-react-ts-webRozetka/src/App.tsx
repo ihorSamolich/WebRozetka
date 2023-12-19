@@ -1,13 +1,25 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Layout, theme, ConfigProvider} from 'antd';
 import { Route, Routes} from "react-router-dom";
-import { Home, NotFound, CategoriesList, CategoryEdit, CategoryCreate } from "views"
-import { TopHeader, SideMenu } from "components";
+import {Home, NotFound, CategoriesList, CategoryEdit, CategoryCreate, Registration} from "views"
+import {TopHeader, SideMenu, RequireAuth} from "components";
+import Login from "views/Login";
+import {useAppDispatch} from "hooks/reduxHooks";
+import {autoLogin} from "store/accounts/accounts.slice.ts";
+
 
 const App : React.FC = () => {
     const {Footer, Content } = Layout;
     const [themeMode, setThemeMode] = useState<boolean>(true)
     const [collapsed, setCollapsed] = useState<boolean>(false);
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (token){
+            dispatch(autoLogin(token))
+        }
+    }, []);
 
     return (
         <ConfigProvider theme={{algorithm: themeMode ? theme.defaultAlgorithm : theme.darkAlgorithm}}>
@@ -25,11 +37,20 @@ const App : React.FC = () => {
                     >
                         <Routes>
                             <Route path='/' element={<Home />} />
-                            <Route path='/categories/'>
-                                <Route path='all' element={<CategoriesList />} />
-                                <Route path='create' element={<CategoryCreate />} />
-                                <Route path='edit/:id' element={<CategoryEdit />} />
+
+                            <Route path='/account/'>
+                                <Route path='login' element={<Login/>} />
+                                <Route path='register' element={<Registration/>} />
                             </Route>
+
+                            <Route element={<RequireAuth/>}>
+                                <Route path='/categories/'>
+                                    <Route path='all' element={<CategoriesList />} />
+                                    <Route path='create' element={<CategoryCreate />} />
+                                    <Route path='edit/:id' element={<CategoryEdit />} />
+                                </Route>
+                            </Route>
+
                             <Route path='*' element={<NotFound />} />
                         </Routes>
                     </Content>

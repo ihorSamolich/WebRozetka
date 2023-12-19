@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Col, Popconfirm,Image} from "antd";
+import {Card, Col, Popconfirm, Image, Typography} from "antd";
 import Meta from "antd/es/card/Meta";
 import {ICategoryItem} from "interfaces/categories";
 import { EditOutlined,  DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
@@ -50,12 +50,12 @@ const CategoryCard : React.FC<ICategoryItem> = (props) => {
             >
                 <Meta
                     title={
-                        <div style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                        <Typography style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
                             {name}
-                        </div>
+                        </Typography>
                     }
                     description={
-                        <div style={{
+                        <Typography style={{
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             display: '-webkit-box',
@@ -63,7 +63,7 @@ const CategoryCard : React.FC<ICategoryItem> = (props) => {
                             WebkitLineClamp: 2
                         }}>
                             {description}
-                        </div>
+                        </Typography>
                     }
                 />
             </Card>

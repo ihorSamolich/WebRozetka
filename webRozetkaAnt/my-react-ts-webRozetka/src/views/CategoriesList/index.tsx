@@ -1,12 +1,13 @@
 import {useAppSelector, useCategories} from "hooks";
 import {Divider, Pagination, Row} from "antd";
 import {CategoryCard, SkeletonCategoryCard, ServerError} from "components";
-import {Status} from "interfaces/enums";
+import {Status} from "constants/enums";
 import React from "react";
+import {ICategoryItem} from "interfaces/categories";
 
 const CategoriesList : React.FC = () => {
     const status = useAppSelector((state) => state.category.status);
-    const categories = useCategories();
+    const categories : ICategoryItem[] = useCategories();
 
     if (status === Status.ERROR){
         return <ServerError/>
@@ -25,9 +26,9 @@ const CategoriesList : React.FC = () => {
                 )))
             }
 
-            <div style={{width: '100%' ,display: "flex", justifyContent: 'center'}}>
+            <Row style={{width: '100%' ,display: "flex", justifyContent: 'center'}}>
                 <Pagination  showSizeChanger={false} defaultCurrent={1} total={200} />
-            </div>
+            </Row>
         </Row>
     );
 }
