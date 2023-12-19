@@ -28,7 +28,7 @@ export const categorySlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getCategories.fulfilled, (state, action) => {
-                state.items = action.payload;
+                state.items = action.payload.sort((prev, next) => prev.id - next.id);
                 state.status = Status.SUCCESS;
             })
             .addCase(getCategories.pending, (state) => {
@@ -52,7 +52,10 @@ export const categorySlice = createSlice({
                 state.items = state.items.filter(item => item.id !== action.payload);
                 state.status = Status.SUCCESS;
             })
-            .addCase(updateCategory.fulfilled, (state) => {
+            .addCase(updateCategory.fulfilled, (state, action) => {
+                const id = action.payload.id
+
+                state.items = [...state.items.filter(item => item.id !== id), action.payload];
                 state.status = Status.SUCCESS;
             })
             .addCase(updateCategory.pending, (state) => {
@@ -60,6 +63,7 @@ export const categorySlice = createSlice({
             })
             .addMatcher(isRejectedAction, (state,action) => {
                 state.status = Status.ERROR;
+                console.log(action)
                 state.error = action;
             })
     },

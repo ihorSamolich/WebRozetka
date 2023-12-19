@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {apiClient} from "utils/api.ts";
-import {ICategoryCreate, ICategoryItem} from "interfaces/categories";
+import {ICategoryCreate, ICategoryItem, ICategoryUpdate} from "interfaces/categories";
 
 
 
@@ -32,16 +32,14 @@ export const addCategory = createAsyncThunk<ICategoryItem, ICategoryCreate>(
     'category/addCategory',
     async (payload: ICategoryCreate, { rejectWithValue }) => {
         try {
-            const {data} =
-                await apiClient.post<ICategoryItem>("/api/categories", payload,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data"
-                        }
-                    });
+            const {data} = await apiClient.post<ICategoryItem>("/api/categories", payload,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                });
             return data;
-        }
-        catch (error: any) {
+        } catch (error: any) {
             return rejectWithValue(error.response.data);
         }
     }
@@ -49,17 +47,18 @@ export const addCategory = createAsyncThunk<ICategoryItem, ICategoryCreate>(
 
 
 
-export const updateCategory = createAsyncThunk<void, ICategoryItem, { rejectValue: string }>(
+export const updateCategory = createAsyncThunk<ICategoryItem, ICategoryUpdate, { rejectValue: string }>(
     'category/updateCategory',
-    async (payload: ICategoryItem, { rejectWithValue }) => {
+    async (payload: ICategoryUpdate, { rejectWithValue }) => {
         try {
-            await apiClient.put("/api/categories", payload,
+            const {data} = await apiClient.put<ICategoryItem>("/api/categories", payload,
                 {
                     headers: {
                         "Content-Type": "multipart/form-data"
                     }
                 });
-        } catch (error : any) {
+            return data;
+        } catch (error: any) {
             return rejectWithValue(error.response.data);
         }
     }

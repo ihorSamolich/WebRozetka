@@ -3,15 +3,16 @@ import {Status} from "constants/enums";
 import {Button, Divider, Form, Input, Image, Row, Spin, Upload, message} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {useAppDispatch, useAppSelector} from "hooks/reduxHooks";
-import {ICategoryItem} from "interfaces/categories";
+import { ICategoryItem, ICategoryUpdate, ICategoryUpdateForm} from "interfaces/categories";
 import {getCategoryById, updateCategory} from "store/categories/categories.actions.ts";
 import {useNavigate, useParams} from "react-router-dom";
-import {UploadOutlined} from "@ant-design/icons";
-import {UploadFile} from "antd/es/upload/interface";
-import {RcFile, UploadProps} from "antd/es/upload";
-import {APP_ENV} from "../../env";
+import { UploadOutlined} from "@ant-design/icons";
+import {RcFile} from "antd/es/upload";
+import {APP_ENV} from "env";
 import {useNotification} from "hooks/notificationHook";
 import {unwrapResult} from "@reduxjs/toolkit";
+import {imageConverter} from "utils/imageConverter.ts";
+import {IUploadedFile} from "interfaces/account";
 
 const CategoryEdit : React.FC = () => {
     const dispatch = useAppDispatch();
@@ -19,7 +20,6 @@ const CategoryEdit : React.FC = () => {
     const {id} = useParams();
     const [form] = Form.useForm<ICategoryItem>();
     const [previewImage, setPreviewImage] = useState('');
-    const [file, setFile] = useState<UploadFile | null>(null);
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const {handleSuccess, handleError} = useNotification(messageApi);
@@ -49,36 +49,29 @@ const CategoryEdit : React.FC = () => {
             setPreviewImage(`${APP_ENV.BASE_URL}images/${data.image}`);
         }
     }
-    const handlePreview = (file: UploadFile) => {
+
+    const handlePreview = () => {
+        const file : IUploadedFile = form.getFieldValue('image')
+
         if (file) {
-            if (!file.url && !file.preview) {
-                file.preview = URL.createObjectURL(file.originFileObj as RcFile);
-            }
-            setFile(file);
-            setPreviewImage(file.url || (file.preview as string));
+            setPreviewImage(URL.createObjectURL(file.originFileObj as RcFile));
         } else {
-            setFile(null);
             setPreviewImage(`${APP_ENV.BASE_URL}images/${category?.image}`);
         }
     };
-    const handleChange: UploadProps['onChange'] = ({fileList: newFile}) => {
-        const newFileList = newFile.slice(-1);
-        setFile(newFileList[0]);
-        handlePreview(newFileList[0]);
-    };
 
-    const onFinish = async (values: any) => {
-        values.image = values.image.file;
+    const onFinish = async (values: ICategoryUpdateForm) => {
+
+        const data : ICategoryUpdate = {...values, image : values.image?.originFileObj}
 
         try {
-            const result = await dispatch(updateCategory(values));
+            const result = await dispatch(updateCategory(data));
             unwrapResult(result);
             handleSuccess('Категорію успішно оновлено!');
             setTimeout(() => {
                 navigate('/categories/all');
             }, 1000);
         } catch (error) {
-            console.log(error)
             handleError(error);
         }
     };
@@ -87,7 +80,6 @@ const CategoryEdit : React.FC = () => {
         if (category) {
             setDefaultData(category);
         }
-        setFile(null);
     };
 
     return (
@@ -143,31 +135,34 @@ const CategoryEdit : React.FC = () => {
                     </Form.Item>
 
                     <Row style={{display: 'flex', alignItems: 'center', flexWrap: 'nowrap'}}>
-
                         <Image height={120}
                                src={previewImage || 'https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg'}
                                style={{borderRadius: 10}}/>
-
-                        <Form.Item name="image" style={{margin: 0, marginLeft: 10}}>
+                        <Form.Item
+                            style={{margin: 0, marginLeft: 10}}
+                            name="image"
+                            valuePropName="file"
+                            getValueFromEvent={imageConverter}
+                        >
                             <Upload
-                                name="logo"
+                                showUploadList={{showPreviewIcon: false}}
+                                onChange={handlePreview}
                                 beforeUpload={() => false}
+                                accept="image/*"
                                 listType="picture"
                                 maxCount={1}
-                                onChange={handleChange}
-                                fileList={file ? [file] : []}
-                                accept="image/*"
                             >
                                 <Button icon={<UploadOutlined/>}>Обрати нове фото</Button>
                             </Upload>
                         </Form.Item>
                     </Row>
+
                     <Row style={{display: 'flex', justifyContent: 'center'}}>
                         <Button style={{margin: 10}} type="primary" htmlType="submit">
-                            Save
+                            Зберегти
                         </Button>
                         <Button style={{margin: 10}} htmlType="button" onClick={onCancel}>
-                            Cancel
+                            Скасувати
                         </Button>
                     </Row>
                 </Form>

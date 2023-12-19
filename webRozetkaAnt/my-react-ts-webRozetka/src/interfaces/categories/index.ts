@@ -21,6 +21,17 @@ export interface ICategoryCreate {
     description: string;
 }
 
+export interface ICategoryUpdateForm {
+    name: string;
+    image: UploadedFile | null;
+    description: string;
+}
+export interface ICategoryUpdate {
+    name: string;
+    image: File | undefined;
+    description: string;
+}
+
 export interface ICategoryState {
     items: ICategoryItem[],
     error: object | null,

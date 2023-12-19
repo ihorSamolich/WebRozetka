@@ -21,7 +21,7 @@ export interface IRegistration {
     imageBase64: string,
 }
 
-export interface UploadedFile {
+export interface IUploadedFile {
     lastModified: number;
     lastModifiedDate: Date;
     name: string;
@@ -38,5 +38,5 @@ export interface IRegistrationForm {
     lastName: string,
     email: string,
     password: string,
-    image: UploadedFile,
+    image: IUploadedFile,
 }
