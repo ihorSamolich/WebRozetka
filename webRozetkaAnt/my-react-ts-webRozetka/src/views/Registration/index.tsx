@@ -8,7 +8,7 @@ import {useNotification} from "hooks/notificationHook";
 import {autoLogin} from "store/accounts/accounts.slice.ts";
 import {useNavigate} from "react-router-dom";
 import {IRegistration, IRegistrationForm} from "interfaces/account";
-import {imageConverter} from "utils/imageConverter.ts";
+import {imageConverterToAntFile } from "utils/imageConverterToAntFile.ts";
 
 const formItemLayout = {
     labelCol: {
@@ -44,7 +44,6 @@ const Registration : React.FC = () => {
     const {handleError} = useNotification(messageApi);
 
     const onFinish = async (values: IRegistrationForm) => {
-
         const { image, ...restValues } = values;
 
         const data: IRegistration = {
@@ -151,7 +150,7 @@ const Registration : React.FC = () => {
                         name="image"
                         label="Фото"
                         valuePropName="file"
-                        getValueFromEvent={imageConverter}
+                        getValueFromEvent={imageConverterToAntFile}
                         rules={[{required: true, message: 'Please select your avatar!'}]}
                     >
                         <Upload

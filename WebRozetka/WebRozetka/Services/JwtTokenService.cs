@@ -20,8 +20,9 @@ namespace WebRozetka.Services
         {
             var claims = new List<Claim>
             {
-                new Claim("email", user.Email),
-                new Claim("name", $"{user.LastName} {user.FirstName}"),
+                new ("email", user.Email),
+                new ("name", $"{user.LastName} {user.FirstName}"),
+                new ("image", user.Image),
             };
 
             var key = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JwtSecretKey"));
@@ -30,6 +31,7 @@ namespace WebRozetka.Services
             var jwt = new JwtSecurityToken(
                 signingCredentials: signinCredential,
                 expires: DateTime.Now.AddDays(10),
+                //expires: DateTime.Now.AddMinutes(1),
                 claims: claims);
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);

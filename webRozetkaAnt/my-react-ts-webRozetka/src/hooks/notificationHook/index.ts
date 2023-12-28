@@ -14,19 +14,18 @@ export const useNotification = (messageApi : MessageInstance) => {
     };
 
     const handleError = (error: any) => {
-        const errorsObject = error?.errors;
-        let errorList = '';
+        if (typeof error === 'string'){
+            showMessage('error', error)
+        }
+        else {
+            const errorsObject = error?.errors;
+            let errorList = '';
 
-        if (errorsObject) {
             for (const field in errorsObject) {
                 const fieldErrors = errorsObject[field];
                 errorList += fieldErrors.map((errorMessage: string) => `${errorMessage} `);
             }
             showMessage('error', errorList);
-        } else if (error.length > 0){
-            showMessage('error', error)
-        } else {
-            showMessage('error', 'Непередбачувана помилка сервера!');
         }
     };
     return { handleSuccess, handleError };

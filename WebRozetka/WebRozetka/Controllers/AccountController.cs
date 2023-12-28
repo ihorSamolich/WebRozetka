@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebRozetka.Constants;
+using WebRozetka.Data.Entities;
 using WebRozetka.Data.Entities.Identity;
 using WebRozetka.Helpers;
 using WebRozetka.Interfaces;
@@ -22,7 +24,7 @@ namespace WebRozetka.Controllers
             _jwtTokenService = jwtTokenService;
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             try

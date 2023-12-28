@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {PRIMARY_BLUE_COLOR} from "constants/index.ts";
-import {Button, Switch} from "antd";
+import {Avatar, Button, Switch} from "antd";
 import {MenuFoldOutlined, MenuUnfoldOutlined,UserOutlined, PoweroffOutlined} from "@ant-design/icons";
 import {Header} from "antd/es/layout/layout";
 import {ITopHeader} from "interfaces/design";
@@ -8,6 +8,7 @@ import {Link} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "hooks/reduxHooks";
 import ButtonGroup from "antd/es/button/button-group";
 import {logout} from "store/accounts/accounts.slice.ts";
+import {APP_ENV} from "env/index.ts";
 
 
 const TopHeader: React.FC<ITopHeader> = (props) => {
@@ -66,20 +67,24 @@ const TopHeader: React.FC<ITopHeader> = (props) => {
             />
 
             {isLogin ? (
-                <ButtonGroup>
-                    <Button type="primary" icon={<UserOutlined />}>
+                <ButtonGroup size='large'>
+                    <Button
+                        type='primary'
+                        style={{display: 'flex'}}
+                        icon={<Avatar  size="small" src={`${APP_ENV.BASE_URL}images/${user?.image}`}/>}
+                    >
                         {user?.name}
                     </Button>
                     <Button
-                        type="primary"
-                        icon={<PoweroffOutlined />}
+                        type='primary'
+                        icon={<PoweroffOutlined/>}
                         onClick={() => handleLogout()}
                     />
                 </ButtonGroup>
 
             ) : (
-                <Link to="/account/login" style={{ color: "inherit", textDecoration: "none" }}>
-                    <Button type="primary" icon={<UserOutlined />}>
+                <Link to="/account/login" style={{color: "inherit", textDecoration: "none"}}>
+                    <Button type="primary" icon={<UserOutlined/>}>
                         Увійти
                     </Button>
                 </Link>

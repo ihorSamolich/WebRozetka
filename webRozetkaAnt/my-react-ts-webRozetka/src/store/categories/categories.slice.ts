@@ -14,6 +14,7 @@ type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
 
 const initialState: ICategoryState = {
     items: [],
+    totalItems: 0,
     error: null,
     status: Status.IDLE,
 };
@@ -28,7 +29,11 @@ export const categorySlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getCategories.fulfilled, (state, action) => {
-                state.items = action.payload.sort((prev, next) => prev.id - next.id);
+                const {items, count} = action.payload;
+
+                state.items = items;
+                state.totalItems = count;
+
                 state.status = Status.SUCCESS;
             })
             .addCase(getCategories.pending, (state) => {
@@ -63,8 +68,7 @@ export const categorySlice = createSlice({
             })
             .addMatcher(isRejectedAction, (state,action) => {
                 state.status = Status.ERROR;
-                console.log(action)
-                state.error = action;
+                state.error = action.payload;
             })
     },
 });

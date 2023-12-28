@@ -6,7 +6,7 @@ namespace WebRozetka.Helpers
     {
         public static async Task<string> SaveImageAsync(IFormFile image)
         {
-            using (MemoryStream ms = new MemoryStream())
+            using (MemoryStream ms = new())
             {
                 await image.CopyToAsync(ms);
                 string fileName = await SaveBytesCompres(ms.ToArray());
@@ -16,7 +16,7 @@ namespace WebRozetka.Helpers
 
         public static async Task<string> SaveImageAsync(string base64)
         {
-            if (base64.Contains(","))
+            if (base64.Contains(','))
                 base64 = base64.Split(',')[1];
             var bytes = Convert.FromBase64String(base64);
             var fileName = await SaveBytesCompres(bytes);
@@ -46,5 +46,21 @@ namespace WebRozetka.Helpers
             return imageName;
         }
 
+        public static bool RemoveImage(string name)
+        {
+            try
+            {
+                string fileRemove = Path.Combine(Directory.GetCurrentDirectory(), "images", name);
+                if (System.IO.File.Exists(fileRemove))
+                {
+                    System.IO.File.Delete(fileRemove);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

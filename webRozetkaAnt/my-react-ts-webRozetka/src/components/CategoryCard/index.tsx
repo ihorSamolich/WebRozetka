@@ -22,7 +22,7 @@ const CategoryCard : React.FC<ICategoryItem> = (props) => {
         <Col style={{padding: 10}} key={id} xxl={4} xl={6} lg={8} md={12} sm={24}>
             <Card
                 bodyStyle={{flex:'1'}}
-                style={{height: '100%', display: 'flex', flexDirection: 'column'}}
+                style={{height: 365, display: 'flex', flexDirection: 'column'}}
                 hoverable
                 cover={
                     <Image

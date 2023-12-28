@@ -14,6 +14,7 @@ using WebRozetka.FluentValidation.Categories;
 using WebRozetka.Interfaces;
 using WebRozetka.Mapper;
 using WebRozetka.Models.Category;
+using WebRozetka.Repository;
 using WebRozetka.Services;
 
 namespace WebRozetka
@@ -37,6 +38,7 @@ namespace WebRozetka
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 
             // IDENTITY SETTINGS

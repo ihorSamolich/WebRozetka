@@ -1,30 +1,47 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {apiClient} from "utils/api.ts";
-import {ICategoryCreate, ICategoryItem, ICategoryUpdate} from "interfaces/categories";
+import {
+    ICategoriesData,
+    ICategoriesPageParams,
+    ICategoryCreate,
+    ICategoryItem,
+    ICategoryUpdate
+} from "interfaces/categories";
+import {handleAxiosError} from "utils/handleAxiosError.ts";
 
-
-
-export const getCategories = createAsyncThunk<ICategoryItem[]>(
+export const getCategories = createAsyncThunk(
     'category/getCategories',
-    async () => {
-        const response = await apiClient.get<ICategoryItem[]>('/api/categories');
-        return response.data;
+    async (payload : ICategoriesPageParams,{rejectWithValue}) => {
+        try {
+            const response = await apiClient.get<ICategoriesData>(`/api/categories/${payload.page}/${payload.pageSize}`);
+            return response.data;
+        }  catch (error) {
+            return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
+        }
     }
 );
 
 export const getCategoryById = createAsyncThunk<ICategoryItem, number>(
     'category/getCategoryById',
-    async (categoryId) => {
-        const {data } = await apiClient.get<ICategoryItem>(`/api/categories/${categoryId}`);
-        return data;
+    async (categoryId, {rejectWithValue}) => {
+        try {
+            const {data} = await apiClient.get<ICategoryItem>(`/api/categories/${categoryId}`);
+            return data;
+        } catch (error) {
+            return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
+        }
     }
 );
 
 export const deleteCategory = createAsyncThunk<number,number>(
     'category/deleteCategory',
-    async (categoryId) => {
-        await apiClient.delete(`/api/categories/${categoryId}`);
-        return categoryId;
+    async (categoryId, {rejectWithValue}) => {
+        try {
+            await apiClient.delete(`/api/categories/${categoryId}`);
+            return categoryId;
+        } catch (error) {
+            return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
+        }
     }
 );
 
@@ -39,13 +56,11 @@ export const addCategory = createAsyncThunk<ICategoryItem, ICategoryCreate>(
                     }
                 });
             return data;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data);
+        } catch (error) {
+            return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
     }
 );
-
-
 
 export const updateCategory = createAsyncThunk<ICategoryItem, ICategoryUpdate, { rejectValue: string }>(
     'category/updateCategory',
@@ -58,8 +73,8 @@ export const updateCategory = createAsyncThunk<ICategoryItem, ICategoryUpdate, {
                     }
                 });
             return data;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data);
+        } catch (error) {
+            return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
     }
 );

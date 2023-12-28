@@ -3,7 +3,7 @@ import {Status} from "constants/enums";
 import {Button, Divider, Form, Input, Image, Row, Spin, Upload, message} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {useAppDispatch, useAppSelector} from "hooks/reduxHooks";
-import { ICategoryItem, ICategoryUpdate, ICategoryUpdateForm} from "interfaces/categories";
+import { ICategoryItem, ICategoryUpdate } from "interfaces/categories";
 import {getCategoryById, updateCategory} from "store/categories/categories.actions.ts";
 import {useNavigate, useParams} from "react-router-dom";
 import { UploadOutlined} from "@ant-design/icons";
@@ -11,14 +11,13 @@ import {RcFile} from "antd/es/upload";
 import {APP_ENV} from "env";
 import {useNotification} from "hooks/notificationHook";
 import {unwrapResult} from "@reduxjs/toolkit";
-import {imageConverter} from "utils/imageConverter.ts";
-import {IUploadedFile} from "interfaces/account";
+import { imageConverterToFile} from "utils/imageConverterToFile.ts";
 
 const CategoryEdit : React.FC = () => {
     const dispatch = useAppDispatch();
     const status = useAppSelector((state) => state.category.status);
     const {id} = useParams();
-    const [form] = Form.useForm<ICategoryItem>();
+    const [form] = Form.useForm<ICategoryUpdate>();
     const [previewImage, setPreviewImage] = useState('');
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
@@ -28,7 +27,7 @@ const CategoryEdit : React.FC = () => {
     useEffect(() => {
         dispatch(getCategoryById(Number(id)))
             .then((action) => {
-                const data   = action.payload as ICategoryItem;
+                const data = action.payload as ICategoryItem;
 
                 if (data) {
                     setCategory(data);
@@ -51,21 +50,18 @@ const CategoryEdit : React.FC = () => {
     }
 
     const handlePreview = () => {
-        const file : IUploadedFile = form.getFieldValue('image')
+        const file : File = form.getFieldValue('image')
 
         if (file) {
-            setPreviewImage(URL.createObjectURL(file.originFileObj as RcFile));
+            setPreviewImage(URL.createObjectURL(file as RcFile));
         } else {
             setPreviewImage(`${APP_ENV.BASE_URL}images/${category?.image}`);
         }
     };
 
-    const onFinish = async (values: ICategoryUpdateForm) => {
-
-        const data : ICategoryUpdate = {...values, image : values.image?.originFileObj}
-
+    const onFinish = async (values: ICategoryUpdate) => {
         try {
-            const result = await dispatch(updateCategory(data));
+            const result = await dispatch(updateCategory(values));
             unwrapResult(result);
             handleSuccess('Категорію успішно оновлено!');
             setTimeout(() => {
@@ -142,7 +138,7 @@ const CategoryEdit : React.FC = () => {
                             style={{margin: 0, marginLeft: 10}}
                             name="image"
                             valuePropName="file"
-                            getValueFromEvent={imageConverter}
+                            getValueFromEvent={imageConverterToFile}
                         >
                             <Upload
                                 showUploadList={{showPreviewIcon: false}}

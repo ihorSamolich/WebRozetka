@@ -2,30 +2,29 @@ import React from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import {Button, Divider, Form, Input, message, Row, Spin, Upload} from 'antd';
 import TextArea from "antd/es/input/TextArea";
-import {ICategoryCreate, ICategoryCreateForm} from "interfaces/categories";
+import {ICategoryCreate,} from "interfaces/categories";
 import {addCategory} from "store/categories/categories.actions.ts";
 import {useAppDispatch, useAppSelector, useNotification} from "hooks";
 import {Status} from "constants/enums";
 import {unwrapResult} from "@reduxjs/toolkit";
 import {useNavigate} from "react-router-dom";
-import {imageConverter} from "utils/imageConverter.ts";
+import {imageConverterToFile} from "utils/imageConverterToFile.ts";
 
 const CategoryCreate: React.FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const status = useAppSelector((state) => state.category.status);
     const [messageApi, contextHolder] = message.useMessage();
-    const [form] = Form.useForm<ICategoryCreateForm>();
+    const [form] = Form.useForm<ICategoryCreate>();
     const { handleSuccess, handleError } = useNotification(messageApi);
 
     const onReset = () => {
         form.resetFields();
     };
 
-    const onFinish = async (values: ICategoryCreateForm) => {
-        const data : ICategoryCreate = {...values, image : values.image?.originFileObj}
+    const onFinish = async (values: ICategoryCreate) => {
         try {
-            const result = await dispatch(addCategory(data));
+            const result = await dispatch(addCategory(values));
             unwrapResult(result);
             handleSuccess('Категорію успішно створено!');
             setTimeout(() => {
@@ -81,7 +80,7 @@ const CategoryCreate: React.FC = () => {
                         name="image"
                         label="Фото"
                         valuePropName="file"
-                        getValueFromEvent={imageConverter}
+                        getValueFromEvent={imageConverterToFile}
                         rules={[{required: true, message: 'Оберіть фото категорії!'}]}
                     >
                         <Upload

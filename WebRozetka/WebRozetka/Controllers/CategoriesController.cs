@@ -10,121 +10,104 @@ using System;
 using WebRozetka.Data;
 using WebRozetka.Data.Entities;
 using WebRozetka.Helpers;
+using WebRozetka.Interfaces;
 using WebRozetka.Models.Category;
 
 namespace WebRozetka.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class CategoriesController : ControllerBase
     {
-        private readonly AppEFContext _appEFContext;
         private readonly IMapper _mapper;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CategoriesController(AppEFContext appEFContext, IMapper mapper)
+        public CategoriesController(IMapper mapper, ICategoryRepository categoryRepository)
         {
-            _appEFContext = appEFContext;
             _mapper = mapper;
+            _categoryRepository = categoryRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> GetCategoriesList()
         {
-            var list = await _appEFContext.Categories
-                .Where(c => !c.IsDeleted)
-                .Select(x => _mapper.Map<CategoryItemViewModel>(x))
-                .ToListAsync();
+            var items = await _categoryRepository.GetAllAsync();
 
-            return Ok(list);
+            return Ok(items);
+        }
+
+        [HttpGet("{page}/{pageSize}/{search?}")]
+        public async Task<IActionResult> GetCategoriesSearchPagedList(int page = 1, int pageSize = 1, string search = "")
+        {
+            var count = await _categoryRepository.GetCountAsync(search);
+            var items = await _categoryRepository.GetPagedAllAsync(page, pageSize, search);
+
+            return Ok(new { count, items });
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCategoryById(int id)
+        public async Task<IActionResult> GetCategoryById(int id)
         {
-            var category = _appEFContext.Categories
-                .Where(c => !c.IsDeleted)
-                .SingleOrDefault(c => c.Id == id);
+            var item = await _categoryRepository.GetByIdAsync(id);
 
-            if (category == null)
+            if (item == null)
             {
-                return NotFound();
+                return NotFound("Категорію не знайдено!");
             }
 
-            return Ok(category);
+            return Ok(item);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CategoryCreateViewModel model)
         {
-            try
-            {
-                var category = _mapper.Map<CategoryEntity>(model);
-                category.IsDeleted = false;
-                category.DateCreated = DateTime.UtcNow;
-                category.Image = await ImageWorker.SaveImageAsync(model.Image);
+            var item = _mapper.Map<CategoryEntity>(model);
+            var result = await _categoryRepository.AddAsync(item);
 
-                await _appEFContext.Categories.AddAsync(category);
-                await _appEFContext.SaveChangesAsync();
-
-                return Created($"/api/categories/{category.Id}", category);
-            }
-            catch (Exception)
+            if (!result)
             {
-                return StatusCode(500, "Невідома помилка сервера!");
+                return BadRequest("Помилка створення категорії!");
             }
+
+            return Ok(item);
         }
 
         [HttpPut]
         public async Task<IActionResult> Edit([FromForm] CategoryEditViewModel model)
         {
-            try
+            var item = await _categoryRepository.GetByIdAsync(model.Id);
+
+            if (item == null)
             {
-                var category = _appEFContext.Categories
-                    .Where(c => !c.IsDeleted)
-                    .SingleOrDefault(x => x.Id == model.Id);
-                if (category == null)
-                {
-                    return NotFound();
-                }
-
-                if (model.Image != null)
-                {
-                    string fileRemove = Path.Combine(Directory.GetCurrentDirectory(), "images", category.Image);
-                    if (System.IO.File.Exists(fileRemove))
-                    {
-                        System.IO.File.Delete(fileRemove);
-                    }
-                    category.Image = await ImageWorker.SaveImageAsync(model.Image);
-                }
-
-                category.Name = model.Name;
-
-                category.Description = model.Description;
-
-
-                await _appEFContext.SaveChangesAsync();
-                return Created($"/api/categories/{category.Id}", category);
+                return NotFound("Категорію не знайдено!");
             }
-            catch (Exception)
+
+            if (model.Image != null)
             {
-                return NotFound();
+                ImageWorker.RemoveImage(item.Image);
+                item.Image = await ImageWorker.SaveImageAsync(model.Image);
             }
+
+            item.Name = model.Name;
+            item.Description = model.Description;
+
+            await _categoryRepository.UpdateAsync(item);
+
+            return Ok(item);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var category = _appEFContext.Categories
-                .Where(c => !c.IsDeleted)
-                .SingleOrDefault(x => x.Id == id);
-            if (category == null)
+            var result = await _categoryRepository.DeleteAsync(id);
+
+            if (!result)
             {
-                return NotFound();
+                return BadRequest("Помилка видалення категорії!");
             }
-            category.IsDeleted = true;
-            await _appEFContext.SaveChangesAsync();
-            return Ok();
+
+            return Ok("Категорія успішно видалена!");
         }
     }
 }

@@ -1,34 +1,59 @@
-import {useAppSelector, useCategories} from "hooks";
-import {Divider, Pagination, Row} from "antd";
-import {CategoryCard, SkeletonCategoryCard, ServerError} from "components";
-import {Status} from "constants/enums";
-import React from "react";
-import {ICategoryItem} from "interfaces/categories";
+import { useAppDispatch, useAppSelector } from "hooks";
+import {Divider, Flex, Row} from "antd";
+import { CategoryCard, SkeletonCategoryCard, ServerError, SitePagination } from "components";
+import { Status } from "constants/enums";
+import React, { useEffect, useState } from "react";
+import { getCategories } from "store/categories/categories.actions.ts";
+import { useNavigate } from 'react-router-dom';
+import Search from "antd/es/input/Search";
 
-const CategoriesList : React.FC = () => {
-    const status = useAppSelector((state) => state.category.status);
-    const categories : ICategoryItem[] = useCategories();
+const CategoriesList: React.FC = () => {
+    const dispatch = useAppDispatch();
+    const { status, items, totalItems } = useAppSelector((state) => state.category);
+    const [page, setPage] = useState<number>(1);
+    const navigate = useNavigate();
 
-    if (status === Status.ERROR){
-        return <ServerError/>
+    // зробити select page size
+    const [pageSize] = useState<number>(4);
+
+    useEffect(() => {
+        dispatch(getCategories({ page, pageSize }));
+
+        if (page > 1) {
+            navigate(`/categories/all/page/${page}`);
+        } else if (page === 1) {
+            navigate('/categories/all');
+        }
+    }, [page]);
+
+    if (status === Status.ERROR) {
+        return <ServerError />;
     }
 
     return (
-        <Row gutter={16} >
-            <Divider orientation="left">КАТЕГОРІЇ</Divider>
+        <Row gutter={16}>
+            <Divider orientation="left">
+                <Flex align="center" gap="20px">
+                    КАТЕГОРІЇ
+                    <Search
+                        style={{width: 200}}
+                        placeholder="я шукаю..."
+                        onSearch={()=>{console.log('dd')}}
+                        enterButton
+                    />
+                </Flex>
+            </Divider>
 
             {status === Status.LOADING ?
                 (Array.from({ length: 4 }).map((_, index) => (
-                    <SkeletonCategoryCard key={index}/>
+                    <SkeletonCategoryCard key={index} />
                 )))
-                : (categories.map((item) => (
+                : (items.map((item) => (
                     <CategoryCard key={item.id} {...item} />
                 )))
             }
 
-            <Row style={{width: '100%' ,display: "flex", justifyContent: 'center'}}>
-                <Pagination  showSizeChanger={false} defaultCurrent={1} total={200} />
-            </Row>
+            <SitePagination page={page} pageSize={pageSize} totalItems={totalItems} setPage={setPage} />
         </Row>
     );
 }

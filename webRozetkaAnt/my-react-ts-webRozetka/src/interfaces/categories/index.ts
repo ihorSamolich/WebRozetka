@@ -1,6 +1,4 @@
 import {Status} from 'constants/enums';
-import {UploadedFile} from "interfaces/account";
-
 export interface ICategoryItem {
     id: number;
     name: string;
@@ -10,22 +8,23 @@ export interface ICategoryItem {
     isDeleted: boolean;
 }
 
-export interface ICategoryCreateForm {
-    name: string;
-    image: UploadedFile | null;
-    description: string;
+export interface ICategoriesData {
+    items: ICategoryItem[],
+    count: number,
 }
+
+export interface ICategoriesPageParams {
+    page: number,
+    pageSize: number | null,
+}
+
+
 export interface ICategoryCreate {
     name: string;
     image: File | undefined;
     description: string;
 }
 
-export interface ICategoryUpdateForm {
-    name: string;
-    image: UploadedFile | null;
-    description: string;
-}
 export interface ICategoryUpdate {
     name: string;
     image: File | undefined;
@@ -34,6 +33,7 @@ export interface ICategoryUpdate {
 
 export interface ICategoryState {
     items: ICategoryItem[],
-    error: object | null,
+    totalItems: number,
+    error: unknown | null,
     status: Status;
 }
