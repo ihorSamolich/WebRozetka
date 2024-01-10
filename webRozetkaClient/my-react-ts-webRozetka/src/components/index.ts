@@ -6,7 +6,9 @@ import RequireAuth from "components/RequireAuth"
 import SitePagination from "components/SitePagination"
 import ItemsNotFound from  "components/ItemsNotFound"
 import SiteSearch from  "components/SiteSearch"
+import ProductPictures from  "components/ProductPictures"
+import ProductDescriptions from  "components/ProductDescriptions"
+import CompanyInformation from "components/CompanyInformation";
 
 
-
-export { SiteSearch, ItemsNotFound, CategoryCard, RequireAuth, ServerError, SkeletonCategoryCard, TopHeader, SitePagination };
+export { SiteSearch, CompanyInformation, ItemsNotFound, CategoryCard, RequireAuth, ProductDescriptions, ProductPictures, ServerError, SkeletonCategoryCard, TopHeader, SitePagination };

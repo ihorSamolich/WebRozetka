@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useState } from "react";
 
 export const useLocalStorageHook = (key: string) => {
     const [storedValue, setStoredValue] = useState(() => {
@@ -12,11 +12,10 @@ export const useLocalStorageHook = (key: string) => {
                 return undefined;
             }
         }
-
         return undefined;
     });
 
-    const setValue = (newValue) => {
+    const setValue = (newValue: string) => {
         try {
             const valueToStore = JSON.stringify(newValue);
             localStorage.setItem(key, valueToStore);
@@ -25,6 +24,8 @@ export const useLocalStorageHook = (key: string) => {
             console.error('Error serializing value to JSON and storing in localStorage:', error);
         }
     };
+
+
 
     return [storedValue, setValue];
 };

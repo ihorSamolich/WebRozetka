@@ -7,6 +7,7 @@ import {autoLogin} from "store/accounts/accounts.slice.ts";
 import Sider from "antd/es/layout/Sider";
 import {AppstoreAddOutlined, AppstoreOutlined, BuildOutlined, HomeOutlined} from "@ant-design/icons";
 import {useLocalStorageHook} from "hooks/useLocalStorageHook";
+import Basket from "components/Basket";
 
 const items: MenuProps["items"] = [
     {
@@ -58,7 +59,7 @@ const SiteLayout : React.FC = () => {
     const [collapsed, setCollapsed] = useState<boolean>(false);
     const dispatch = useAppDispatch()
     const location = useLocation();
-    const [token, setToken] = useLocalStorageHook('authToken')
+    const [token] = useLocalStorageHook('authToken')
 
     useEffect(() => {
         if (token){
@@ -69,7 +70,7 @@ const SiteLayout : React.FC = () => {
     return (
         <ConfigProvider theme={{algorithm: themeMode ? theme.defaultAlgorithm : theme.darkAlgorithm}}>
             <Layout style={{minHeight: '100vh'}}>
-
+                <Basket/>
                 <Sider trigger={null} collapsible collapsed={collapsed}>
                     <Menu
                         selectedKeys={[location.pathname]}

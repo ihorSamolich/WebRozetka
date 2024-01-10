@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Col, Popconfirm, Image, Typography} from "antd";
+import {Card, Col, Popconfirm, Image, Typography, Button, Flex} from "antd";
 import Meta from "antd/es/card/Meta";
 import {ICategoryItem} from "interfaces/categories";
 import { EditOutlined,  DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
@@ -8,7 +8,6 @@ import {APP_ENV} from "env";
 import {deleteCategory} from "store/categories/categories.actions.ts";
 import {useAppDispatch} from "hooks";
 import {Link} from "react-router-dom";
-
 
 const CategoryCard : React.FC<ICategoryItem> = (props) => {
     const dispatch = useAppDispatch()
@@ -26,26 +25,35 @@ const CategoryCard : React.FC<ICategoryItem> = (props) => {
                 hoverable
                 cover={
                     <Image
+                        preview={false}
                         style={{height: '200px', objectFit: 'cover'}}
                         alt={name}
                         src={image ? `${APP_ENV.BASE_URL}images/${image}` : NotImage}
                     />
                 }
                 actions={[
-                    <Popconfirm
-                        title="Видалення категорії"
-                        description="Підтвердити видалення категорії?"
-                        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-                        cancelText="Ні"
-                        okText="Так"
-                        onConfirm={handleDeleteCategory}
-                    >
-                        <DeleteOutlined key="delete"/>
-                    </Popconfirm>,
+                    <Flex justify={'space-around'}>
+                        <Popconfirm
+                            title="Видалення категорії"
+                            description="Підтвердити видалення категорії?"
+                            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                            cancelText="Ні"
+                            okText="Так"
+                            onConfirm={handleDeleteCategory}
+                        >
+                            <Button type="link" danger icon={<DeleteOutlined />} />
+                        </Popconfirm>
 
-                    <Link to={`/categories/edit/${id}`}>
-                        <EditOutlined key="edit"/>
-                    </Link>,
+                        <Link style={{width: "auto"}} to={`/categories/products-category/${id}`}>
+                            <Button type="primary" >
+                                Переглянути товари
+                            </Button>
+                        </Link>
+
+                        <Link style={{width: "auto"}} to={`/categories/edit/${id}`}>
+                            <Button type="link" icon={<EditOutlined />} />
+                        </Link>
+                    </Flex>
                 ]}
             >
                 <Meta

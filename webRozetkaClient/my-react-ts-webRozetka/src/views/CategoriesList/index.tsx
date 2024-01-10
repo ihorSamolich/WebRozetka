@@ -4,16 +4,21 @@ import { CategoryCard, SkeletonCategoryCard, ServerError, SitePagination, ItemsN
 import { Status } from "constants/enums";
 import React, { useEffect, useState } from "react";
 import { getCategories } from "store/categories/categories.actions.ts";
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 
 const CategoriesList: React.FC = () => {
+
+    const {pageNumber} = useParams();
+    const [page, setPage] = useState<number>(Number(pageNumber) || 1);
+
     const dispatch = useAppDispatch();
     const { status, items, totalItems } = useAppSelector((state) => state.category);
-    const [page, setPage] = useState<number>(1);
     const navigate = useNavigate();
     const [search , setSearch] = useState<string>("");
     const [searchValue , setSearchValue] = useState<string>("");
     const [pageSize, setPageSize] = useState<number>(4);
+
+    console.log(page)
 
     useEffect(() => {
         dispatch(getCategories({ page, pageSize, search }));

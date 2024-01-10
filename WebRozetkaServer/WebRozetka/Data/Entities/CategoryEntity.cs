@@ -13,5 +13,7 @@ namespace WebRozetka.Data.Entities
 
         [StringLength(4000)]
         public string Description { get; set; }
+
+        public ICollection<ProductEntity> Products { get; set; }
     }
 }

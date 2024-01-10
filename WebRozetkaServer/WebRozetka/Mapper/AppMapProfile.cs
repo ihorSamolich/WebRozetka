@@ -5,11 +5,14 @@ using WebRozetka.Helpers;
 using WebRozetka.Mapper.Converters;
 using WebRozetka.Models.Account;
 using WebRozetka.Models.Category;
+using WebRozetka.Models.Product;
 
 namespace WebRozetka.Mapper
 {
     public class AppMapProfile : Profile
     {
+
+
         public AppMapProfile()
         {
             CreateMap<CategoryCreateViewModel, CategoryEntity>()
@@ -21,6 +24,16 @@ namespace WebRozetka.Mapper
                 });
 
             CreateMap<CategoryEntity, CategoryItemViewModel>();
+
+            CreateMap<ProductEntity, ProductViewModel>()
+                .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Photos));
+
+            CreateMap<ICollection<PhotoEntity>, List<string>>()
+                .ConvertUsing<PhotoEntityToFilePathConverter>();
+
         }
     }
+
+
+
 }

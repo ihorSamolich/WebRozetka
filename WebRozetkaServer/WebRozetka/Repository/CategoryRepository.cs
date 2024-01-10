@@ -81,6 +81,7 @@ namespace WebRozetka.Repository
             }
 
             return entities
+                //.Include(x => x.Products)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

@@ -10,10 +10,8 @@ using System;
 using System.Text;
 using WebRozetka.Data;
 using WebRozetka.Data.Entities.Identity;
-using WebRozetka.FluentValidation.Categories;
 using WebRozetka.Interfaces;
 using WebRozetka.Mapper;
-using WebRozetka.Models.Category;
 using WebRozetka.Repository;
 using WebRozetka.Services;
 
