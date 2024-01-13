@@ -1,7 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {apiClient} from "utils/api.ts";
 import {handleAxiosError} from "utils/handleAxiosError.ts";
-import {IProductItem} from "interfaces/product";
+import {IProductCreate, IProductItem} from "interfaces/product";
 
 export const getProducts = createAsyncThunk(
     'product/getProducts',
@@ -38,6 +38,24 @@ export const getProductById = createAsyncThunk<IProductItem, number>(
             const response
                 = await apiClient.get<IProductItem>(`/api/products/${productId}`);
 
+            return response.data;
+        }  catch (error) {
+            return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
+        }
+    }
+);
+
+export const addProduct = createAsyncThunk<IProductItem, IProductCreate>(
+    'product/addProduct',
+    async (payload,{rejectWithValue}) => {
+        try {
+            const response
+                = await apiClient.post<IProductItem>(`/api/products`, payload,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                });
             return response.data;
         }  catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));

@@ -1,7 +1,7 @@
 import {AnyAction, AsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {Status} from "constants/enums";
 import {IProductState} from "interfaces/product";
-import {getProductById, getProducts, getProductsByCategory} from "store/products/products.actions.ts";
+import {addProduct, getProductById, getProducts, getProductsByCategory} from "store/products/products.actions.ts";
 
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
 type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
@@ -46,6 +46,11 @@ export const productSlice = createSlice({
                 state.selectedItem = action.payload;
             })
             .addCase(getProductById.pending, (state) => {
+                state.items = [];
+                state.selectedItem = null;
+                state.status = Status.LOADING;
+            })
+            .addCase(addProduct.pending, (state) => {
                 state.items = [];
                 state.selectedItem = null;
                 state.status = Status.LOADING;

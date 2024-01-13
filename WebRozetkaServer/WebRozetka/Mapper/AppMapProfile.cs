@@ -31,6 +31,12 @@ namespace WebRozetka.Mapper
             CreateMap<ICollection<PhotoEntity>, List<string>>()
                 .ConvertUsing<PhotoEntityToFilePathConverter>();
 
+            CreateMap<ProductCreateViewModel, ProductEntity>()
+               .AfterMap((src, dest) =>
+               {
+                   dest.IsDeleted = false;
+                   dest.DateCreated = DateTime.UtcNow;
+               });
         }
     }
 

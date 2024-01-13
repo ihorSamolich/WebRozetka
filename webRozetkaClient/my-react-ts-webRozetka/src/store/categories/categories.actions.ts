@@ -25,6 +25,19 @@ export const getCategories = createAsyncThunk(
     }
 );
 
+export const getCategoriesAll = createAsyncThunk<ICategoryItem[]>(
+    'category/getCategoriesAll',
+    async (_, {rejectWithValue}) => {
+        try {
+            const response
+                = await apiClient.get<ICategoryItem[]>(`/api/categories/all`);
+            return response.data;
+        }  catch (error) {
+            return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
+        }
+    }
+);
+
 export const getCategoryById = createAsyncThunk<ICategoryItem, number>(
     'category/getCategoryById',
     async (categoryId, {rejectWithValue}) => {

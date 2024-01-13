@@ -18,7 +18,9 @@ const CategoriesList: React.FC = () => {
     const [searchValue , setSearchValue] = useState<string>("");
     const [pageSize, setPageSize] = useState<number>(4);
 
-    console.log(page)
+    console.log('render')
+    console.log(items)
+
 
     useEffect(() => {
         dispatch(getCategories({ page, pageSize, search }));

@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebRozetka.Data;
 using WebRozetka.Data.Entities;
+using WebRozetka.Helpers;
 using WebRozetka.Models.Product;
 
 namespace WebRozetka.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly AppEFContext _context;
@@ -71,6 +74,37 @@ namespace WebRozetka.Controllers
             return Ok(viewModel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromForm] ProductCreateViewModel newProduct)
+        {
+            if (newProduct == null)
+            {
+                return BadRequest("Новий продукт є пустим!");
+            }
+
+            try
+            {
+                var product = _mapper.Map<ProductEntity>(newProduct);
+                await _context.Products.AddAsync(product);
+                await _context.SaveChangesAsync();
+
+                foreach (var image in newProduct.Images)
+                {
+                    var imagePath = await ImageWorker.SaveImageAsync(image);
+
+                    await _context.Photos.AddAsync(new PhotoEntity { FilePath = imagePath, ProductId = product.Id });
+                }
+
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Сталася помилка при створенні продукту: " + ex.Message);
+            }
+        }
+
         //// PUT: api/Products/5
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         //[HttpPut("{id}")]
@@ -102,16 +136,7 @@ namespace WebRozetka.Controllers
         //    return NoContent();
         //}
 
-        //// POST: api/Products
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<ProductEntity>> PostProductEntity(ProductEntity productEntity)
-        //{
-        //    _context.Products.Add(productEntity);
-        //    await _context.SaveChangesAsync();
 
-        //    return CreatedAtAction("GetProductEntity", new { id = productEntity.Id }, productEntity);
-        //}
 
         //// DELETE: api/Products/5
         //[HttpDelete("{id}")]

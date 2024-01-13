@@ -1,3 +1,5 @@
+import {Status} from "constants/enums";
+
 export interface IUser{
     name: string,
     email: string,
@@ -12,6 +14,7 @@ export interface IAccountState {
     user: IUser | null,
     token: string | null,
     isLogin: boolean,
+    status: Status;
 }
 
 export interface IRegistration {

@@ -4,13 +4,14 @@ import {Status} from "constants/enums";
 import {
     addCategory,
     deleteCategory,
-    getCategories,
+    getCategories, getCategoriesAll,
     getCategoryById,
     updateCategory
 } from "store/categories/categories.actions.ts";
 
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
 type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
+type PendingAction = ReturnType<GenericAsyncThunk['pending']>
 
 const initialState: ICategoryState = {
     items: [],
@@ -18,8 +19,13 @@ const initialState: ICategoryState = {
     error: null,
     status: Status.IDLE,
 };
+
 function isRejectedAction(action: AnyAction): action is RejectedAction {
     return action.type.endsWith('/rejected')
+}
+
+function isPendingAction(action: AnyAction): action is PendingAction {
+    return action.type.endsWith('/pending');
 }
 
 export const categorySlice = createSlice({
@@ -29,40 +35,29 @@ export const categorySlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getCategories.fulfilled, (state, action) => {
-                const {items, count} = action.payload;
-
-                state.items = items;
-                state.totalItems = count;
-
+                state.items = action.payload.items;
+                state.totalItems = action.payload.count;
                 state.status = Status.SUCCESS;
             })
-            .addCase(getCategories.pending, (state) => {
-                state.status = Status.LOADING;
+            .addCase(getCategoriesAll.fulfilled, (state, action) =>{
+                state.items = action.payload
+                state.status = Status.SUCCESS;
             })
             .addCase(getCategoryById.fulfilled, (state) => {
                 state.status = Status.SUCCESS;
             })
-            .addCase(getCategoryById.pending, (state) => {
-                state.status = Status.LOADING;
-            })
-            .addCase(addCategory.fulfilled, (state, action) => {
-                state.items.push(action.payload);
+            .addCase(addCategory.fulfilled, (state) => {
                 state.status = Status.SUCCESS;
             })
-            .addCase(addCategory.pending, (state) => {
-                state.status = Status.LOADING;
-            })
-            .addCase(deleteCategory.fulfilled, (state, action) => {
-                state.items = state.items.filter(item => item.id !== action.payload);
+            .addCase(deleteCategory.fulfilled, (state) => {
                 state.status = Status.SUCCESS;
             })
-            .addCase(updateCategory.fulfilled, (state, action) => {
-                const id = action.payload.id
-
-                state.items = [...state.items.filter(item => item.id !== id), action.payload];
+            .addCase(updateCategory.fulfilled, (state) => {
                 state.status = Status.SUCCESS;
             })
-            .addCase(updateCategory.pending, (state) => {
+            .addMatcher(isPendingAction, (state) => {
+                state.items = [];
+                state.totalItems = 0;
                 state.status = Status.LOADING;
             })
             .addMatcher(isRejectedAction, (state,action) => {

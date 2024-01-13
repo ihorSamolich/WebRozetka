@@ -1,12 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import {Layout, theme, ConfigProvider, Menu, MenuProps} from 'antd';
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import {TopHeader} from "components";
-import {useAppDispatch} from "hooks/reduxHooks";
-import {autoLogin} from "store/accounts/accounts.slice.ts";
 import Sider from "antd/es/layout/Sider";
 import {AppstoreAddOutlined, AppstoreOutlined, BuildOutlined, HomeOutlined} from "@ant-design/icons";
-import {useLocalStorageHook} from "hooks/useLocalStorageHook";
 import Basket from "components/Basket";
 
 const items: MenuProps["items"] = [
@@ -49,23 +46,43 @@ const items: MenuProps["items"] = [
                 ),
             },
         ],
-    }
+    },
+    {
+        key: "/products",
+        icon: <AppstoreOutlined/>,
+        label: "Products",
+        children: [
+            {
+                key: "/products/create",
+                icon: <AppstoreAddOutlined/>,
+                label: (
+                    <NavLink
+                        to="/products/create"
+                        style={{color: "inherit", textDecoration: "none"}}
+                    >
+                        Create product
+                    </NavLink>
+                ),
+            },
+        ],
+    },
 ];
 
 
 const SiteLayout : React.FC = () => {
     const {Footer, Content } = Layout;
     const [themeMode, setThemeMode] = useState<boolean>(true)
-    const [collapsed, setCollapsed] = useState<boolean>(false);
-    const dispatch = useAppDispatch()
     const location = useLocation();
-    const [token] = useLocalStorageHook('authToken')
+    const [collapsed, setCollapsed] = useState<boolean>(false);
 
-    useEffect(() => {
-        if (token){
-            dispatch(autoLogin(token))
-        }
-    }, []);
+    // const dispatch = useAppDispatch()
+    // const [token] = useLocalStorageHook('authToken')
+
+    // useEffect(() => {
+    //     if (token){
+    //         dispatch(autoLogin(token))
+    //     }
+    // }, []);
 
     return (
         <ConfigProvider theme={{algorithm: themeMode ? theme.defaultAlgorithm : theme.darkAlgorithm}}>

@@ -20,6 +20,7 @@ namespace WebRozetka.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
             builder.Entity<UserRoleEntity>(ur =>
             {
                 ur.HasKey(ur => new { ur.UserId, ur.RoleId });
