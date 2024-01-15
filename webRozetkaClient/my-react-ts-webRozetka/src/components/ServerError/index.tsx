@@ -1,6 +1,6 @@
 import { Result, Button } from 'antd';
 import { Link } from 'react-router-dom';
-import React from "react";
+import React from 'react';
 
 const ServerError: React.FC = () => {
     return (

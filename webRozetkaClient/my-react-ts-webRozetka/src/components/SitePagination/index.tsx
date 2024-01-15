@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pagination, Row} from "antd";
+import {Pagination, Row} from 'antd';
 
 interface ISitePaginationProps {
     page: number,
@@ -22,7 +22,7 @@ const SitePagination : React.FC<ISitePaginationProps> = (props) => {
     };
 
     return (
-        <Row style={{width: '100%', display: "flex", justifyContent: 'center'}}>
+        <Row style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
             <Pagination
                 showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
                 current={page}

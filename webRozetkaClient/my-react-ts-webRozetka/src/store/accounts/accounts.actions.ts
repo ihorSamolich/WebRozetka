@@ -1,7 +1,7 @@
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import {apiClient} from "utils/api.ts";
-import {ILogin, IRegistration} from "interfaces/account";
-import {handleAxiosError} from "utils/handleAxiosError.ts";
+import {createAsyncThunk} from '@reduxjs/toolkit';
+import {apiClient} from 'utils/api.ts';
+import {ILogin, IRegistration} from 'interfaces/account';
+import {handleAxiosError} from 'utils/handleAxiosError.ts';
 
 export const login = createAsyncThunk(
     'account/login',
@@ -12,7 +12,7 @@ export const login = createAsyncThunk(
         } catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
-    }
+    },
 );
 
 export const register = createAsyncThunk(
@@ -25,5 +25,5 @@ export const register = createAsyncThunk(
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
 
-    }
+    },
 );

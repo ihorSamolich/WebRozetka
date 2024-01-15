@@ -1,14 +1,14 @@
 import React from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import {Button, Divider, Form, Input, message, Row, Spin, Upload} from 'antd';
-import TextArea from "antd/es/input/TextArea";
-import {ICategoryCreate,} from "interfaces/categories";
-import {addCategory} from "store/categories/categories.actions.ts";
-import {useAppDispatch, useAppSelector, useNotification} from "hooks";
-import {Status} from "constants/enums";
-import {unwrapResult} from "@reduxjs/toolkit";
-import {useNavigate} from "react-router-dom";
-import {imageConverterToFile} from "utils/imageConverterToFile.ts";
+import TextArea from 'antd/es/input/TextArea';
+import {ICategoryCreate} from 'interfaces/categories';
+import {addCategory} from 'store/categories/categories.actions.ts';
+import {useAppDispatch, useAppSelector, useNotification} from 'hooks';
+import {Status} from 'constants/enums';
+import {unwrapResult} from '@reduxjs/toolkit';
+import {useNavigate} from 'react-router-dom';
+import {imageConverterToFile} from 'utils/imageConverterToFile.ts';
 
 const CategoryCreate: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -28,7 +28,7 @@ const CategoryCreate: React.FC = () => {
             unwrapResult(result);
             handleSuccess('Категорію успішно створено!');
             setTimeout(() => {
-                navigate('/categories/all');
+                navigate('/categories');
             }, 1000);
         } catch (error) {
             handleError(error);
@@ -47,9 +47,9 @@ const CategoryCreate: React.FC = () => {
                     style={{
                         minWidth: '100%',
                         display: 'flex',
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        padding: 20
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        padding: 20,
                     }}
                 >
                     <Form.Item
@@ -58,7 +58,7 @@ const CategoryCreate: React.FC = () => {
                         htmlFor="name"
                         rules={[
                             {required: true, message: 'Це поле є обов\'язковим!'},
-                            {min: 3, message: 'Назва повинна містити мінімум 3 символи!'}
+                            {min: 3, message: 'Назва повинна містити мінімум 3 символи!'},
                         ]}
                     >
                         <Input autoComplete="name"/>
@@ -70,7 +70,7 @@ const CategoryCreate: React.FC = () => {
                         htmlFor="description"
                         rules={[
                             {required: true, message: 'Це поле є обов\'язковим!'},
-                            {min: 10, message: 'Опис повинен містити мінімум 10 символів!'}
+                            {min: 10, message: 'Опис повинен містити мінімум 10 символів!'},
                         ]}
                     >
                         <TextArea/>
@@ -108,9 +108,9 @@ const CategoryCreate: React.FC = () => {
                 </Form>
             </Row>
         </Spin>
-    )
-}
+    );
+};
 
-export default CategoryCreate
+export default CategoryCreate;
 
 

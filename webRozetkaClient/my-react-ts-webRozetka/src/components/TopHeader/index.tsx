@@ -1,47 +1,48 @@
 import React, {useEffect, useState} from 'react';
-import {PRIMARY_BLUE_COLOR} from "constants/index.ts";
-import {Avatar, Button, Switch} from "antd";
-import {MenuFoldOutlined, MenuUnfoldOutlined,UserOutlined, PoweroffOutlined} from "@ant-design/icons";
-import {Header} from "antd/es/layout/layout";
-import {ITopHeader} from "interfaces/design";
-import {Link} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "hooks/reduxHooks";
-import ButtonGroup from "antd/es/button/button-group";
-import {logout} from "store/accounts/accounts.slice.ts";
-import {APP_ENV} from "env/index.ts";
+import {PRIMARY_BLUE_COLOR} from 'constants/index.ts';
+import {Avatar, Button, Switch} from 'antd';
+import {MenuFoldOutlined, MenuUnfoldOutlined,UserOutlined, PoweroffOutlined} from '@ant-design/icons';
+import {Header} from 'antd/es/layout/layout';
+import {ITopHeader} from 'interfaces/design';
+import {Link} from 'react-router-dom';
+import {useAppDispatch, useAppSelector} from 'hooks/reduxHooks';
+import ButtonGroup from 'antd/es/button/button-group';
+import {logout} from 'store/accounts/accounts.slice.ts';
+import {APP_ENV} from 'env/index.ts';
 
 
 const TopHeader: React.FC<ITopHeader> = (props) => {
     const {collapsed, setCollapsed, themeMode, setThemeMode} = props;
     const [show, setShow] = useState<boolean>(true);
     const [lastScrollY, setLastScrollY] = useState<number>(0);
-    const {isLogin, user} = useAppSelector(state => state.account)
+    const {isLogin, user} = useAppSelector(state => state.account);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        window.addEventListener("scroll", controlNavbar);
+        const controlNavbar = () => {
+            if (window.scrollY > 0) {
+                if (window.scrollY > lastScrollY) {
+                    setShow(false);
+
+                } else {
+                    setShow(true);
+                }
+            } else {
+                setShow(true);
+            }
+            setLastScrollY(window.scrollY);
+        };
+
+        window.addEventListener('scroll', controlNavbar);
         return () => {
-            window.removeEventListener("scroll", controlNavbar);
+            window.removeEventListener('scroll', controlNavbar);
         };
     }, [lastScrollY]);
 
-    const controlNavbar = () => {
-        if (window.scrollY > 0) {
-            if (window.scrollY > lastScrollY) {
-                setShow(false);
-
-            } else {
-                setShow(true)
-            }
-        } else {
-            setShow(true);
-        }
-        setLastScrollY(window.scrollY);
-    };
 
     const handleLogout = () => {
         dispatch(logout());
-    }
+    };
 
     return (
         <Header style={{
@@ -53,7 +54,7 @@ const TopHeader: React.FC<ITopHeader> = (props) => {
             zIndex: 10,
             position: show ? 'sticky' : 'relative',
             top: 0,
-            transition: 'all 1s'
+            transition: 'all 1s',
         }}>
             <Button
                 type="text"
@@ -67,23 +68,23 @@ const TopHeader: React.FC<ITopHeader> = (props) => {
             />
 
             {isLogin ? (
-                <ButtonGroup size='large'>
+                <ButtonGroup size="large">
                     <Button
-                        type='primary'
+                        type="primary"
                         style={{display: 'flex'}}
                         icon={<Avatar  size="small" src={`${APP_ENV.BASE_URL}images/${user?.image}`}/>}
                     >
                         {user?.name}
                     </Button>
                     <Button
-                        type='primary'
+                        type="primary"
                         icon={<PoweroffOutlined/>}
                         onClick={() => handleLogout()}
                     />
                 </ButtonGroup>
 
             ) : (
-                <Link to="/account/login" style={{color: "inherit", textDecoration: "none"}}>
+                <Link to="/account/login" style={{color: 'inherit', textDecoration: 'none'}}>
                     <Button type="primary" icon={<UserOutlined/>}>
                         Увійти
                     </Button>

@@ -1,13 +1,14 @@
 import {AnyAction, AsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {ICategoryState} from "interfaces/categories";
-import {Status} from "constants/enums";
+import {ICategoryState} from 'interfaces/categories';
+import {Status} from 'constants/enums';
 import {
     addCategory,
     deleteCategory,
-    getCategories, getCategoriesAll,
+    getCategories,
+    getCategoriesNames,
     getCategoryById,
-    updateCategory
-} from "store/categories/categories.actions.ts";
+    updateCategory,
+} from 'store/categories/categories.actions.ts';
 
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
 type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
@@ -15,13 +16,14 @@ type PendingAction = ReturnType<GenericAsyncThunk['pending']>
 
 const initialState: ICategoryState = {
     items: [],
+    itemNames: [],
     totalItems: 0,
     error: null,
     status: Status.IDLE,
 };
 
 function isRejectedAction(action: AnyAction): action is RejectedAction {
-    return action.type.endsWith('/rejected')
+    return action.type.endsWith('/rejected');
 }
 
 function isPendingAction(action: AnyAction): action is PendingAction {
@@ -39,8 +41,8 @@ export const categorySlice = createSlice({
                 state.totalItems = action.payload.count;
                 state.status = Status.SUCCESS;
             })
-            .addCase(getCategoriesAll.fulfilled, (state, action) =>{
-                state.items = action.payload
+            .addCase(getCategoriesNames.fulfilled, (state, action) =>{
+                state.itemNames = action.payload;
                 state.status = Status.SUCCESS;
             })
             .addCase(getCategoryById.fulfilled, (state) => {
@@ -56,14 +58,15 @@ export const categorySlice = createSlice({
                 state.status = Status.SUCCESS;
             })
             .addMatcher(isPendingAction, (state) => {
-                state.items = [];
-                state.totalItems = 0;
                 state.status = Status.LOADING;
             })
             .addMatcher(isRejectedAction, (state,action) => {
                 state.status = Status.ERROR;
                 state.error = action.payload;
-            })
+                state.totalItems = 0;
+                state.items=[];
+                state.itemNames=[];
+            });
     },
 });
 

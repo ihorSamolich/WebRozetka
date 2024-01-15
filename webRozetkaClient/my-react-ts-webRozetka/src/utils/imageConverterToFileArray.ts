@@ -1,5 +1,5 @@
-import {UploadChangeParam} from "antd/es/upload";
+import {UploadChangeParam} from 'antd/es/upload';
 
 export const imageConverterToFileArray = (e: UploadChangeParam) => {
-    return e?.fileList.map(file => file.originFileObj)
+    return e?.fileList.map(file => file.originFileObj);
 };

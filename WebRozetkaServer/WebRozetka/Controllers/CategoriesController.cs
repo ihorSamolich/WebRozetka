@@ -17,7 +17,7 @@ namespace WebRozetka.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -38,13 +38,16 @@ namespace WebRozetka.Controllers
             return Ok(new { count, items });
         }
 
-        [HttpGet("all")]
-        public async Task<IActionResult> GetCategoriesList()
+        [HttpGet("names")]
+        public async Task<IActionResult> GetCategoriesNames()
         {
             var items = await _categoryRepository.GetAllAsync();
 
-            return Ok(items);
+            var result = items.Select(item => new { item.Name, item.Id });
+
+            return Ok(result);
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategoryById(int id)

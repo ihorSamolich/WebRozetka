@@ -1,8 +1,8 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {Navigation, Pagination} from 'swiper/modules';
-import {Flex, Image} from "antd";
-import {APP_ENV} from "env/index.ts";
+import {Flex, Image} from 'antd';
+import {APP_ENV} from 'env/index.ts';
 import 'swiper/swiper-bundle.css';
 
 interface IProductPicturesProps{
@@ -22,7 +22,7 @@ const ProductPictures: React.FC<IProductPicturesProps> = (props) => {
         >
             {photos?.map((photo, index) => (
                 <SwiperSlide key={index}>
-                    <Flex style={{height: '100%'}} align={"center"} justify={'center'}>
+                    <Flex style={{height: '100%'}} align={'center'} justify={'center'}>
                         <Image
                             height={'300px'}
                             preview={false}

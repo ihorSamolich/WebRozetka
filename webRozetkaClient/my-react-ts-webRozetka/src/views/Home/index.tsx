@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Card, Divider, Flex, Row, Spin, Typography} from "antd";
+import {Button, Card, Divider, Flex, Row, Spin, Typography} from 'antd';
 import { GithubOutlined} from '@ant-design/icons';
 
 const Home: React.FC = () => {
@@ -20,20 +20,19 @@ const Home: React.FC = () => {
                     <Button
                         size="large"
                         type="primary"
-                        //onClick={() => window.open("", '_blank')}
                         icon={<GithubOutlined />}
                     >
                         Clone it from Github
                     </Button>
                 </Typography.Title>
-                <Flex style={{margin:50}} gap="small" align={'center'} justify={"center"}>
+                <Flex style={{margin:50}} gap="small" align={'center'} justify={'center'}>
                     <Spin size="large">
                         <div className="content" />
                     </Spin>
                 </Flex>
             </Card>
         </Row>
-    )
+    );
 };
 
 export default Home;

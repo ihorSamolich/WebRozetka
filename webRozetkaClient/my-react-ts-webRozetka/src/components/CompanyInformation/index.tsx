@@ -1,5 +1,5 @@
 import React from 'react';
-import {Collapse, CollapseProps, Divider} from "antd";
+import {Collapse, CollapseProps, Divider} from 'antd';
 
 const collapsedItem: CollapseProps['items'] = [
     {
@@ -21,7 +21,7 @@ const collapsedItem: CollapseProps['items'] = [
 const CompanyInformation : React.FC = () => {
     return (
         <>
-            <Divider orientation={"left"}>ПРО НАС</Divider>
+            <Divider orientation={'left'}>ПРО НАС</Divider>
             <Collapse style={{marginTop: 20}} accordion items={collapsedItem} />
         </>
 

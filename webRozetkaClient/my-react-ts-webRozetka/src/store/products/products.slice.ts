@@ -1,7 +1,7 @@
 import {AnyAction, AsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {Status} from "constants/enums";
-import {IProductState} from "interfaces/product";
-import {addProduct, getProductById, getProducts, getProductsByCategory} from "store/products/products.actions.ts";
+import {Status} from 'constants/enums';
+import {IProductState} from 'interfaces/product';
+import {addProduct, getProductById, getProducts, getProductsByCategory} from 'store/products/products.actions.ts';
 
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
 type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
@@ -14,7 +14,7 @@ const initialState: IProductState = {
     status: Status.IDLE,
 };
 function isRejectedAction(action: AnyAction): action is RejectedAction {
-    return action.type.endsWith('/rejected')
+    return action.type.endsWith('/rejected');
 }
 
 export const productSlice = createSlice({
@@ -58,7 +58,7 @@ export const productSlice = createSlice({
             .addMatcher(isRejectedAction, (state,action) => {
                 state.status = Status.ERROR;
                 state.error = action.payload;
-            })
+            });
     },
 });
 

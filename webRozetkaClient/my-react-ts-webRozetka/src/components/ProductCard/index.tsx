@@ -2,30 +2,30 @@ import React from 'react';
 import { ShoppingCartOutlined,ExclamationCircleOutlined } from '@ant-design/icons';
 import {Badge, Button, Card, Col} from 'antd';
 import {Typography } from 'antd';
-import {IProductItem} from "interfaces/product";
-import {APP_ENV} from "env/index.ts";
-import NotImage from "assets/imagenot.png";
-import {useNavigate} from "react-router-dom";
+import {IProductItem} from 'interfaces/product';
+import {APP_ENV} from 'env/index.ts';
+import NotImage from 'assets/imagenot.png';
+import {useNavigate} from 'react-router-dom';
 
 const { Title } = Typography;
 const { Meta } = Card;
 const ProductCard : React.FC<IProductItem> = (props) => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const {id, name, discount, price, photos, quantity} = props;
 
     const handleOpenProductCard = () => {
-        navigate(`/product/${id}`)
-    }
+        navigate(`/product/${id}`);
+    };
 
     const handleAddProductToBasket = (event: React.MouseEvent) => {
         event.stopPropagation();
         console.log('to basket');
-    }
+    };
 
     return (
         <Col style={{padding: 10}} xxl={3} xl={4} lg={6} md={8} sm={12}>
             <Badge.Ribbon
-                text={discount > 0 ? `Знижка - ${discount} %` : `Вигідна пропозиція!`}
+                text={discount > 0 ? `Знижка - ${discount} %` : 'Вигідна пропозиція!'}
                 color={discount > 0 ? 'red' : 'green'}
             >
                 <Card
@@ -64,6 +64,6 @@ const ProductCard : React.FC<IProductItem> = (props) => {
             </Badge.Ribbon>
         </Col>
     );
-}
+};
 
 export default ProductCard;

@@ -1,20 +1,20 @@
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import {apiClient} from "utils/api.ts";
-import {handleAxiosError} from "utils/handleAxiosError.ts";
-import {IProductCreate, IProductItem} from "interfaces/product";
+import {createAsyncThunk} from '@reduxjs/toolkit';
+import {apiClient} from 'utils/api.ts';
+import {handleAxiosError} from 'utils/handleAxiosError.ts';
+import {IProductCreate, IProductItem} from 'interfaces/product';
 
 export const getProducts = createAsyncThunk(
     'product/getProducts',
     async (_,{rejectWithValue}) => {
         try {
             const response
-                = await apiClient.get<IProductItem[]>(`/api/products`);
+                = await apiClient.get<IProductItem[]>('/api/products');
 
             return response.data;
         }  catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
-    }
+    },
 );
 
 export const getProductsByCategory = createAsyncThunk<IProductItem[], number>(
@@ -28,7 +28,7 @@ export const getProductsByCategory = createAsyncThunk<IProductItem[], number>(
         }  catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
-    }
+    },
 );
 
 export const getProductById = createAsyncThunk<IProductItem, number>(
@@ -42,7 +42,7 @@ export const getProductById = createAsyncThunk<IProductItem, number>(
         }  catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
-    }
+    },
 );
 
 export const addProduct = createAsyncThunk<IProductItem, IProductCreate>(
@@ -50,15 +50,15 @@ export const addProduct = createAsyncThunk<IProductItem, IProductCreate>(
     async (payload,{rejectWithValue}) => {
         try {
             const response
-                = await apiClient.post<IProductItem>(`/api/products`, payload,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data"
-                    }
-                });
+                = await apiClient.post<IProductItem>('/api/products', payload,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    });
             return response.data;
         }  catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
-    }
+    },
 );

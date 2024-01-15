@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
-import {Divider, Row, Col, Flex, Typography, Button, Rate} from "antd";
-import {useParams} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "hooks/reduxHooks";
-import {getProductById} from "store/products/products.actions.ts";
-import {CompanyInformation, ProductDescriptions, ProductPictures} from "components/index.ts";
-import {ExclamationCircleOutlined, ShoppingCartOutlined, CarOutlined} from "@ant-design/icons";
+import {Divider, Row, Col, Flex, Typography, Button, Rate} from 'antd';
+import {useParams} from 'react-router-dom';
+import {useAppDispatch, useAppSelector} from 'hooks/reduxHooks';
+import {getProductById} from 'store/products/products.actions.ts';
+import {CompanyInformation, ProductDescriptions, ProductPictures} from 'components/index.ts';
+import {ExclamationCircleOutlined, ShoppingCartOutlined, CarOutlined} from '@ant-design/icons';
 import { Descriptions } from 'antd';
 import type { DescriptionsProps } from 'antd';
-import {IProductItem} from "interfaces/product";
+import {IProductItem} from 'interfaces/product';
 const { Title,Text } = Typography;
 
 const deliveryInfo: DescriptionsProps['items'] = [
@@ -23,29 +23,30 @@ const deliveryInfo: DescriptionsProps['items'] = [
             <li>
                 <Text type="secondary"> При замовленні від 2000 грн доставка безкоштовна</Text>
             </li>
-        </ul>
-    }
+        </ul>,
+    },
 ];
+
 const defaultProductData : IProductItem = {
-    name: "Без назви",
-    description: "Немає опису",
+    name: 'Без назви',
+    description: 'Немає опису',
     discount: 0,
     id: 0,
     photos: [],
     price: 0,
     quantity: 0,
     country: null,
-    manufacturer: null
-}
+    manufacturer: null,
+};
 
 const ProductDetail : React.FC = () => {
     const {productId} = useParams();
     const dispatch = useAppDispatch();
-    const {selectedItem} = useAppSelector(state => state.product)
+    const {selectedItem} = useAppSelector(state => state.product);
 
     useEffect(() => {
         dispatch(getProductById(Number(productId)));
-    }, []);
+    }, [dispatch, productId]);
 
     const {
         name,
@@ -55,7 +56,7 @@ const ProductDetail : React.FC = () => {
         photos,
         price,
         discount,
-        quantity
+        quantity,
     } = selectedItem || defaultProductData;
 
     return (
@@ -69,14 +70,14 @@ const ProductDetail : React.FC = () => {
                     </Col>
 
                     <Col style={{paddingLeft: 20}} span={16}>
-                        <Flex justify={"space-between"}>
+                        <Flex justify={'space-between'}>
                             <Title style={{marginBottom: 0}} level={2}>{name}</Title>
                             <Flex gap={20}>
-                                <Title level={2} type={"success"} style={{margin: '0px'}}>{price.toFixed(2)} грн</Title>
+                                <Title level={2} type={'success'} style={{margin: '0px'}}>{price.toFixed(2)} грн</Title>
                                 {
                                     discount > 0 &&
                                     <Title level={5} style={{margin: '0px'}} delete type="danger">
-                                        {(price / (1 - discount / 100)).toFixed(2)}{" грн"}
+                                        {(price / (1 - discount / 100)).toFixed(2)}{' грн'}
                                     </Title>
                                 }
                             </Flex>
@@ -91,7 +92,7 @@ const ProductDetail : React.FC = () => {
                                     <Text type="success">Товар в наявності {quantity} шт.</Text>
                                     <Button
                                         style={{maxWidth: 300}}
-                                        type={"primary"}
+                                        type={'primary'}
                                         icon={<ShoppingCartOutlined/>} key="addToCart"
                                     >
                                         До кошика
@@ -110,7 +111,6 @@ const ProductDetail : React.FC = () => {
                             <Descriptions bordered items={deliveryInfo} />
                         </Flex>
                     </Col>
-
                     <Col span={24}>
                         <Divider orientation="left">ХАРАКТЕРИСТИКИ</Divider>
                         <ProductDescriptions
@@ -125,8 +125,7 @@ const ProductDetail : React.FC = () => {
                 </Row>
             }
         </>
-
     );
-}
+};
 
 export default ProductDetail;

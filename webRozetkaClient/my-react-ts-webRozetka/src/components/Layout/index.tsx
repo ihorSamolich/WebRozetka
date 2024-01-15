@@ -1,45 +1,45 @@
-import React, { useState} from "react";
+import React, { useState} from 'react';
 import {Layout, theme, ConfigProvider, Menu, MenuProps} from 'antd';
-import { NavLink, Outlet, useLocation } from "react-router-dom";
-import {TopHeader} from "components";
-import Sider from "antd/es/layout/Sider";
-import {AppstoreAddOutlined, AppstoreOutlined, BuildOutlined, HomeOutlined} from "@ant-design/icons";
-import Basket from "components/Basket";
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import {TopHeader} from 'components';
+import Sider from 'antd/es/layout/Sider';
+import {AppstoreAddOutlined, AppstoreOutlined, BuildOutlined, HomeOutlined} from '@ant-design/icons';
+import Basket from 'components/Basket';
 
-const items: MenuProps["items"] = [
+const items: MenuProps['items'] = [
     {
-        key: "/",
+        key: '/',
         icon: <HomeOutlined />,
         label: (
-            <NavLink to="/" style={{ color: "inherit", textDecoration: "none" }}>
+            <NavLink to="/" style={{ color: 'inherit', textDecoration: 'none' }}>
                 Home
             </NavLink>
         ),
     },
     {
-        key: "/categories",
+        key: '/categories/',
         icon: <AppstoreOutlined/>,
-        label: "Categories",
+        label: 'Categories',
         children: [
             {
-                key: "/categories/all",
+                key: '/categories',
                 icon: <BuildOutlined/>,
                 label: (
                     <NavLink
-                        to="/categories/all"
-                        style={{color: "inherit", textDecoration: "none"}}
+                        to="/categories"
+                        style={{color: 'inherit', textDecoration: 'none'}}
                     >
                         All categories
                     </NavLink>
                 ),
             },
             {
-                key: "/categories/create",
+                key: '/categories/create',
                 icon: <AppstoreAddOutlined/>,
                 label: (
                     <NavLink
                         to="/categories/create"
-                        style={{color: "inherit", textDecoration: "none"}}
+                        style={{color: 'inherit', textDecoration: 'none'}}
                     >
                         Create category
                     </NavLink>
@@ -48,17 +48,17 @@ const items: MenuProps["items"] = [
         ],
     },
     {
-        key: "/products",
+        key: '/products',
         icon: <AppstoreOutlined/>,
-        label: "Products",
+        label: 'Products',
         children: [
             {
-                key: "/products/create",
+                key: '/product/create',
                 icon: <AppstoreAddOutlined/>,
                 label: (
                     <NavLink
-                        to="/products/create"
-                        style={{color: "inherit", textDecoration: "none"}}
+                        to="/product/create"
+                        style={{color: 'inherit', textDecoration: 'none'}}
                     >
                         Create product
                     </NavLink>
@@ -71,18 +71,9 @@ const items: MenuProps["items"] = [
 
 const SiteLayout : React.FC = () => {
     const {Footer, Content } = Layout;
-    const [themeMode, setThemeMode] = useState<boolean>(true)
+    const [themeMode, setThemeMode] = useState<boolean>(true);
     const location = useLocation();
     const [collapsed, setCollapsed] = useState<boolean>(false);
-
-    // const dispatch = useAppDispatch()
-    // const [token] = useLocalStorageHook('authToken')
-
-    // useEffect(() => {
-    //     if (token){
-    //         dispatch(autoLogin(token))
-    //     }
-    // }, []);
 
     return (
         <ConfigProvider theme={{algorithm: themeMode ? theme.defaultAlgorithm : theme.darkAlgorithm}}>
@@ -106,7 +97,7 @@ const SiteLayout : React.FC = () => {
                             margin: '0 24px',
                             padding: '0 24px',
                             minHeight: 280,
-                            maxHeight: '100%'
+                            maxHeight: '100%',
                         }}
                     >
                         <Outlet/>
@@ -116,7 +107,7 @@ const SiteLayout : React.FC = () => {
             </Layout>
         </ConfigProvider>
     );
-}
+};
 
 export default SiteLayout;
 

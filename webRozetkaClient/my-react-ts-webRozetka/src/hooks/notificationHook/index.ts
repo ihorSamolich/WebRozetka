@@ -1,4 +1,4 @@
-import {MessageInstance} from "antd/es/message/interface";
+import {MessageInstance} from 'antd/es/message/interface';
 
 export const useNotification = (messageApi : MessageInstance) => {
     const showMessage = (type: 'success' | 'error', content: string) => {
@@ -15,7 +15,7 @@ export const useNotification = (messageApi : MessageInstance) => {
 
     const handleError = (error: any) => {
         if (typeof error === 'string'){
-            showMessage('error', error)
+            showMessage('error', error);
         }
         else {
             const errorsObject = error?.errors;

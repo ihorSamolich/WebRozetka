@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {Status} from "constants/enums";
-import {Button, Divider, Form, Input, Image, Row, Spin, Upload, message} from "antd";
-import TextArea from "antd/es/input/TextArea";
-import {useAppDispatch, useAppSelector} from "hooks/reduxHooks";
-import { ICategoryItem, ICategoryUpdate } from "interfaces/categories";
-import {getCategoryById, updateCategory} from "store/categories/categories.actions.ts";
-import {useNavigate, useParams} from "react-router-dom";
-import { UploadOutlined} from "@ant-design/icons";
-import {RcFile} from "antd/es/upload";
-import {APP_ENV} from "env";
-import {useNotification} from "hooks/notificationHook";
-import {unwrapResult} from "@reduxjs/toolkit";
-import { imageConverterToFile} from "utils/imageConverterToFile.ts";
+import {Status} from 'constants/enums';
+import {Button, Divider, Form, Input, Image, Row, Spin, Upload, message} from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import {useAppDispatch, useAppSelector} from 'hooks/reduxHooks';
+import { ICategoryItem, ICategoryUpdate } from 'interfaces/categories';
+import {getCategoryById, updateCategory} from 'store/categories/categories.actions.ts';
+import {useNavigate, useParams} from 'react-router-dom';
+import { UploadOutlined} from '@ant-design/icons';
+import {RcFile} from 'antd/es/upload';
+import {APP_ENV} from 'env';
+import {useNotification} from 'hooks/notificationHook';
+import {unwrapResult} from '@reduxjs/toolkit';
+import { imageConverterToFile} from 'utils/imageConverterToFile.ts';
 
 const CategoryEdit : React.FC = () => {
     const dispatch = useAppDispatch();
@@ -22,7 +22,7 @@ const CategoryEdit : React.FC = () => {
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const {handleSuccess, handleError} = useNotification(messageApi);
-    const [category, setCategory] = useState<ICategoryItem | null>(null)
+    const [category, setCategory] = useState<ICategoryItem | null>(null);
 
     useEffect(() => {
         dispatch(getCategoryById(Number(id)))
@@ -37,20 +37,20 @@ const CategoryEdit : React.FC = () => {
                 }
             })
             .catch(()=> {
-                    navigate('/categories/all');
-                }
-            )
-    }, [id]);
+                navigate('/categories/all');
+            },
+            );
+    }, [dispatch, id, navigate]);
 
     const setDefaultData = (data : ICategoryItem) => {
         if (data) {
             form.setFieldsValue(data);
             setPreviewImage(`${APP_ENV.BASE_URL}images/${data.image}`);
         }
-    }
+    };
 
     const handlePreview = () => {
-        const file : File = form.getFieldValue('image')
+        const file : File = form.getFieldValue('image');
 
         if (file) {
             setPreviewImage(URL.createObjectURL(file as RcFile));
@@ -65,7 +65,7 @@ const CategoryEdit : React.FC = () => {
             unwrapResult(result);
             handleSuccess('Категорію успішно оновлено!');
             setTimeout(() => {
-                navigate('/categories/all');
+                navigate('/categories');
             }, 1000);
         } catch (error) {
             handleError(error);
@@ -90,9 +90,9 @@ const CategoryEdit : React.FC = () => {
                     style={{
                         minWidth: '100%',
                         display: 'flex',
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        padding: 20
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        padding: 20,
                     }}
                 >
                     <Form.Item
@@ -112,7 +112,7 @@ const CategoryEdit : React.FC = () => {
                         htmlFor="name"
                         rules={[
                             {required: true, message: 'Це поле є обов\'язковим!'},
-                            {min: 3, message: 'Назва повинна містити мінімум 3 символи!'}
+                            {min: 3, message: 'Назва повинна містити мінімум 3 символи!'},
                         ]}
                     >
                         <Input autoComplete="name"/>
@@ -124,7 +124,7 @@ const CategoryEdit : React.FC = () => {
                         htmlFor="description"
                         rules={[
                             {required: true, message: 'Це поле є обов\'язковим!'},
-                            {min: 10, message: 'Опис повинен містити мінімум 10 символів!'}
+                            {min: 10, message: 'Опис повинен містити мінімум 10 символів!'},
                         ]}
                     >
                         <TextArea/>
@@ -132,8 +132,8 @@ const CategoryEdit : React.FC = () => {
 
                     <Row style={{display: 'flex', alignItems: 'center', flexWrap: 'nowrap'}}>
                         <Image height={120}
-                               src={previewImage || 'https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg'}
-                               style={{borderRadius: 10}}/>
+                            src={previewImage || 'https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg'}
+                            style={{borderRadius: 10}}/>
                         <Form.Item
                             style={{margin: 0, marginLeft: 10}}
                             name="image"
@@ -165,6 +165,6 @@ const CategoryEdit : React.FC = () => {
             </Row>
         </Spin>
     );
-}
+};
 
 export default CategoryEdit;

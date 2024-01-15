@@ -16,4 +16,4 @@ export const isTokenActive = (token : string | null) => {
         console.error('Помилка при обробці токена:', error);
         return false;
     }
-}
+};

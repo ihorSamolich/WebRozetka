@@ -14,5 +14,11 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'quotes': ["error", "single"],             //
+    'jsx-quotes': ["error", "prefer-double"],
+    'eqeqeq': "error",                         //Вимагати використання === та !==
+    'indent': ["warn", 4],
+    'comma-dangle': ["error", "always-multiline"],
+    'semi': ["error", "always"]
   },
 }

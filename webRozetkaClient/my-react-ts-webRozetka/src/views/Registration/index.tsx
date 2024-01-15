@@ -1,14 +1,14 @@
 import React from 'react';
 import {Button, Divider, Flex, Form, Input, message, Row, Upload} from 'antd';
-import {PlusOutlined} from "@ant-design/icons";
-import {useAppDispatch} from "hooks/reduxHooks";
-import {register} from "store/accounts/accounts.actions.ts";
-import {unwrapResult} from "@reduxjs/toolkit";
-import {useNotification} from "hooks/notificationHook";
-import {autoLogin} from "store/accounts/accounts.slice.ts";
-import {useNavigate} from "react-router-dom";
-import {IRegistration, IRegistrationForm} from "interfaces/account";
-import {imageConverterToAntFile } from "utils/imageConverterToAntFile.ts";
+import {PlusOutlined} from '@ant-design/icons';
+import {useAppDispatch} from 'hooks/reduxHooks';
+import {register} from 'store/accounts/accounts.actions.ts';
+import {unwrapResult} from '@reduxjs/toolkit';
+import {useNotification} from 'hooks/notificationHook';
+import {autoLogin} from 'store/accounts/accounts.slice.ts';
+import {useNavigate} from 'react-router-dom';
+import {IRegistration, IRegistrationForm} from 'interfaces/account';
+import {imageConverterToAntFile } from 'utils/imageConverterToAntFile.ts';
 
 const formItemLayout = {
     labelCol: {
@@ -37,7 +37,7 @@ const tailFormItemLayout = {
 
 
 const Registration : React.FC = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
     const [messageApi, contextHolder] = message.useMessage();
@@ -52,12 +52,12 @@ const Registration : React.FC = () => {
         };
 
         try {
-            const response =  await dispatch(register(data))
+            const response =  await dispatch(register(data));
             unwrapResult(response);
             const { token } = response.payload;
             localStorage.setItem('authToken', token);
             dispatch(autoLogin(token));
-            navigate('/')
+            navigate('/');
         }
         catch (error) {
             handleError(error);
@@ -69,7 +69,7 @@ const Registration : React.FC = () => {
         <Row gutter={16}>
             {contextHolder}
             <Divider orientation="left">Реєстрація</Divider>
-            <Flex vertical style={{width: '100%'}} align='center' justify='center'>
+            <Flex vertical style={{width: '100%'}} align="center" justify="center">
                 <Form
                     {...formItemLayout}
                     form={form}
@@ -99,8 +99,8 @@ const Registration : React.FC = () => {
                         name="password"
                         label="Пароль"
                         rules={[
-                            { required: true, message: 'Please input your password!', },
-                            { min: 6, message: 'Please password min length 6 symbols!', },
+                            { required: true, message: 'Please input your password!' },
+                            { min: 6, message: 'Please password min length 6 symbols!' },
                         ]}
                         hasFeedback
                     >

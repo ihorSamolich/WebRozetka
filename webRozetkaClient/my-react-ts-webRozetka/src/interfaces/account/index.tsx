@@ -1,4 +1,4 @@
-import {Status} from "constants/enums";
+import {Status} from 'constants/enums';
 
 export interface IUser{
     name: string,

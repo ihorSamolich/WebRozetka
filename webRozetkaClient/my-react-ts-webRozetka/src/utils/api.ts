@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import {APP_ENV} from "env";
-import {isTokenActive} from "utils/isTokenActive.ts";
+import {APP_ENV} from 'env';
+import {isTokenActive} from 'utils/isTokenActive.ts';
 
 interface IApiClientConfig extends AxiosRequestConfig {
     baseURL: string;

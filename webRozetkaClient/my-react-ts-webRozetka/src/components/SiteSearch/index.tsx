@@ -1,7 +1,7 @@
 import React from 'react';
-import Search from "antd/es/input/Search";
-import {Button} from "antd";
-import {CloseOutlined} from "@ant-design/icons";
+import Search from 'antd/es/input/Search';
+import {Button} from 'antd';
+import {CloseOutlined} from '@ant-design/icons';
 
 interface ISiteSearchProps {
     searchValue: string,

@@ -1,13 +1,13 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import {apiClient} from "utils/api.ts";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import {apiClient} from 'utils/api.ts';
 import {
     ICategoriesData,
     ICategoriesPageParams,
     ICategoryCreate,
-    ICategoryItem,
-    ICategoryUpdate
-} from "interfaces/categories";
-import {handleAxiosError} from "utils/handleAxiosError.ts";
+    ICategoryItem, ICategoryName,
+    ICategoryUpdate,
+} from 'interfaces/categories';
+import {handleAxiosError} from 'utils/handleAxiosError.ts';
 
 export const getCategories = createAsyncThunk(
     'category/getCategories',
@@ -16,26 +16,26 @@ export const getCategories = createAsyncThunk(
             const {page, pageSize, search} = payload;
 
             const response
-                = await apiClient.get<ICategoriesData>(`/api/categories?page=${page}&pageSize=${pageSize}${search ? `&search=${search}`:``}`);
+                = await apiClient.get<ICategoriesData>(`/api/categories?page=${page}&pageSize=${pageSize}${search ? `&search=${search}`:''}`);
 
             return response.data;
         }  catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
-    }
+    },
 );
 
-export const getCategoriesAll = createAsyncThunk<ICategoryItem[]>(
-    'category/getCategoriesAll',
+export const getCategoriesNames = createAsyncThunk<ICategoryName[]>(
+    'category/getCategoriesNames',
     async (_, {rejectWithValue}) => {
         try {
             const response
-                = await apiClient.get<ICategoryItem[]>(`/api/categories/all`);
+                = await apiClient.get<ICategoryName[]>('/api/categories/names');
             return response.data;
         }  catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
-    }
+    },
 );
 
 export const getCategoryById = createAsyncThunk<ICategoryItem, number>(
@@ -47,7 +47,7 @@ export const getCategoryById = createAsyncThunk<ICategoryItem, number>(
         } catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
-    }
+    },
 );
 
 export const deleteCategory = createAsyncThunk<number,number>(
@@ -59,40 +59,40 @@ export const deleteCategory = createAsyncThunk<number,number>(
         } catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
-    }
+    },
 );
 
 export const addCategory = createAsyncThunk<ICategoryItem, ICategoryCreate>(
     'category/addCategory',
     async (payload: ICategoryCreate, { rejectWithValue }) => {
         try {
-            const {data} = await apiClient.post<ICategoryItem>("/api/categories", payload,
+            const {data} = await apiClient.post<ICategoryItem>('/api/categories', payload,
                 {
                     headers: {
-                        "Content-Type": "multipart/form-data"
-                    }
+                        'Content-Type': 'multipart/form-data',
+                    },
                 });
             return data;
         } catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
-    }
+    },
 );
 
 export const updateCategory = createAsyncThunk<ICategoryItem, ICategoryUpdate, { rejectValue: string }>(
     'category/updateCategory',
     async (payload: ICategoryUpdate, { rejectWithValue }) => {
         try {
-            const {data} = await apiClient.put<ICategoryItem>("/api/categories", payload,
+            const {data} = await apiClient.put<ICategoryItem>('/api/categories', payload,
                 {
                     headers: {
-                        "Content-Type": "multipart/form-data"
-                    }
+                        'Content-Type': 'multipart/form-data',
+                    },
                 });
             return data;
         } catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
-    }
+    },
 );
 

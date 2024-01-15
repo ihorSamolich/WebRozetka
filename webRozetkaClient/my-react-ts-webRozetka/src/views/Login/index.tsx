@@ -1,16 +1,15 @@
 import React from 'react';
 import {Button, Image, Divider, Flex, Form, Input, Row, Typography, message, Spin} from 'antd';
-import logo from 'assets/login.png'
-import {ILogin} from "interfaces/account";
-import {useAppDispatch, useAppSelector} from "hooks/reduxHooks";
-import {login} from "store/accounts/accounts.actions.ts";
-import {Link, useNavigate} from "react-router-dom";
-import {unwrapResult} from "@reduxjs/toolkit";
-import {useNotification} from "hooks/notificationHook";
-import {Status} from "constants/enums";
+import logo from 'assets/login.png';
+import {ILogin} from 'interfaces/account';
+import {useAppDispatch, useAppSelector} from 'hooks/reduxHooks';
+import {login} from 'store/accounts/accounts.actions.ts';
+import {Link, useNavigate} from 'react-router-dom';
+import {unwrapResult} from '@reduxjs/toolkit';
+import {useNotification} from 'hooks/notificationHook';
+import {Status} from 'constants/enums';
 
 const Login : React.FC = () => {
-
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [messageApi, contextHolder] = message.useMessage();
@@ -19,9 +18,9 @@ const Login : React.FC = () => {
 
     const onFinish = async (values: ILogin) => {
         try {
-            const response = await dispatch(login(values))
+            const response = await dispatch(login(values));
             unwrapResult(response);
-            navigate('/')
+            navigate('/');
         } catch (error) {
             handleError(error);
         }
@@ -32,7 +31,7 @@ const Login : React.FC = () => {
             <Row gutter={16}>
                 {contextHolder}
                 <Divider orientation="left">Вхід</Divider>
-                <Flex vertical style={{width: '100%'}} align='center' justify='center'>
+                <Flex vertical style={{width: '100%'}} align="center" justify="center">
 
                     <Image
                         preview={false}
@@ -75,8 +74,8 @@ const Login : React.FC = () => {
                             <Input.Password/>
                         </Form.Item>
 
-                        <Form.Item style={{display: "flex", justifyContent: 'center'}}>
-                            <Button size='large' type="primary" htmlType="submit" style={{paddingInline: 50}}>
+                        <Form.Item style={{display: 'flex', justifyContent: 'center'}}>
+                            <Button size="large" type="primary" htmlType="submit" style={{paddingInline: 50}}>
                                 Вхід
                             </Button>
                         </Form.Item>
@@ -91,6 +90,6 @@ const Login : React.FC = () => {
             </Row>
         </Spin>
     );
-}
+};
 
 export default Login;
