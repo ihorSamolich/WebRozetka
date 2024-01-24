@@ -1,6 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {apiClient} from 'utils/api.ts';
-import {handleAxiosError} from 'utils/handleAxiosError.ts';
+import {apiClient} from 'utils/api/apiClient.ts';
+import {handleAxiosError} from 'utils/errors/handleAxiosError.ts';
 import {IProductCreate, IProductItem} from 'interfaces/product';
 
 export const getProducts = createAsyncThunk(

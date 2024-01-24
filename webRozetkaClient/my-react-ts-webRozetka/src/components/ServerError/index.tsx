@@ -2,11 +2,15 @@ import { Result, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
-const ServerError: React.FC = () => {
+interface IServerErrorProps{
+    error: string | undefined,
+}
+
+const ServerError: React.FC<IServerErrorProps> = (props) => {
     return (
         <Result
             title="Помилка сервера"
-            subTitle="Вибачте, сталася помилка на сервері."
+            subTitle={props.error}
             status={500}
             extra={
                 <Button type="primary">

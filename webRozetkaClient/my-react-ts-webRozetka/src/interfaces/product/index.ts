@@ -1,4 +1,4 @@
-import {Status} from 'constants/enums';
+import {Status} from 'utils/enums';
 
 export interface IProductState {
     items: IProductItem[],

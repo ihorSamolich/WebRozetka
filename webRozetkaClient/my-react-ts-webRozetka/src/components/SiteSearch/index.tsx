@@ -1,16 +1,26 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Search from 'antd/es/input/Search';
 import {Button} from 'antd';
 import {CloseOutlined} from '@ant-design/icons';
 
 interface ISiteSearchProps {
-    searchValue: string,
-    setSearchValue: (searchValue: string) => void,
-    handleSearch: (searchValue: string) => void,
-    handleClearSearch: () => void,
+    search: string,
+    setSearch: (search: string) => void,
 }
 const SiteSearch : React.FC<ISiteSearchProps> = (props) => {
-    const { searchValue, setSearchValue, handleSearch, handleClearSearch } = props;
+    const { search, setSearch } = props;
+    const [searchValue , setSearchValue] = useState<string>('');
+
+    const handleSearch = (value : string) => {
+        if (value !== search){
+            setSearch(value);
+        }
+    };
+
+    const handleClearSearch = ()=> {
+        setSearch('');
+        setSearchValue('');
+    };
 
     return (
         <>
@@ -22,7 +32,7 @@ const SiteSearch : React.FC<ISiteSearchProps> = (props) => {
                 onSearch={handleSearch}
                 enterButton
             />
-            {searchValue && searchValue.length > 0 && (
+            {search && search.length > 0 && (
                 <Button onClick={handleClearSearch} type="primary" icon={<CloseOutlined />} danger>
                     Скасувати
                 </Button>

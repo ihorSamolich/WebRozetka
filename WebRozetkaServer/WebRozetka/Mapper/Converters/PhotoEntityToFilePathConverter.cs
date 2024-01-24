@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using WebRozetka.Data.Entities;
+using WebRozetka.Data.Entities.Photo;
 
 namespace WebRozetka.Mapper.Converters
 {
@@ -10,6 +10,4 @@ namespace WebRozetka.Mapper.Converters
             return sourceMember?.Select(photo => photo.FilePath).ToList();
         }
     }
-
-
 }

@@ -2,9 +2,11 @@ import {AnyAction, AsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolki
 import {login} from 'store/accounts/accounts.actions.ts';
 import {IAccountState, IUser} from 'interfaces/account';
 import {jwtDecode} from 'jwt-decode';
-import {Status} from 'constants/enums';
+import {Status} from 'utils/enums';
 
+// eslint-disable-next-line
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
+
 type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
 function isRejectedAction(action: AnyAction): action is RejectedAction {
     return action.type.endsWith('/rejected');

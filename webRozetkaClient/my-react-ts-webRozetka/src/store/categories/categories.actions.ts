@@ -1,13 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import {apiClient} from 'utils/api.ts';
+import {apiClient} from 'utils/api/apiClient.ts';
 import {
     ICategoriesData,
     ICategoriesPageParams,
     ICategoryCreate,
-    ICategoryItem, ICategoryName,
+    ICategoryItem,
+    ICategoryName,
     ICategoryUpdate,
 } from 'interfaces/categories';
-import {handleAxiosError} from 'utils/handleAxiosError.ts';
+import {handleAxiosError} from 'utils/errors/handleAxiosError.ts';
 
 export const getCategories = createAsyncThunk(
     'category/getCategories',
@@ -19,7 +20,7 @@ export const getCategories = createAsyncThunk(
                 = await apiClient.get<ICategoriesData>(`/api/categories?page=${page}&pageSize=${pageSize}${search ? `&search=${search}`:''}`);
 
             return response.data;
-        }  catch (error) {
+        } catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
     },
@@ -32,7 +33,7 @@ export const getCategoriesNames = createAsyncThunk<ICategoryName[]>(
             const response
                 = await apiClient.get<ICategoryName[]>('/api/categories/names');
             return response.data;
-        }  catch (error) {
+        } catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));
         }
     },
@@ -62,6 +63,7 @@ export const deleteCategory = createAsyncThunk<number,number>(
     },
 );
 
+
 export const addCategory = createAsyncThunk<ICategoryItem, ICategoryCreate>(
     'category/addCategory',
     async (payload: ICategoryCreate, { rejectWithValue }) => {
@@ -72,6 +74,9 @@ export const addCategory = createAsyncThunk<ICategoryItem, ICategoryCreate>(
                         'Content-Type': 'multipart/form-data',
                     },
                 });
+
+            console.log(data);
+
             return data;
         } catch (error) {
             return rejectWithValue(handleAxiosError(error, 'Сталася неочікувана помилка'));

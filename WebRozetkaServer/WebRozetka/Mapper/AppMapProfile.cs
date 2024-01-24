@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
-using WebRozetka.Data.Entities;
+using WebRozetka.Data.Entities.Category;
 using WebRozetka.Data.Entities.Identity;
+using WebRozetka.Data.Entities.Photo;
+using WebRozetka.Data.Entities.Product;
 using WebRozetka.Helpers;
 using WebRozetka.Mapper.Converters;
 using WebRozetka.Models.Account;
@@ -11,8 +13,6 @@ namespace WebRozetka.Mapper
 {
     public class AppMapProfile : Profile
     {
-
-
         public AppMapProfile()
         {
             CreateMap<CategoryCreateViewModel, CategoryEntity>()
@@ -25,18 +25,19 @@ namespace WebRozetka.Mapper
 
             CreateMap<CategoryEntity, CategoryItemViewModel>();
 
-            CreateMap<ProductEntity, ProductViewModel>()
-                .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Photos));
-
             CreateMap<ICollection<PhotoEntity>, List<string>>()
                 .ConvertUsing<PhotoEntityToFilePathConverter>();
 
+            CreateMap<ProductEntity, ProductViewModel>()
+               .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Photos));
+
             CreateMap<ProductCreateViewModel, ProductEntity>()
-               .AfterMap((src, dest) =>
-               {
-                   dest.IsDeleted = false;
-                   dest.DateCreated = DateTime.UtcNow;
-               });
+                .ForMember(dest => dest.Photos, opt => opt.Ignore())
+                .AfterMap((src, dest) =>
+                {
+                    dest.IsDeleted = false;
+                    dest.DateCreated = DateTime.UtcNow;
+                });
         }
     }
 

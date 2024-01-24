@@ -1,14 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-import categoryReducer from 'store/categories/categories.slice.ts';
 import accountReducer from 'store/accounts/accounts.slice.ts';
 import productReducer from 'store/products/products.slice.ts';
-
+import basketReducer from  'store/basket/basket.slice.ts';
 
 export const store = configureStore({
     reducer: {
-        category: categoryReducer,
+        //category: categoryReducer,
         account: accountReducer,
         product: productReducer,
+        basket: basketReducer,
     },
 });
 

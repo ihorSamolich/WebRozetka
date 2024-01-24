@@ -6,12 +6,16 @@ import {IProductItem} from 'interfaces/product';
 import {APP_ENV} from 'env/index.ts';
 import NotImage from 'assets/imagenot.png';
 import {useNavigate} from 'react-router-dom';
+import {useAppDispatch} from 'hooks/reduxHooks';
+import {addToBasket} from 'store/basket/basket.slice.ts';
 
 const { Title } = Typography;
 const { Meta } = Card;
+
 const ProductCard : React.FC<IProductItem> = (props) => {
     const navigate = useNavigate();
     const {id, name, discount, price, photos, quantity} = props;
+    const dispatch = useAppDispatch();
 
     const handleOpenProductCard = () => {
         navigate(`/product/${id}`);
@@ -19,7 +23,7 @@ const ProductCard : React.FC<IProductItem> = (props) => {
 
     const handleAddProductToBasket = (event: React.MouseEvent) => {
         event.stopPropagation();
-        console.log('to basket');
+        dispatch(addToBasket({product: {id, name, price, photos, quantity}, count: 1}));
     };
 
     return (

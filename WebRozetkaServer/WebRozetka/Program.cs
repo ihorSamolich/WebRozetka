@@ -6,11 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
+using System.Reflection;
 using System.Text;
 using WebRozetka.Data;
 using WebRozetka.Data.Entities.Identity;
 using WebRozetka.Interfaces;
+using WebRozetka.Interfaces.Repo;
 using WebRozetka.Mapper;
 using WebRozetka.Repository;
 using WebRozetka.Services;
@@ -29,7 +32,35 @@ namespace WebRozetka
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
+            // Додаємо Authorize на Swagger
+            var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+            builder.Services.AddSwaggerGen(c =>
+            {
+                var fileDoc = Path.Combine(AppContext.BaseDirectory, $"{assemblyName}.xml");
+                c.IncludeXmlComments(fileDoc);
+                c.AddSecurityDefinition("Bearer",
+                    new OpenApiSecurityScheme
+                    {
+                        Description = "Jwt Auth header using the Bearer scheme",
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer"
+                    });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference=new OpenApiReference
+                            {
+                                Id="Bearer",
+                                Type = ReferenceType.SecurityScheme
+                            }
+                        }, new List<string>()
+                    }
+                });
+            });
+            // -- Authorize на Swagger
+
             builder.Services.AddAutoMapper(typeof(AppMapProfile));
             builder.Services.AddCors();
 
@@ -37,6 +68,8 @@ namespace WebRozetka
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 
 
             // IDENTITY SETTINGS
@@ -90,7 +123,6 @@ namespace WebRozetka
             //    app.UseSwagger();
             //    app.UseSwaggerUI();
             //}
-
             app.UseSwagger();
             app.UseSwaggerUI();
 

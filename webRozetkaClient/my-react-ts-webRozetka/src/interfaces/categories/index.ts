@@ -1,16 +1,16 @@
-import {Status} from 'constants/enums';
-export interface ICategoryItem {
-    id: number,
-    name: string,
-    image: string,
-    description: string,
-    dateCreated: string,
-    isDeleted: boolean,
-}
+import {Status} from 'utils/enums';
+
 
 export interface ICategoryName {
     id: number,
     name: string,
+}
+
+export interface ICategoryItem extends ICategoryName{
+    image: string,
+    description: string,
+    dateCreated: string,
+    isDeleted: boolean,
 }
 
 export interface ICategoriesData {

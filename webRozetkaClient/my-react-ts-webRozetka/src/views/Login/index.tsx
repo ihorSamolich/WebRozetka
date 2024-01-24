@@ -7,7 +7,7 @@ import {login} from 'store/accounts/accounts.actions.ts';
 import {Link, useNavigate} from 'react-router-dom';
 import {unwrapResult} from '@reduxjs/toolkit';
 import {useNotification} from 'hooks/notificationHook';
-import {Status} from 'constants/enums';
+import {Status} from 'utils/enums';
 
 const Login : React.FC = () => {
     const navigate = useNavigate();

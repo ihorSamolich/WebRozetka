@@ -5,23 +5,24 @@ import {IProductCreate } from 'interfaces/product';
 import {useAppDispatch, useAppSelector} from 'hooks/reduxHooks';
 import {getCategoriesNames} from 'store/categories/categories.actions.ts';
 import {DownloadOutlined } from '@ant-design/icons';
-import {imageConverterToFileArray} from 'utils/imageConverterToFileArray.ts';
+import {imageConverterToFileArray} from 'utils/converters/imageConverterToFileArray.ts';
 import {addProduct} from 'store/products/products.actions.ts';
 import {unwrapResult} from '@reduxjs/toolkit';
 import {useNavigate} from 'react-router-dom';
 import {useNotification} from 'hooks/notificationHook';
-import {Status} from 'constants/enums';
+import {Status} from 'utils/enums';
+import {useCategoriesNamesData} from 'hooks/categories';
 
 const ProductCreate : React.FC = () => {
 
     const [form] = Form.useForm<IProductCreate>();
-    const categoriesNames = useAppSelector(state => state.category.itemNames);
     const status = useAppSelector(state => state.product.status);
     const dispatch = useAppDispatch();
-    const optionsData = categoriesNames.map(item => ({label: item.name, value: item.id}));
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const {handleError} = useNotification(messageApi);
+    const { data : categoriesNames , isLoading } = useCategoriesNamesData();
+    const optionsData = categoriesNames?.map(item => ({label: item.name, value: item.id}));
 
     useEffect(() => {
         dispatch(getCategoriesNames());
@@ -42,7 +43,7 @@ const ProductCreate : React.FC = () => {
     };
 
     return (
-        <Spin spinning={status === Status.LOADING}>
+        <Spin spinning={status === Status.LOADING || isLoading}>
             <Row gutter={16}>
                 {contextHolder}
                 <Divider orientation="left">ДОДАТИ ТОВАР</Divider>

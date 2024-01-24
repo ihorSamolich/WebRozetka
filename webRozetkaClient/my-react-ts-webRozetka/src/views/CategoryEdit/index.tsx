@@ -1,46 +1,47 @@
 import React, {useEffect, useState} from 'react';
-import {Status} from 'constants/enums';
-import {Button, Divider, Form, Input, Image, Row, Spin, Upload, message} from 'antd';
+import {Button, Divider, Form, Input, Image, Row, Spin, Upload, notification} from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-import {useAppDispatch, useAppSelector} from 'hooks/reduxHooks';
 import { ICategoryItem, ICategoryUpdate } from 'interfaces/categories';
-import {getCategoryById, updateCategory} from 'store/categories/categories.actions.ts';
 import {useNavigate, useParams} from 'react-router-dom';
 import { UploadOutlined} from '@ant-design/icons';
 import {RcFile} from 'antd/es/upload';
 import {APP_ENV} from 'env';
-import {useNotification} from 'hooks/notificationHook';
-import {unwrapResult} from '@reduxjs/toolkit';
-import { imageConverterToFile} from 'utils/imageConverterToFile.ts';
+import {imageConverterToFile} from 'utils/converters/imageConverterToFile.ts';
+import {useCategoryData, useUpdateCategoryData} from 'hooks/categories';
+import {ServerError} from 'components/index.ts';
+import {openNotification} from 'utils/notification';
 
 const CategoryEdit : React.FC = () => {
-    const dispatch = useAppDispatch();
-    const status = useAppSelector((state) => state.category.status);
     const {id} = useParams();
     const [form] = Form.useForm<ICategoryUpdate>();
     const [previewImage, setPreviewImage] = useState('');
     const navigate = useNavigate();
-    const [messageApi, contextHolder] = message.useMessage();
-    const {handleSuccess, handleError} = useNotification(messageApi);
-    const [category, setCategory] = useState<ICategoryItem | null>(null);
+    const [notificationApi, contextHolder] = notification.useNotification();
+    const {mutate : updateCategory, isSuccess, isError} = useUpdateCategoryData();
+    const {isLoading, data: category, isError: isGetError,error: errorGet} = useCategoryData(Number(id));
 
     useEffect(() => {
-        dispatch(getCategoryById(Number(id)))
-            .then((action) => {
-                const data = action.payload as ICategoryItem;
+        if (isError) {
+            openNotification('error', notificationApi, 'Помилка', 'Щось пішло не так. Будь ласка, спробуйте ще раз.');
+        }
+        if(isSuccess){
+            openNotification('success',notificationApi, 'Успішно', 'Категорію успішно оновлено!');
+            navigate('/categories');
+        }
+    }, [isError, isSuccess]);
+    
+    const onCancel = () => {
+        if (category) {
+            form.resetFields();
+            setDefaultData(category);
+        }
+    };
 
-                if (data) {
-                    setCategory(data);
-                    setDefaultData(data);
-                } else {
-                    throw new Error();
-                }
-            })
-            .catch(()=> {
-                navigate('/categories/all');
-            },
-            );
-    }, [dispatch, id, navigate]);
+    useEffect(() => {
+        if (category) {
+            setDefaultData(category);
+        }
+    }, [category]);
 
     const setDefaultData = (data : ICategoryItem) => {
         if (data) {
@@ -48,7 +49,7 @@ const CategoryEdit : React.FC = () => {
             setPreviewImage(`${APP_ENV.BASE_URL}images/${data.image}`);
         }
     };
-
+    
     const handlePreview = () => {
         const file : File = form.getFieldValue('image');
 
@@ -59,27 +60,16 @@ const CategoryEdit : React.FC = () => {
         }
     };
 
-    const onFinish = async (values: ICategoryUpdate) => {
-        try {
-            const result = await dispatch(updateCategory(values));
-            unwrapResult(result);
-            handleSuccess('Категорію успішно оновлено!');
-            setTimeout(() => {
-                navigate('/categories');
-            }, 1000);
-        } catch (error) {
-            handleError(error);
-        }
+    const onFinish = (values : ICategoryUpdate) => {
+        updateCategory(values);
     };
 
-    const onCancel = () => {
-        if (category) {
-            setDefaultData(category);
-        }
-    };
+    if (isGetError){
+        return <ServerError error = {errorGet?.message} />;
+    }
 
     return (
-        <Spin spinning={status === Status.LOADING}>
+        <Spin spinning={isLoading}>
             <Row gutter={16}>
                 {contextHolder}
                 <Divider orientation="left">РЕДАГУВАТИ КАТЕГОРІЮ</Divider>

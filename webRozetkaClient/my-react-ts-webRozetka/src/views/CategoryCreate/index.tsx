@@ -1,44 +1,39 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import {Button, Divider, Form, Input, message, Row, Spin, Upload} from 'antd';
+import {Button, Divider, Form, Input, notification, Row, Spin, Upload} from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import {ICategoryCreate} from 'interfaces/categories';
-import {addCategory} from 'store/categories/categories.actions.ts';
-import {useAppDispatch, useAppSelector, useNotification} from 'hooks';
-import {Status} from 'constants/enums';
-import {unwrapResult} from '@reduxjs/toolkit';
-import {useNavigate} from 'react-router-dom';
-import {imageConverterToFile} from 'utils/imageConverterToFile.ts';
+import {imageConverterToFile} from 'utils/converters/imageConverterToFile.ts';
+import {useAddCategoryData} from 'hooks/categories';
+import {openNotification} from 'utils/notification';
 
 const CategoryCreate: React.FC = () => {
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
-    const status = useAppSelector((state) => state.category.status);
-    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm<ICategoryCreate>();
-    const { handleSuccess, handleError } = useNotification(messageApi);
+    const [notificationApi, contextHolder] = notification.useNotification();
+    const {mutate : addCategory, isLoading, isError, isSuccess} = useAddCategoryData();
 
+    useEffect(() => {
+        if (isError) {
+            openNotification('error', notificationApi, 'Помилка', 'Щось пішло не так. Будь ласка, спробуйте ще раз.');
+        }
+        if(isSuccess){
+            openNotification('success',notificationApi, 'Успішно', 'Категорію успішно створено!');
+            form.resetFields();
+        }
+    }, [form, isError, isSuccess, notificationApi]);
+    
     const onReset = () => {
         form.resetFields();
     };
 
-    const onFinish = async (values: ICategoryCreate) => {
-        try {
-            const result = await dispatch(addCategory(values));
-            unwrapResult(result);
-            handleSuccess('Категорію успішно створено!');
-            setTimeout(() => {
-                navigate('/categories');
-            }, 1000);
-        } catch (error) {
-            handleError(error);
-        }
+    const onFinish = async (values: ICategoryCreate) =>{
+        addCategory(values);
     };
 
     return (
-        <Spin spinning={status === Status.LOADING}>
+        <Spin spinning={isLoading}>
+            {contextHolder}
             <Row gutter={16}>
-                {contextHolder}
                 <Divider orientation="left">CТВОРИТИ КАТЕГОРІЮ</Divider>
                 <Form
                     form={form}

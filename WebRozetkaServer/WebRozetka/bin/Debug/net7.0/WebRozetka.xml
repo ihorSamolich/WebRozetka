@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebRozetka</name>
+    </assembly>
+    <members>
+        <member name="T:WebRozetka.Migrations.Createnewdb">
+            <inheritdoc />
+        </member>
+        <member name="M:WebRozetka.Migrations.Createnewdb.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebRozetka.Migrations.Createnewdb.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebRozetka.Migrations.Createnewdb.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="P:WebRozetka.Models.Account.LoginViewModel.Email">
+            <summary>
+            Пошта користувача:
+            </summary>
+            <example>admin@gmail.com</example>
+        </member>
+        <member name="P:WebRozetka.Models.Account.LoginViewModel.Password">
+            <summary>
+            Пароль користувача:
+            </summary>
+            <example>123456</example>
+        </member>
+    </members>
+</doc>

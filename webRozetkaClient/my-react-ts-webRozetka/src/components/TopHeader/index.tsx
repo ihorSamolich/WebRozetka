@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {PRIMARY_BLUE_COLOR} from 'constants/index.ts';
+import {PRIMARY_BLUE_COLOR} from 'utils/constants/index.ts';
 import {Avatar, Button, Switch} from 'antd';
 import {MenuFoldOutlined, MenuUnfoldOutlined,UserOutlined, PoweroffOutlined} from '@ant-design/icons';
 import {Header} from 'antd/es/layout/layout';

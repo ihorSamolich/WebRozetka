@@ -8,7 +8,7 @@ import {useNotification} from 'hooks/notificationHook';
 import {autoLogin} from 'store/accounts/accounts.slice.ts';
 import {useNavigate} from 'react-router-dom';
 import {IRegistration, IRegistrationForm} from 'interfaces/account';
-import {imageConverterToAntFile } from 'utils/imageConverterToAntFile.ts';
+import {imageConverterToAntFile } from 'utils/converters/imageConverterToAntFile.ts';
 
 const formItemLayout = {
     labelCol: {

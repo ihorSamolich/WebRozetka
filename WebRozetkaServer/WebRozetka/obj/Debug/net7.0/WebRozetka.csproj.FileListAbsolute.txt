@@ -360,3 +360,9 @@ C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetkaServer\W
 C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetkaServer\WebRozetka\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetkaServer\WebRozetka\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetkaServer\WebRozetka\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetkaServer\WebRozetka\bin\Debug\net7.0\WebRozetka.xml
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetkaServer\WebRozetka\obj\Debug\net7.0\WebRozetka.xml
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetkaServer\WebRozetka\bin\Debug\net7.0\MailKit.dll
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetkaServer\WebRozetka\bin\Debug\net7.0\MimeKit.dll
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetkaServer\WebRozetka\bin\Debug\net7.0\NETCore.MailKit.dll
+C:\Users\ihors\OneDrive\Рабочий стол\webRozetkaGit\WebRozetkaServer\WebRozetka\bin\Debug\net7.0\BouncyCastle.Crypto.dll

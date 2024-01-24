@@ -8,6 +8,7 @@ import {ExclamationCircleOutlined, ShoppingCartOutlined, CarOutlined} from '@ant
 import { Descriptions } from 'antd';
 import type { DescriptionsProps } from 'antd';
 import {IProductItem} from 'interfaces/product';
+import {addToBasket} from 'store/basket/basket.slice.ts';
 const { Title,Text } = Typography;
 
 const deliveryInfo: DescriptionsProps['items'] = [
@@ -44,10 +45,6 @@ const ProductDetail : React.FC = () => {
     const dispatch = useAppDispatch();
     const {selectedItem} = useAppSelector(state => state.product);
 
-    useEffect(() => {
-        dispatch(getProductById(Number(productId)));
-    }, [dispatch, productId]);
-
     const {
         name,
         country,
@@ -58,6 +55,18 @@ const ProductDetail : React.FC = () => {
         discount,
         quantity,
     } = selectedItem || defaultProductData;
+
+    useEffect(() => {
+        dispatch(getProductById(Number(productId)));
+    }, [dispatch, productId]);
+
+    const handleAddProductToBasket = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        if (selectedItem) {
+            dispatch(addToBasket({product: selectedItem, count: 1}));
+        }
+    };
+
 
     return (
         <>
@@ -93,7 +102,9 @@ const ProductDetail : React.FC = () => {
                                     <Button
                                         style={{maxWidth: 300}}
                                         type={'primary'}
-                                        icon={<ShoppingCartOutlined/>} key="addToCart"
+                                        icon={<ShoppingCartOutlined/>}
+                                        onClick={handleAddProductToBasket}
+                                        key="addToCart"
                                     >
                                         До кошика
                                     </Button>

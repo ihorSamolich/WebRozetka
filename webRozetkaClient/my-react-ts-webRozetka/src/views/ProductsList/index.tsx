@@ -4,7 +4,7 @@ import {getProductsByCategory} from 'store/products/products.actions.ts';
 import {useAppDispatch, useAppSelector} from 'hooks/reduxHooks';
 import ProductCard from 'components/ProductCard';
 import {useParams} from 'react-router-dom';
-import {Status} from 'constants/enums';
+import {Status} from 'utils/enums';
 import { ItemsNotFound, SitePagination} from 'components/index.ts';
 
 const ProductsList : React.FC = () => {
@@ -22,7 +22,9 @@ const ProductsList : React.FC = () => {
             {items.length === 0 && status === Status.SUCCESS ? (
                 <ItemsNotFound />
             ) : (
-                items.map((item) => <ProductCard key={item.id} {...item} />)
+                items.map((item) =>
+                    <ProductCard key={item.id} {...item} />,
+                )
             )}
 
             <SitePagination page={1} pageSize={8} totalItems={items.length} setPage={()=>{}} setPageSize={()=>{}} />

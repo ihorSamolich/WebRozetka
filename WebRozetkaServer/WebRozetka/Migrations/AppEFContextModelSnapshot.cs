@@ -114,7 +114,7 @@ namespace WebRozetka.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WebRozetka.Data.Entities.CategoryEntity", b =>
+            modelBuilder.Entity("WebRozetka.Data.Entities.Category.CategoryEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -269,7 +269,214 @@ namespace WebRozetka.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("WebRozetka.Data.Entities.PhotoEntity", b =>
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.CitiesEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.DeliveryServiсesEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeliveryServiсes");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.DepartmentEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("DeliveryServiсesId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("DeliveryServiсesId");
+
+                    b.ToTable("Department");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CustomerEmail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CustomerPhone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("OrderInfoId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OrderStatusId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderInfoId");
+
+                    b.HasIndex("OrderStatusId");
+
+                    b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderInfoEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("OrderInfo");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderItemsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderStatusEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderStatus");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Photo.PhotoEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -292,7 +499,7 @@ namespace WebRozetka.Migrations
                     b.ToTable("Photos");
                 });
 
-            modelBuilder.Entity("WebRozetka.Data.Entities.ProductEntity", b =>
+            modelBuilder.Entity("WebRozetka.Data.Entities.Product.ProductEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -396,9 +603,85 @@ namespace WebRozetka.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebRozetka.Data.Entities.PhotoEntity", b =>
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.DepartmentEntity", b =>
                 {
-                    b.HasOne("WebRozetka.Data.Entities.ProductEntity", "Product")
+                    b.HasOne("WebRozetka.Data.Entities.Order.CitiesEntity", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebRozetka.Data.Entities.Order.DeliveryServiсesEntity", "DeliveryServiсes")
+                        .WithMany()
+                        .HasForeignKey("DeliveryServiсesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("DeliveryServiсes");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderEntity", b =>
+                {
+                    b.HasOne("WebRozetka.Data.Entities.Order.OrderInfoEntity", "OrderInfo")
+                        .WithMany()
+                        .HasForeignKey("OrderInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebRozetka.Data.Entities.Order.OrderStatusEntity", "OrderStatus")
+                        .WithMany()
+                        .HasForeignKey("OrderStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrderInfo");
+
+                    b.Navigation("OrderStatus");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderInfoEntity", b =>
+                {
+                    b.HasOne("WebRozetka.Data.Entities.Order.DepartmentEntity", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebRozetka.Data.Entities.Identity.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderItemsEntity", b =>
+                {
+                    b.HasOne("WebRozetka.Data.Entities.Order.OrderEntity", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebRozetka.Data.Entities.Product.ProductEntity", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Photo.PhotoEntity", b =>
+                {
+                    b.HasOne("WebRozetka.Data.Entities.Product.ProductEntity", "Product")
                         .WithMany("Photos")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -407,9 +690,9 @@ namespace WebRozetka.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("WebRozetka.Data.Entities.ProductEntity", b =>
+            modelBuilder.Entity("WebRozetka.Data.Entities.Product.ProductEntity", b =>
                 {
-                    b.HasOne("WebRozetka.Data.Entities.CategoryEntity", "Category")
+                    b.HasOne("WebRozetka.Data.Entities.Category.CategoryEntity", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -418,7 +701,7 @@ namespace WebRozetka.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("WebRozetka.Data.Entities.CategoryEntity", b =>
+            modelBuilder.Entity("WebRozetka.Data.Entities.Category.CategoryEntity", b =>
                 {
                     b.Navigation("Products");
                 });
@@ -433,7 +716,12 @@ namespace WebRozetka.Migrations
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("WebRozetka.Data.Entities.ProductEntity", b =>
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderEntity", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Product.ProductEntity", b =>
                 {
                     b.Navigation("Photos");
                 });

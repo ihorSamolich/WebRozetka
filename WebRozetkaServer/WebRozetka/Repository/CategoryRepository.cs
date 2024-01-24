@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using WebRozetka.Data;
-using WebRozetka.Data.Entities;
-using WebRozetka.Interfaces;
+using WebRozetka.Data.Entities.Category;
+using WebRozetka.Interfaces.Repo;
 
 namespace WebRozetka.Repository
 {
@@ -25,27 +25,33 @@ namespace WebRozetka.Repository
             return _context.Set<CategoryEntity>().Where(x => !x.IsDeleted).ToListAsync();
         }
 
-        public async Task<bool> AddAsync(CategoryEntity entity)
+        public async Task<CategoryEntity> AddAsync(CategoryEntity entity)
         {
             try
             {
                 await _context.Set<CategoryEntity>().AddAsync(entity);
                 await _context.SaveChangesAsync();
 
-                return true;
+                return entity;
             }
             catch (Exception)
             {
-                return false;
+                return entity;
             }
         }
 
-        public async Task<bool> UpdateAsync(CategoryEntity entity)
+        public async Task<CategoryEntity> UpdateAsync(CategoryEntity entity)
         {
-            _context.Set<CategoryEntity>().Update(entity);
-            await _context.SaveChangesAsync();
-
-            return true;
+            try
+            {
+                _context.Set<CategoryEntity>().Update(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -81,7 +87,6 @@ namespace WebRozetka.Repository
             }
 
             return entities
-                //.Include(x => x.Products)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -103,7 +108,5 @@ namespace WebRozetka.Repository
             var count = await entities.CountAsync();
             return count;
         }
-
-
     }
 }

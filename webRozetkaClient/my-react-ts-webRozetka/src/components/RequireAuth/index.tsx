@@ -1,7 +1,7 @@
 import React from 'react';
 import {Navigate, Outlet, useLocation} from 'react-router-dom';
 import {useAppSelector} from 'hooks/reduxHooks';
-import {isTokenActive} from 'utils/isTokenActive.ts';
+import {isTokenActive} from 'utils/storage/isTokenActive.ts';
 
 const RequireAuth : React.FC = () => {
     const isLogin = useAppSelector((state)=>state.account.isLogin);

@@ -1,16 +1,9 @@
 ﻿using AutoMapper;
-using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using WebRozetka.Data;
-using WebRozetka.Data.Entities;
+using WebRozetka.Data.Entities.Category;
 using WebRozetka.Helpers;
-using WebRozetka.Interfaces;
+using WebRozetka.Interfaces.Repo;
 using WebRozetka.Models.Category;
 
 namespace WebRozetka.Controllers
@@ -30,7 +23,7 @@ namespace WebRozetka.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCategoriesSearchPagedList([FromQuery] int page = 1, int pageSize = 1, string search = "")
+        public async Task<IActionResult> GetCategoriesSearchPagedList([FromQuery] int page = 1, int pageSize = 4, string search = "")
         {
             var count = await _categoryRepository.GetCountAsync(search);
             var items = await _categoryRepository.GetPagedAllAsync(page, pageSize, search);
@@ -66,9 +59,9 @@ namespace WebRozetka.Controllers
         public async Task<IActionResult> Create([FromForm] CategoryCreateViewModel model)
         {
             var item = _mapper.Map<CategoryEntity>(model);
-            var result = await _categoryRepository.AddAsync(item);
+            var newEntity = await _categoryRepository.AddAsync(item);
 
-            if (!result)
+            if (newEntity == null)
             {
                 return BadRequest("Помилка створення категорії!");
             }
@@ -95,9 +88,17 @@ namespace WebRozetka.Controllers
             item.Name = model.Name;
             item.Description = model.Description;
 
-            await _categoryRepository.UpdateAsync(item);
+            var updatedItem = await _categoryRepository.UpdateAsync(item);
 
-            return Ok(item);
+            if (updatedItem != null)
+            {
+                return Ok(item);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+
         }
 
         [HttpDelete("{id}")]

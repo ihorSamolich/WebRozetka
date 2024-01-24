@@ -5,23 +5,22 @@ import {ICategoryItem} from 'interfaces/categories';
 import { EditOutlined,  DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import NotImage from 'assets/imagenot.png';
 import {APP_ENV} from 'env';
-import {deleteCategory} from 'store/categories/categories.actions.ts';
-import {useAppDispatch} from 'hooks';
 import {Link} from 'react-router-dom';
+import {useDeleteCategoryData} from 'hooks/categories';
 
 const CategoryCard : React.FC<ICategoryItem> = (props) => {
-    const dispatch = useAppDispatch();
     const {id, name, image, description} = props;
+    const { mutate : deleteCategory } = useDeleteCategoryData();
 
     const handleDeleteCategory = async () => {
-        await dispatch((deleteCategory(id)));
+        deleteCategory(id);
     };
 
     return (
         <Col style={{padding: 10}} key={id} xxl={4} xl={6} lg={8} md={12} sm={24}>
             <Card
                 bodyStyle={{flex:'1'}}
-                style={{height: 365, display: 'flex', flexDirection: 'column'}}
+                style={{height: 375, display: 'flex', flexDirection: 'column'}}
                 hoverable
                 cover={
                     <Image

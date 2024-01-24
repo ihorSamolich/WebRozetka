@@ -1,6 +1,6 @@
 import {AnyAction, AsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {ICategoryState} from 'interfaces/categories';
-import {Status} from 'constants/enums';
+import {Status} from 'utils/enums';
 import {
     addCategory,
     deleteCategory,
@@ -10,9 +10,18 @@ import {
     updateCategory,
 } from 'store/categories/categories.actions.ts';
 
+// eslint-disable-next-line
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
+
 type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
 type PendingAction = ReturnType<GenericAsyncThunk['pending']>
+function isRejectedAction(action: AnyAction): action is RejectedAction {
+    return action.type.endsWith('/rejected');
+}
+
+function isPendingAction(action: AnyAction): action is PendingAction {
+    return action.type.endsWith('/pending');
+}
 
 const initialState: ICategoryState = {
     items: [],
@@ -21,14 +30,6 @@ const initialState: ICategoryState = {
     error: null,
     status: Status.IDLE,
 };
-
-function isRejectedAction(action: AnyAction): action is RejectedAction {
-    return action.type.endsWith('/rejected');
-}
-
-function isPendingAction(action: AnyAction): action is PendingAction {
-    return action.type.endsWith('/pending');
-}
 
 export const categorySlice = createSlice({
     name: 'category',
@@ -61,6 +62,9 @@ export const categorySlice = createSlice({
                 state.status = Status.LOADING;
             })
             .addMatcher(isRejectedAction, (state,action) => {
+
+                console.log('in add matcher');
+
                 state.status = Status.ERROR;
                 state.error = action.payload;
                 state.totalItems = 0;
