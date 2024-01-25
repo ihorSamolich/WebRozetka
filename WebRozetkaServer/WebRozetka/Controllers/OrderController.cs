@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebRozetka.Data;
 using WebRozetka.Data.Entities.Identity;
 using WebRozetka.Data.Entities.Order;
@@ -16,14 +17,45 @@ namespace WebRozetka.Controllers
     {
         private readonly UserManager<UserEntity> _userManager;
         private readonly AppEFContext _context;
-        private readonly IMapper _mapper;
 
-        public OrderController(AppEFContext context, IMapper mapper, UserManager<UserEntity> userManager)
+        public OrderController(AppEFContext context, UserManager<UserEntity> userManager)
         {
             _userManager = userManager;
             _context = context;
-            _mapper = mapper;
         }
+
+        [HttpGet]
+        public IActionResult GetAllOrders()
+        {
+            try
+            {
+                var orders = _context.Orders
+                    .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)  // Використовуйте ThenInclude для вкладених включень
+                    .ToList();
+
+                var orderViewModels = orders.Select(order => new OrderViewModel
+                {
+                    OrderId = order.Id,
+                    CustomerName = order.CustomerName,
+                    CustomerEmail = order.CustomerEmail,
+                    CustomerPhone = order.CustomerPhone,
+                    OrderItems = order.OrderItems.Select(item => new OrderItemDetailViewModel
+                    {
+                        ProductName = item.Product.Name,
+                        Quantity = item.Quantity,
+                    }).ToList()
+                }).ToList();
+
+                return Ok(orderViewModels);
+            }
+            catch (Exception ex)
+            {
+                // Обробляйте помилки або повертайте відповідь з помилкою
+                return StatusCode(500, "Помилка сервера");
+            }
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderViewModel model)

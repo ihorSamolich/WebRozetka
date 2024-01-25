@@ -1,13 +1,11 @@
-import {AnyAction, AsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {login} from 'store/accounts/accounts.actions.ts';
+import {AnyAction, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {login, register} from 'store/accounts/accounts.actions.ts';
 import {IAccountState, IUser} from 'interfaces/account';
 import {jwtDecode} from 'jwt-decode';
 import {Status} from 'utils/enums';
+import {RejectedAction} from 'utils/types/redux';
+import {addLocalStorage, deleteLocalStorage} from 'utils/storage/localStorageUtils.ts';
 
-// eslint-disable-next-line
-type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
-
-type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
 function isRejectedAction(action: AnyAction): action is RejectedAction {
     return action.type.endsWith('/rejected');
 }
@@ -21,7 +19,7 @@ const updateUserState = (state: IAccountState, token: string): void => {
     state.token = token;
     state.isLogin = true;
 
-    localStorage.setItem('authToken', JSON.stringify(token));
+    addLocalStorage('authToken', token);
 };
 
 const initialState: IAccountState = {
@@ -39,7 +37,7 @@ export const accountsSlice = createSlice({
             updateUserState(state, action.payload);
         },
         logout: (state) => {
-            localStorage.removeItem('authToken');
+            deleteLocalStorage('authToken');
             state.user = null;
             state.token = null;
             state.isLogin = false;
@@ -55,10 +53,13 @@ export const accountsSlice = createSlice({
             .addCase(login.pending, (state) => {
                 state.status = Status.LOADING;
             })
+            .addCase(register.fulfilled, (state) => {
+                state.status = Status.SUCCESS;
+            })
+            .addCase(register.pending, (state) => {
+                state.status = Status.LOADING;
+            })
             .addMatcher(isRejectedAction, (state) => {
-                state.user = null;
-                state.token = null;
-                state.isLogin = false;
                 state.status = Status.ERROR;
             });
     },

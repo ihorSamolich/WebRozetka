@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Divider, Row} from 'antd';
 import {getProductsByCategory} from 'store/products/products.actions.ts';
-import {useAppDispatch, useAppSelector} from 'hooks/reduxHooks';
+import {useAppDispatch, useAppSelector} from 'hooks/redux';
 import ProductCard from 'components/ProductCard';
 import {useParams} from 'react-router-dom';
 import {Status} from 'utils/enums';

@@ -1,10 +1,10 @@
 import React from 'react';
 import {Button, Divider, Flex, Form, Input, message, Row, Upload} from 'antd';
 import {PlusOutlined} from '@ant-design/icons';
-import {useAppDispatch} from 'hooks/reduxHooks';
+import {useAppDispatch} from 'hooks/redux';
 import {register} from 'store/accounts/accounts.actions.ts';
 import {unwrapResult} from '@reduxjs/toolkit';
-import {useNotification} from 'hooks/notificationHook';
+import {useNotification} from 'hooks/notification';
 import {autoLogin} from 'store/accounts/accounts.slice.ts';
 import {useNavigate} from 'react-router-dom';
 import {IRegistration, IRegistrationForm} from 'interfaces/account';
@@ -20,7 +20,6 @@ const formItemLayout = {
         sm: { span: 16 },
     },
 };
-
 const tailFormItemLayout = {
     wrapperCol: {
         xs: {
@@ -33,8 +32,6 @@ const tailFormItemLayout = {
         },
     },
 };
-
-
 
 const Registration : React.FC = () => {
     const navigate = useNavigate();

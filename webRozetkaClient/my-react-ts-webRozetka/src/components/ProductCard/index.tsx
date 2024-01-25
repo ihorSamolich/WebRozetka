@@ -6,7 +6,7 @@ import {IProductItem} from 'interfaces/product';
 import {APP_ENV} from 'env/index.ts';
 import NotImage from 'assets/imagenot.png';
 import {useNavigate} from 'react-router-dom';
-import {useAppDispatch} from 'hooks/reduxHooks';
+import {useAppDispatch} from 'hooks/redux';
 import {addToBasket} from 'store/basket/basket.slice.ts';
 
 const { Title } = Typography;

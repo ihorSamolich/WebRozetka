@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IBasketItem, IBasketState } from 'interfaces/basket';
 import {calcTotalPrice} from 'utils/basket/calcTotalPrice.ts';
-import {addLocalStorage, deleteLocalStorage, getLocalStorage} from 'utils/basket/localStorageBasket.ts';
+import {addLocalStorage, deleteLocalStorage, getLocalStorage} from 'utils/storage/localStorageUtils.ts';
 
-const initialState: IBasketState = getLocalStorage('basket');
+const initialState: IBasketState = getLocalStorage('basket') as IBasketState;
 
 export const basketSlice = createSlice({
     name: 'basket',

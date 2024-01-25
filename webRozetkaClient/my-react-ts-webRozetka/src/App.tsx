@@ -1,26 +1,25 @@
 import React, {useEffect} from 'react';
 import {Route, Routes} from 'react-router-dom';
-import {Home, NotFound, CategoriesList, CategoryEdit, CategoryCreate, Registration, ProductDetail,CreateOrder} from 'views';
-import {RequireAuth} from 'components';
-import Login from 'views/Login';
-import SiteLayout from 'components/Layout';
-import ProductsList from 'views/ProductsList';
-import ProductCreate from 'views/ProductCreate';
+import {Login, ProductCreate, ProductsList, Home, NotFound, CategoriesList, CategoryEdit, CategoryCreate, Registration, ProductDetail,CreateOrder} from 'views';
+import { RequireAuth, Layout as SiteLayout} from 'components';
 import {autoLogin} from 'store/accounts/accounts.slice.ts';
-import {useAppDispatch} from 'hooks/reduxHooks';
-import {useLocalStorageHook} from 'hooks/useLocalStorageHook';
+import {useAppDispatch} from 'hooks/redux';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {ReactQueryDevtools} from 'react-query/devtools';
+import {isTokenActive} from 'utils/storage/isTokenActive.ts';
+import {getLocalStorage} from 'utils/storage/localStorageUtils.ts';
 
 const queryClient = new QueryClient();
 
 const App : React.FC = () => {
     const dispatch = useAppDispatch();
-    const [token] = useLocalStorageHook('authToken');
+    const token = getLocalStorage('authToken');
 
     useEffect(() => {
-        if (token) {
-            dispatch(autoLogin(token));
+        if (typeof token === 'string') {
+            if (isTokenActive(token)) {
+                dispatch(autoLogin(token));
+            }
         }
     }, [dispatch, token]);
 

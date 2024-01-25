@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Divider, Row, Col, Flex, Typography, Button, Rate} from 'antd';
 import {useParams} from 'react-router-dom';
-import {useAppDispatch, useAppSelector} from 'hooks/reduxHooks';
+import {useAppDispatch, useAppSelector} from 'hooks/redux';
 import {getProductById} from 'store/products/products.actions.ts';
 import {CompanyInformation, ProductDescriptions, ProductPictures} from 'components/index.ts';
 import {ExclamationCircleOutlined, ShoppingCartOutlined, CarOutlined} from '@ant-design/icons';

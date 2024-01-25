@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {APP_ENV} from 'env/index.ts';
 import {isTokenActive} from 'utils/storage/isTokenActive.ts';
+import {getLocalStorage} from 'utils/storage/localStorageUtils.ts';
 
 interface IApiClientConfig extends AxiosRequestConfig {
     baseURL: string;
@@ -11,9 +12,9 @@ export const apiClient: AxiosInstance = axios.create({
 } as IApiClientConfig);
 
 apiClient.interceptors.request.use((config) => {
-    const token = localStorage.getItem('authToken');
-    if (token && isTokenActive(token)) {
-        config.headers.Authorization = `Bearer ${JSON.parse(token)}`;
+    const token = getLocalStorage('authToken') as string;
+    if (isTokenActive(token)) {
+        config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
 });

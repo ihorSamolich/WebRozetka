@@ -7,7 +7,3 @@ export interface ITopHeader {
     setThemeMode: Dispatch<SetStateAction<boolean>>;
 }
 
-export interface ISideMenu {
-    collapsed: boolean;
-}
-

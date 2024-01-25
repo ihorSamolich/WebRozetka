@@ -17,7 +17,7 @@ import {
 } from 'antd';
 import { ArrowLeftOutlined, SmileOutlined } from '@ant-design/icons';
 import {IOrder, IOrderDelivery, IOrderPayment, IOrderProduct, IOrderUser} from 'interfaces/order';
-import {useAppDispatch, useAppSelector} from 'hooks/reduxHooks';
+import {useAppDispatch, useAppSelector} from 'hooks/redux';
 import OrderCard from 'components/OrderProductCard';
 import {useAddOrderData} from 'hooks/order';
 import {openNotification} from 'utils/notification';

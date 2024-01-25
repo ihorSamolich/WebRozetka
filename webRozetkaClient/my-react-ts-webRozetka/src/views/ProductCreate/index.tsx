@@ -2,14 +2,14 @@ import React, {useEffect } from 'react';
 import {Button, Divider, Form, Input, InputNumber, message, Row, Select, Spin, Upload} from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import {IProductCreate } from 'interfaces/product';
-import {useAppDispatch, useAppSelector} from 'hooks/reduxHooks';
+import {useAppDispatch, useAppSelector} from 'hooks/redux';
 import {getCategoriesNames} from 'store/categories/categories.actions.ts';
 import {DownloadOutlined } from '@ant-design/icons';
 import {imageConverterToFileArray} from 'utils/converters/imageConverterToFileArray.ts';
 import {addProduct} from 'store/products/products.actions.ts';
 import {unwrapResult} from '@reduxjs/toolkit';
 import {useNavigate} from 'react-router-dom';
-import {useNotification} from 'hooks/notificationHook';
+import {useNotification} from 'hooks/notification';
 import {Status} from 'utils/enums';
 import {useCategoriesNamesData} from 'hooks/categories';
 

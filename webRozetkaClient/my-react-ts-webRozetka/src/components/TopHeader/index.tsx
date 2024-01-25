@@ -5,7 +5,7 @@ import {MenuFoldOutlined, MenuUnfoldOutlined,UserOutlined, PoweroffOutlined} fro
 import {Header} from 'antd/es/layout/layout';
 import {ITopHeader} from 'interfaces/design';
 import {Link} from 'react-router-dom';
-import {useAppDispatch, useAppSelector} from 'hooks/reduxHooks';
+import {useAppDispatch, useAppSelector} from 'hooks/redux';
 import ButtonGroup from 'antd/es/button/button-group';
 import {logout} from 'store/accounts/accounts.slice.ts';
 import {APP_ENV} from 'env/index.ts';

@@ -4,7 +4,7 @@ import Meta from 'antd/es/card/Meta';
 import {APP_ENV} from 'env/index.ts';
 import {DeleteOutlined} from '@ant-design/icons';
 import {IBasketItem} from 'interfaces/basket';
-import {useAppDispatch} from 'hooks/reduxHooks';
+import {useAppDispatch} from 'hooks/redux';
 import {removeFromBasket, changeBasketCount} from 'store/basket/basket.slice.ts';
 
 const {Text,Title} = Typography;

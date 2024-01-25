@@ -9,6 +9,6 @@ import SiteSearch from  'components/SiteSearch';
 import ProductPictures from  'components/ProductPictures';
 import ProductDescriptions from  'components/ProductDescriptions';
 import CompanyInformation from 'components/CompanyInformation';
+import Layout from 'components/Layout';
 
-
-export { SiteSearch, CompanyInformation, ItemsNotFound, CategoryCard, RequireAuth, ProductDescriptions, ProductPictures, ServerError, SkeletonCategoryCard, TopHeader, SitePagination };
+export {Layout, SiteSearch, CompanyInformation, ItemsNotFound, CategoryCard, RequireAuth, ProductDescriptions, ProductPictures, ServerError, SkeletonCategoryCard, TopHeader, SitePagination };
