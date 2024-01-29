@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WebRozetka.Data.Entities.Addres;
 using WebRozetka.Data.Entities.Category;
 using WebRozetka.Data.Entities.Identity;
 using WebRozetka.Data.Entities.Order;
@@ -21,15 +22,15 @@ namespace WebRozetka.Data
         public DbSet<ProductEntity> Products { get; set; }
         public DbSet<PhotoEntity> Photos { get; set; }
 
+        public DbSet<BasketEntity> Baskets { get; set; }
         public DbSet<OrderEntity> Orders { get; set; }
         public DbSet<OrderItemsEntity> OrdersItems { get; set; }
         public DbSet<OrderStatusEntity> OrderStatuses { get; set; }
+        public DbSet<OrderContactInfoEntity> OrderContactInfos { get; set; }
 
-        public DbSet<CitiesEntity> Cities { get; set; }
-        public DbSet<DeliveryServiсesEntity> DeliveryServiсes { get; set; }
-        public DbSet<DepartmentEntity> Departments { get; set; }
-        public DbSet<OrderInfoEntity> OrderInfo { get; set; }
-
+        public DbSet<AreasEntity> Areas { get; set; }
+        public DbSet<SettlementEntity> Settlements { get; set; }
+        public DbSet<WarehouseEntity> Warehouses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -46,6 +47,11 @@ namespace WebRozetka.Data
                     .WithMany(u => u.UserRoles)
                     .HasForeignKey(u => u.UserId)
                     .IsRequired();
+            });
+
+            builder.Entity<BasketEntity>(ur =>
+            {
+                ur.HasKey(ur => new { ur.UserId, ur.ProductId });
             });
         }
     }

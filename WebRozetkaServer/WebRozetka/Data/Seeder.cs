@@ -64,53 +64,6 @@ namespace WebRozetka.Data
                     }
                 }
 
-                if (!context.Cities.Any())
-                {
-                    context.Cities.AddRange(
-                        new CitiesEntity { Name = "Київ" },
-                        new CitiesEntity { Name = "Харків" },
-                        new CitiesEntity { Name = "Одеса" },
-                        new CitiesEntity { Name = "Дніпро" },
-                        new CitiesEntity { Name = "Львів" },
-                        new CitiesEntity { Name = "Запоріжжя" },
-                        new CitiesEntity { Name = "Івано-Франківськ" },
-                        new CitiesEntity { Name = "Херсон" },
-                        new CitiesEntity { Name = "Чернівці" },
-                        new CitiesEntity { Name = "Луцьк" }
-                    );
-
-                    context.SaveChanges();
-                }
-
-                if (!context.DeliveryServiсes.Any())
-                {
-                    context.DeliveryServiсes.AddRange(
-                        new DeliveryServiсesEntity { Name = "Нова Пошта" },
-                        new DeliveryServiсesEntity { Name = "Укрпошта" },
-                        new DeliveryServiсesEntity { Name = "MeestExpress" }
-                    );
-
-                    context.SaveChanges();
-                }
-
-                if (!context.Departments.Any())
-                {
-                    var cities = context.Cities.ToList();
-                    var deliveryServices = context.DeliveryServiсes.ToList();
-
-                    for (int i = 1; i <= 10; i++)
-                    {
-                        context.Departments.Add(new DepartmentEntity
-                        {
-                            Number = i,
-                            CityId = cities[i % cities.Count].Id,
-                            DeliveryServiсesId = deliveryServices[i % deliveryServices.Count].Id
-                        });
-                    }
-
-                    context.SaveChanges();
-                }
-
                 if (!context.OrderStatuses.Any())
                 {
                     var orderStatus = new List<OrderStatusEntity>

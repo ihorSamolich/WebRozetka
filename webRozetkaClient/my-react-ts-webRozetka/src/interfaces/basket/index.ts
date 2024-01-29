@@ -1,17 +1,20 @@
 
 export interface IBasketProduct {
-    id: number,
-    name: string,
+    productId: number,
+    productName: string,
     price: number,
     quantity: number,
     photos: string[],
-}
-export interface IBasketItem {
-    product: IBasketProduct,
     count: number,
 }
+
+export interface IAddBasketProduct{
+    productId: number,
+    count: number,
+}
+
 export interface IBasketState {
-    items : IBasketItem[],
+    items : IBasketProduct[],
     allPriceProducts: number,
 }
 

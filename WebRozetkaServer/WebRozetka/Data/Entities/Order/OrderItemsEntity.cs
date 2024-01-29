@@ -15,10 +15,10 @@ namespace WebRozetka.Data.Entities.Order
         public int OrderId { get; set; }
         public OrderEntity Order { get; set; }
 
-        [Required, Range(0, int.MaxValue, ErrorMessage = "Quantity must be greater than or equal to 0.")]
-        public int Quantity { get; set; }
+        [Required, Range(0, int.MaxValue, ErrorMessage = "Count must be greater than or equal to 0.")]
+        public int Count { get; set; }
 
         [Required, Range(0, double.MaxValue, ErrorMessage = "Price must be greater than or equal to 0.")]
-        public decimal TotalPrice { get; set; }
+        public decimal Price { get; set; }
     }
 }

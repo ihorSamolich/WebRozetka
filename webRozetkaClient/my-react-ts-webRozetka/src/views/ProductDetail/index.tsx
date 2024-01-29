@@ -8,7 +8,7 @@ import {ExclamationCircleOutlined, ShoppingCartOutlined, CarOutlined} from '@ant
 import { Descriptions } from 'antd';
 import type { DescriptionsProps } from 'antd';
 import {IProductItem} from 'interfaces/product';
-import {addToBasket} from 'store/basket/basket.slice.ts';
+import {addToBasket} from 'store/basket/basket.actions.ts';
 const { Title,Text } = Typography;
 
 const deliveryInfo: DescriptionsProps['items'] = [
@@ -63,7 +63,7 @@ const ProductDetail : React.FC = () => {
     const handleAddProductToBasket = (event: React.MouseEvent) => {
         event.stopPropagation();
         if (selectedItem) {
-            dispatch(addToBasket({product: selectedItem, count: 1}));
+            dispatch(addToBasket({productId: selectedItem.id, count: 1}));
         }
     };
 

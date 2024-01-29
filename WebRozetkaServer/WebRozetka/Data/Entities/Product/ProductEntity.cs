@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using WebRozetka.Data.Entities.Category;
+using WebRozetka.Data.Entities.Order;
 using WebRozetka.Data.Entities.Photo;
 
 namespace WebRozetka.Data.Entities.Product
@@ -28,9 +29,11 @@ namespace WebRozetka.Data.Entities.Product
 
         [Required]
         public int CategoryId { get; set; }
-        public CategoryEntity Category { get; set; }
+        public virtual CategoryEntity Category { get; set; }
 
-        public ICollection<PhotoEntity> Photos { get; set; }
+        public virtual ICollection<PhotoEntity> Photos { get; set; }
+        public virtual ICollection<BasketEntity> Baskets { get; set; }
+        public virtual ICollection<OrderItemsEntity> OrderItems { get; set; }
 
     }
 }

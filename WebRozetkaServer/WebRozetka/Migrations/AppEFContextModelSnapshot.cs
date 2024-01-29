@@ -114,6 +114,61 @@ namespace WebRozetka.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("WebRozetka.Data.Entities.Addres.AreasEntity", b =>
+                {
+                    b.Property<string>("Ref")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Ref");
+
+                    b.ToTable("Areas");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Addres.SettlementEntity", b =>
+                {
+                    b.Property<string>("Ref")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AreaId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Ref");
+
+                    b.HasIndex("AreaId");
+
+                    b.ToTable("Settlements");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Addres.WarehouseEntity", b =>
+                {
+                    b.Property<string>("Ref")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SettlementId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Ref");
+
+                    b.HasIndex("SettlementId");
+
+                    b.ToTable("Warehouses");
+                });
+
             modelBuilder.Entity("WebRozetka.Data.Entities.Category.CategoryEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -269,82 +324,48 @@ namespace WebRozetka.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("WebRozetka.Data.Entities.Order.CitiesEntity", b =>
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.BasketEntity", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                    b.HasKey("UserId", "ProductId");
 
-                    b.Property<string>("Name")
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Basket");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderContactInfoEntity", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Phone")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("OrderId");
 
-                    b.ToTable("Cities");
-                });
-
-            modelBuilder.Entity("WebRozetka.Data.Entities.Order.DeliveryServiсesEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DeliveryServiсes");
-                });
-
-            modelBuilder.Entity("WebRozetka.Data.Entities.Order.DepartmentEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("DeliveryServiсesId")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("DeliveryServiсesId");
-
-                    b.ToTable("Department");
+                    b.ToTable("OrderContactInfo");
                 });
 
             modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderEntity", b =>
@@ -355,66 +376,30 @@ namespace WebRozetka.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CustomerEmail")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CustomerName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CustomerPhone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
-
-                    b.Property<int>("OrderInfoId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("OrderStatusId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderInfoId");
-
-                    b.HasIndex("OrderStatusId");
-
-                    b.ToTable("Order");
-                });
-
-            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderInfoEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("WarehousesRef")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("OrderStatusId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("OrderInfo");
+                    b.HasIndex("WarehousesRef");
+
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderItemsEntity", b =>
@@ -425,6 +410,9 @@ namespace WebRozetka.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp with time zone");
 
@@ -434,14 +422,11 @@ namespace WebRozetka.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("integer");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -584,6 +569,24 @@ namespace WebRozetka.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebRozetka.Data.Entities.Addres.SettlementEntity", b =>
+                {
+                    b.HasOne("WebRozetka.Data.Entities.Addres.AreasEntity", "Area")
+                        .WithMany("Settlements")
+                        .HasForeignKey("AreaId");
+
+                    b.Navigation("Area");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Addres.WarehouseEntity", b =>
+                {
+                    b.HasOne("WebRozetka.Data.Entities.Addres.SettlementEntity", "Settlement")
+                        .WithMany("Warehouses")
+                        .HasForeignKey("SettlementId");
+
+                    b.Navigation("Settlement");
+                });
+
             modelBuilder.Entity("WebRozetka.Data.Entities.Identity.UserRoleEntity", b =>
                 {
                     b.HasOne("WebRozetka.Data.Entities.Identity.RoleEntity", "Role")
@@ -603,61 +606,59 @@ namespace WebRozetka.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebRozetka.Data.Entities.Order.DepartmentEntity", b =>
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.BasketEntity", b =>
                 {
-                    b.HasOne("WebRozetka.Data.Entities.Order.CitiesEntity", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebRozetka.Data.Entities.Order.DeliveryServiсesEntity", "DeliveryServiсes")
-                        .WithMany()
-                        .HasForeignKey("DeliveryServiсesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
-
-                    b.Navigation("DeliveryServiсes");
-                });
-
-            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderEntity", b =>
-                {
-                    b.HasOne("WebRozetka.Data.Entities.Order.OrderInfoEntity", "OrderInfo")
-                        .WithMany()
-                        .HasForeignKey("OrderInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebRozetka.Data.Entities.Order.OrderStatusEntity", "OrderStatus")
-                        .WithMany()
-                        .HasForeignKey("OrderStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrderInfo");
-
-                    b.Navigation("OrderStatus");
-                });
-
-            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderInfoEntity", b =>
-                {
-                    b.HasOne("WebRozetka.Data.Entities.Order.DepartmentEntity", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
+                    b.HasOne("WebRozetka.Data.Entities.Product.ProductEntity", "Product")
+                        .WithMany("Baskets")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WebRozetka.Data.Entities.Identity.UserEntity", "User")
-                        .WithMany()
+                        .WithMany("Baskets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Department");
+                    b.Navigation("Product");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderContactInfoEntity", b =>
+                {
+                    b.HasOne("WebRozetka.Data.Entities.Order.OrderEntity", "Order")
+                        .WithOne("OrderContactInfo")
+                        .HasForeignKey("WebRozetka.Data.Entities.Order.OrderContactInfoEntity", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderEntity", b =>
+                {
+                    b.HasOne("WebRozetka.Data.Entities.Order.OrderStatusEntity", "OrderStatus")
+                        .WithMany("Orders")
+                        .HasForeignKey("OrderStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebRozetka.Data.Entities.Identity.UserEntity", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebRozetka.Data.Entities.Addres.WarehouseEntity", "Warehouses")
+                        .WithMany()
+                        .HasForeignKey("WarehousesRef");
+
+                    b.Navigation("OrderStatus");
+
+                    b.Navigation("User");
+
+                    b.Navigation("Warehouses");
                 });
 
             modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderItemsEntity", b =>
@@ -669,7 +670,7 @@ namespace WebRozetka.Migrations
                         .IsRequired();
 
                     b.HasOne("WebRozetka.Data.Entities.Product.ProductEntity", "Product")
-                        .WithMany()
+                        .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -701,6 +702,16 @@ namespace WebRozetka.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("WebRozetka.Data.Entities.Addres.AreasEntity", b =>
+                {
+                    b.Navigation("Settlements");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Addres.SettlementEntity", b =>
+                {
+                    b.Navigation("Warehouses");
+                });
+
             modelBuilder.Entity("WebRozetka.Data.Entities.Category.CategoryEntity", b =>
                 {
                     b.Navigation("Products");
@@ -713,16 +724,31 @@ namespace WebRozetka.Migrations
 
             modelBuilder.Entity("WebRozetka.Data.Entities.Identity.UserEntity", b =>
                 {
+                    b.Navigation("Baskets");
+
+                    b.Navigation("Orders");
+
                     b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderEntity", b =>
                 {
+                    b.Navigation("OrderContactInfo");
+
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderStatusEntity", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("WebRozetka.Data.Entities.Product.ProductEntity", b =>
                 {
+                    b.Navigation("Baskets");
+
+                    b.Navigation("OrderItems");
+
                     b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618

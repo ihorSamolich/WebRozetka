@@ -1,5 +1,5 @@
-import {IBasketItem} from 'interfaces/basket';
+import {IBasketProduct} from 'interfaces/basket';
 
-export const calcTotalPrice = (items: IBasketItem[]) => {
-    return items.reduce((sum, item) => item.product.price * item.count + sum, 0);
+export const calcTotalPrice = (items: IBasketProduct[]) => {
+    return items.reduce((sum, item) => item.price * item.count + sum, 0);
 };

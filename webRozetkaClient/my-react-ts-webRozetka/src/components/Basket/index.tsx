@@ -3,9 +3,9 @@ import {FloatButton, Drawer, Button, Flex, Typography, Empty} from 'antd';
 import {ShoppingCartOutlined} from '@ant-design/icons';
 import {useAppDispatch, useAppSelector} from 'hooks/redux';
 import BasketCard from 'components/BasketCard';
-import {clearBasket} from 'store/basket/basket.slice.ts';
 import emptyBasket from 'assets/empty-shopping-cart.png';
 import {useNavigate} from 'react-router-dom';
+import {clearBasket} from 'store/basket/basket.actions.ts';
 
 const {Title,Text} = Typography;
 
@@ -87,7 +87,7 @@ const Basket : React.FC = () => {
                 {
                     items.map((item) =>
                         <BasketCard
-                            key={item.product.id}
+                            key={item.productId}
                             {...item}
                         />)
                 }

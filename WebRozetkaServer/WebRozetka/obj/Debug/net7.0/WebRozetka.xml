@@ -4,16 +4,28 @@
         <name>WebRozetka</name>
     </assembly>
     <members>
-        <member name="T:WebRozetka.Migrations.Createnewdb">
+        <member name="T:WebRozetka.Migrations.Creadestarttables">
             <inheritdoc />
         </member>
-        <member name="M:WebRozetka.Migrations.Createnewdb.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+        <member name="M:WebRozetka.Migrations.Creadestarttables.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
             <inheritdoc />
         </member>
-        <member name="M:WebRozetka.Migrations.Createnewdb.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+        <member name="M:WebRozetka.Migrations.Creadestarttables.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
             <inheritdoc />
         </member>
-        <member name="M:WebRozetka.Migrations.Createnewdb.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:WebRozetka.Migrations.Creadestarttables.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebRozetka.Migrations.Orderandaddressarelinked">
+            <inheritdoc />
+        </member>
+        <member name="M:WebRozetka.Migrations.Orderandaddressarelinked.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebRozetka.Migrations.Orderandaddressarelinked.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebRozetka.Migrations.Orderandaddressarelinked.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
         <member name="P:WebRozetka.Models.Account.LoginViewModel.Email">

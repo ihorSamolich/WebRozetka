@@ -22,7 +22,7 @@ import OrderCard from 'components/OrderProductCard';
 import {useAddOrderData} from 'hooks/order';
 import {openNotification} from 'utils/notification';
 import {useNavigate} from 'react-router-dom';
-import {clearBasket} from 'store/basket/basket.slice.ts';
+import {clearBasket} from 'store/basket/basket.actions.ts';
 
 const CreateOrder: React.FC = () => {
     const navigate = useNavigate();
@@ -61,7 +61,7 @@ const CreateOrder: React.FC = () => {
     }, [isError, isSuccess, notificationApi]);
 
     const handleCreateOrder = () =>{
-        const orders: IOrderProduct[] = basketItems.map(item => ({ quantity: item.count, productId: item.product.id }));
+        const orders: IOrderProduct[] = basketItems.map(item => ({ quantity: item.count, productId: item.productId }));
         if (user && orders.length) {
             addOrder(
                 {
@@ -233,7 +233,7 @@ const CreateOrder: React.FC = () => {
                     {
                         basketItems.map((item) =>
                             <OrderCard
-                                key={item.product.id}
+                                key={item.productId}
                                 {...item}
                             />)
                     }

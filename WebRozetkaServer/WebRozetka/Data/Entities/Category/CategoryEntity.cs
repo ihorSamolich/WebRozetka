@@ -15,6 +15,6 @@ namespace WebRozetka.Data.Entities.Category
         [StringLength(4000)]
         public string Description { get; set; }
 
-        public ICollection<ProductEntity> Products { get; set; }
+        public virtual ICollection<ProductEntity> Products { get; set; }
     }
 }
