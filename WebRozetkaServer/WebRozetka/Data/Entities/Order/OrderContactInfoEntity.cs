@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebRozetka.Data.Entities.Addres;
 using WebRozetka.Data.Entities.Identity;
 
 namespace WebRozetka.Data.Entities.Order
@@ -19,5 +20,9 @@ namespace WebRozetka.Data.Entities.Order
 
         public string Phone { get; set; }
         public virtual OrderEntity Order { get; set; }
+
+        [ForeignKey("Warehouses")]
+        public string WarehousesId { get; set; }
+        public virtual WarehouseEntity Warehouses { get; set; }
     }
 }

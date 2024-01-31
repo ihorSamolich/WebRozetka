@@ -47,11 +47,19 @@ namespace WebRozetka.Mapper
                 .ForMember(dest => dest.AreaId, opt => opt.MapFrom(src => src.Area))
                 .ForMember(dest => dest.Area, opt => opt.Ignore());
 
+            CreateMap<SettlementEntity, SettlementNPViewModel>();
+
+
             CreateMap<WarehouseNPViewModel, WarehouseEntity>()
                 .ForMember(dest => dest.SettlementId, opt => opt.MapFrom(src => src.SettlementRef))
                 .ForMember(dest => dest.Settlement, opt => opt.Ignore());
 
+            CreateMap<WarehouseEntity, WarehouseNPViewModel>();
+
+
+
             CreateMap<AreaNPViewModel, AreasEntity>();
+            CreateMap<AreasEntity, AreaNPViewModel>();
 
             CreateMap<BasketEntity, BasketItemViewModel>()
                .ForMember(x => x.ProductName, opt => opt.MapFrom(x => x.Product.Name))

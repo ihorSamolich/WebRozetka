@@ -1,50 +1,39 @@
 import React, {useEffect, useState} from 'react';
-import {
-    Row,
-    Divider,
-    Col,
-    Steps,
-    Button,
-    Form,
-    Input,
-    Radio,
-    Select,
-    Space,
-    Typography,
-    Result,
-    Spin,
-    notification,
-} from 'antd';
+import {Row,Divider,Col,Steps,Button,Typography,Result,Spin,notification} from 'antd';
 import { ArrowLeftOutlined, SmileOutlined } from '@ant-design/icons';
-import {IOrder, IOrderDelivery, IOrderPayment, IOrderProduct, IOrderUser} from 'interfaces/order';
+import {IOrder, IOrderDelivery, IOrderPayment, IOrderUser} from 'interfaces/order';
 import {useAppDispatch, useAppSelector} from 'hooks/redux';
 import OrderCard from 'components/OrderProductCard';
 import {useAddOrderData} from 'hooks/order';
 import {openNotification} from 'utils/notification';
 import {useNavigate} from 'react-router-dom';
 import {clearBasket} from 'store/basket/basket.actions.ts';
+import OrderUserData from 'components/OrderUserData';
+import OrderDeliveryData from 'components/OrderDeliveryData';
+import OrderPaymentData from 'components/OrderPaymentData';
+
+const defaultFormData : IOrder = {
+    user: {
+        firstName: '',
+        lastName: '',
+        phone: '',
+        email: '',
+    },
+    delivery: {
+        areaRef: '',
+        settlementRef: '',
+        warehouseRef: '',
+    },
+    payment: {
+        paymentType: '',
+    },
+};
 
 const CreateOrder: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [current, setCurrent] = useState(0);
-    const [formData, setFormData] = useState<IOrder>({
-        user: {
-            firstName: '',
-            lastName: '',
-            phone: '',
-            email: '',
-        },
-        delivery: {
-            cityId: 0,
-            deliveryServiceId: 0,
-            departmentNumberId: 0,
-        },
-        payment: {
-            paymentType: '',
-        },
-    });
-    const {user} = useAppSelector(state => state.account);
+    const [formData, setFormData] = useState<IOrder>(defaultFormData);
     const [notificationApi, contextHolder] = notification.useNotification();
     const {items : basketItems, allPriceProducts} = useAppSelector(state => state.basket);
     const {mutate : addOrder, isLoading, isError, isSuccess} = useAddOrderData();
@@ -61,14 +50,12 @@ const CreateOrder: React.FC = () => {
     }, [isError, isSuccess, notificationApi]);
 
     const handleCreateOrder = () =>{
-        const orders: IOrderProduct[] = basketItems.map(item => ({ quantity: item.count, productId: item.productId }));
-        if (user && orders.length) {
+        if (basketItems.length) {
             addOrder(
                 {
                     customerPersonalData: formData.user,
                     departmentData: formData.delivery,
-                    userEmail: user.email,
-                    orderProducts: orders,
+                    paymentData: formData.payment,
                 },
             );
         }
@@ -77,120 +64,27 @@ const CreateOrder: React.FC = () => {
         }
     };
 
-    const next = () => {
-        setCurrent(current + 1);
-    };
-
-    const prev = () => {
-        setCurrent(current - 1);
-    };
-
     const updateFormData = (stepName: string, values: IOrderUser | IOrderPayment | IOrderDelivery) => {
         setFormData((prevData) => ({...prevData, [stepName]: values}));
     };
 
+    const next = () => setCurrent(current + 1);
+    const prev = () => setCurrent(current - 1);
+
     const steps = [
         {
             title: 'Контактні дані',
-            content: (
-                <Form
-                    name="user"
-                    layout="vertical"
-                    onFinish={(values) => {
-                        updateFormData('user', values);
-                        next();
-                    }}
-                >
-                    <Form.Item name={'firstName'} label="Ім'я" rules={[{required: true}]}>
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item name={'lastName'} label="Прізвище" rules={[{required: true}]}>
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item name={'phone'} label="Телефон" rules={[{required: true}]}>
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item name={'email'} label="Електронна адреса" rules={[{required: true},{type: 'email'}]}>
-                        <Input/>
-                    </Form.Item>
-
-                    <Button type="primary" htmlType="submit">
-                        Далі
-                    </Button>
-                </Form>
-            ),
+            content: <OrderUserData updateFormData={updateFormData} next={next} />,
         },
         {
             title: 'Доставка',
-            content: (
-                <Form
-                    name="delivery"
-                    layout="vertical"
-                    onFinish={(values) => {
-                        updateFormData('delivery', values);
-                        next();
-                    }}
-                >
-                    <Form.Item name={'cityId'} label="Ваше місто" rules={[{required: true}]}>
-                        <Select>
-                            <Select.Option value={1}>Київ</Select.Option>
-                            <Select.Option value={2}>Харків</Select.Option>
-                            <Select.Option value={3}>Одеса</Select.Option>
-                            <Select.Option value={4}>Дніпро</Select.Option>
-                            <Select.Option value={5}>Львів</Select.Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item name={'deliveryServiceId'} label="Спосіб доставки" rules={[{required: true}]}>
-                        <Radio.Group>
-                            <Radio value={1}>Нова Пошта</Radio>
-                            <Radio value={2}>Укрпошта</Radio>
-                            <Radio value={3}>MeestExpress</Radio>
-                        </Radio.Group>
-                    </Form.Item>
-                    <Form.Item name={'departmentNumberId'} label="Номер відділення" rules={[{required: true}]}>
-                        <Select>
-                            <Select.Option value={1}>1</Select.Option>
-                            <Select.Option value={2}>2</Select.Option>
-                            <Select.Option value={3}>3</Select.Option>
-                            <Select.Option value={4}>4</Select.Option>
-                            <Select.Option value={5}>5</Select.Option>
-                        </Select>
-                    </Form.Item>
-
-                    <Button type="primary" htmlType="submit">
-                        Далі
-                    </Button>
-                </Form>
-            ),
+            content: <OrderDeliveryData updateFormData={updateFormData} next={next}/>,
         },
         {
             title: 'Оплата',
-            content: (
-                <Form
-                    name="payment"
-                    layout="vertical"
-                    onFinish={(values) => {
-                        updateFormData('payment', values);
-                        next();
-                    }}
-                >
-                    <Form.Item name={'paymentType'} label="Спосіб Оплати" rules={[{required: true}]}>
-                        <Radio.Group>
-                            <Space direction="vertical">
-                                <Radio value="1">Картою на сайті</Radio>
-                                <Radio value="2">При отриманні</Radio>
-                                <Radio value="3">Розрахунуовий рахунок</Radio>
-                            </Space>
-                        </Radio.Group>
-                    </Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Далі
-                    </Button>
-                </Form>
-            ),
+            content: <OrderPaymentData  updateFormData={updateFormData} next={next}/>,
         },
     ];
-
     const items = steps.map((item) => ({key: item.title, title: item.title}));
 
     return (
@@ -223,7 +117,7 @@ const CreateOrder: React.FC = () => {
                                             type="primary"
                                             onClick={handleCreateOrder}
                                         >
-                                        Підтвердити замовлення
+                                            Підтвердити замовлення
                                         </Button>
                                     }
                             />
@@ -239,7 +133,7 @@ const CreateOrder: React.FC = () => {
                     }
                     <Divider/>
                     <Typography.Title level={4} style={{ margin: 5, textAlign:'center' }}>
-                    Сума замовлення {allPriceProducts} грн
+                        Сума замовлення {allPriceProducts} грн
                     </Typography.Title>
                 </Col>
             </Row>
@@ -248,3 +142,4 @@ const CreateOrder: React.FC = () => {
 };
 
 export default CreateOrder;
+

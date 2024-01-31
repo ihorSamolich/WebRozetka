@@ -363,7 +363,12 @@ namespace WebRozetka.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
+                    b.Property<string>("WarehousesId")
+                        .HasColumnType("text");
+
                     b.HasKey("OrderId");
+
+                    b.HasIndex("WarehousesId");
 
                     b.ToTable("OrderContactInfo");
                 });
@@ -388,16 +393,11 @@ namespace WebRozetka.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("WarehousesRef")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OrderStatusId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("WarehousesRef");
 
                     b.ToTable("Order");
                 });
@@ -633,7 +633,13 @@ namespace WebRozetka.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("WebRozetka.Data.Entities.Addres.WarehouseEntity", "Warehouses")
+                        .WithMany()
+                        .HasForeignKey("WarehousesId");
+
                     b.Navigation("Order");
+
+                    b.Navigation("Warehouses");
                 });
 
             modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderEntity", b =>
@@ -650,15 +656,9 @@ namespace WebRozetka.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebRozetka.Data.Entities.Addres.WarehouseEntity", "Warehouses")
-                        .WithMany()
-                        .HasForeignKey("WarehousesRef");
-
                     b.Navigation("OrderStatus");
 
                     b.Navigation("User");
-
-                    b.Navigation("Warehouses");
                 });
 
             modelBuilder.Entity("WebRozetka.Data.Entities.Order.OrderItemsEntity", b =>

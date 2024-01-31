@@ -28,6 +28,30 @@
         <member name="M:WebRozetka.Migrations.Orderandaddressarelinked.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:WebRozetka.Migrations.Changeordercontacntentity">
+            <inheritdoc />
+        </member>
+        <member name="M:WebRozetka.Migrations.Changeordercontacntentity.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebRozetka.Migrations.Changeordercontacntentity.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebRozetka.Migrations.Changeordercontacntentity.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebRozetka.Migrations.Changesomeordercontacntentity">
+            <inheritdoc />
+        </member>
+        <member name="M:WebRozetka.Migrations.Changesomeordercontacntentity.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebRozetka.Migrations.Changesomeordercontacntentity.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebRozetka.Migrations.Changesomeordercontacntentity.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
         <member name="P:WebRozetka.Models.Account.LoginViewModel.Email">
             <summary>
             Пошта користувача:

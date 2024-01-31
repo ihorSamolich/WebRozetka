@@ -36,11 +36,6 @@ export const basketSlice = createSlice({
                 state.allPriceProducts = calcTotalPrice(state.items);
                 addLocalStorage('basket', state);
             });
-        // .addCase(changeCountToBasket.fulfilled, (state,action) => {
-        //     state.items = action.payload?.value;
-        //     state.allPriceProducts = calcTotalPrice(state.items);
-        //     addLocalStorage('basket', state);
-        // });
     },
 });
 

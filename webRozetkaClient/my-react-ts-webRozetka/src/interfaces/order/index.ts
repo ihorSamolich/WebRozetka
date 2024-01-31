@@ -10,9 +10,9 @@ export interface IOrderProduct {
 }
 
 export interface IOrderDelivery {
-    cityId: number,
-    deliveryServiceId: number,
-    departmentNumberId: number,
+    areaRef: string,
+    settlementRef: string,
+    warehouseRef: string,
 }
 
 export interface IOrderPayment {
@@ -26,8 +26,7 @@ export interface IOrder {
 }
 
 export interface IOrderData {
-    userEmail : string,
     customerPersonalData: IOrderUser,
     departmentData : IOrderDelivery,
-    orderProducts: IOrderProduct[],
+    paymentData: IOrderPayment
 }

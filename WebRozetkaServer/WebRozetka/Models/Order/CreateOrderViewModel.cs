@@ -12,16 +12,20 @@
 
     public class DepartmentData
     {
-        public int CityId { get; set; }
-        public int DeliveryServiceId { get; set; }
-        public int DepartmentNumberId { get; set; }
+        public string AreaRef { get; set; }
+        public string SettlementRef { get; set; }
+        public string WarehouseRef { get; set; }
+    }
+
+    public class PaymentData
+    {
+        public string PaymentType { get; set; }
     }
 
     public class CreateOrderViewModel
     {
-        public string UserEmail { get; set; }
         public CustomerPersonalData CustomerPersonalData { get; set; }
         public DepartmentData DepartmentData { get; set; }
-        public List<OrderItemViewModel> OrderProducts { get; set; }
+        public PaymentData PaymentData { get; set; }
     }
 }
