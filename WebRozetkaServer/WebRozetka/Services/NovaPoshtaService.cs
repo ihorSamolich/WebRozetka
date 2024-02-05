@@ -1,107 +1,104 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Text;
 using WebRozetka.Controllers;
 using WebRozetka.Data;
 using WebRozetka.Data.Entities.Addres;
-using WebRozetka.Models.Addres;
+using WebRozetka.Interfaces;
+using WebRozetka.Models.Address;
 
 namespace WebRozetka.Services
 {
-    public class NovaPoshtaService
+    public class NovaPoshtaService : INovaPoshtaService
     {
-        private const string API_KEY_NOVAPOSHTA = "7a30218545088acfb427da6006de245a";
-
+        private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
         private readonly IMapper _mapper;
         private readonly AppEFContext _context;
 
-        public NovaPoshtaService(IMapper mapper, AppEFContext context)
+        public NovaPoshtaService(IConfiguration configuration, IMapper mapper, AppEFContext context)
         {
+            _configuration = configuration;
             _httpClient = new HttpClient();
             _mapper = mapper;
             _context = context;
         }
 
-
-        public async Task GetNPWarehouses()
+        public void GetAreas()
         {
-            string jsonData = @$"
-                {{
-                    ""apiKey"": ""{API_KEY_NOVAPOSHTA}"",
-                    ""modelName"": ""Address"",
-                    ""calledMethod"": ""getWarehouses"",
-                    ""methodProperties"": {{
-                        ""Page"" : ""pageNum"",
-                        ""Limit"" : ""200"",
-                        ""Language"" : ""UA""
-                    }}
-                }}";
+            string key = _configuration.GetValue<string>("NovaposhtaKey");
+            NPAreaRequestViewModel model = new NPAreaRequestViewModel
+            {
+                ApiKey = key,
+                ModelName = "Address",
+                CalledMethod = "getSettlementAreas",
+                MethodProperties = new NPAreaProperties
+                {
+                    Page = 1,
+                    Ref = ""
+                }
+            };
 
-            await ProcessApiResponse<WarehouseNPViewModel, WarehouseEntity>(jsonData);
+            string json = JsonConvert.SerializeObject(model);
 
+            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = _httpClient.PostAsync("https://api.novaposhta.ua/v2.0/json/", content).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseData = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<NPAreaResponseViewModel>(responseData);
+
+                if (result.Data.Any())
+                {
+                    List<AreaEntity> dataEntities = _mapper.Map<List<AreaEntity>>(result.Data);
+                    _context.Areas.AddRange(dataEntities);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Error novaposhta: {response.StatusCode}");
+            }
         }
 
-        public async Task GetNPSettlements()
+        public void GetSettlements()
         {
-            string jsonData = @$"
-                {{
-                    ""apiKey"": ""{API_KEY_NOVAPOSHTA}"",
-                    ""modelName"": ""AddressGeneral"",
-                    ""calledMethod"": ""getSettlements"",
-                    ""methodProperties"": {{
-                        ""Page"" : ""pageNum"",
-                        ""Warehouse"": ""1"",
-                        ""Limit"":""200""
-                    }}
-                }}";
-
-            await ProcessApiResponse<SettlementNPViewModel, SettlementEntity>(jsonData);
-
-        }
-
-        public async Task GetNPAreas()
-        {
-
-            string jsonData = $@"{{
-                ""apiKey"": ""{API_KEY_NOVAPOSHTA}"",
-                ""modelName"": ""Address"",
-                ""calledMethod"": ""getSettlementAreas"",
-                ""methodProperties"": {{
-                    ""Page"" : ""pageNum"",
-                    ""Ref"" : """"
-                }}
-            }}";
-
-
-            await ProcessApiResponse<AreaNPViewModel, AreasEntity>(jsonData);
-        }
-
-        private async Task ProcessApiResponse<TApi, TEntity>(string jsonData) where TEntity : class
-        {
-            var dbSet = _context.Set<TEntity>();
+            string key = _configuration.GetValue<string>("NovaposhtaKey");
             int page = 1;
-
             while (true)
             {
-                string jsonWithPage = jsonData.Replace($"\"Page\" : \"pageNum\"", $"\"Page\" : \"{page}\"");
+                NPSettlementRequestViewModel model = new NPSettlementRequestViewModel
+                {
+                    ApiKey = key,
+                    ModelName = "AddressGeneral",
+                    CalledMethod = "getSettlements",
+                    MethodProperties = new NPSettlementProperties
+                    {
+                        Page = page
+                    }
+                };
 
-                HttpContent content = new StringContent(jsonWithPage, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await _httpClient.PostAsync("https://api.novaposhta.ua/v2.0/json/", content);
-
+                string json = JsonConvert.SerializeObject(model);
+                HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = _httpClient.PostAsync("https://api.novaposhta.ua/v2.0/json/", content).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    string responseData = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<ApiResponse<TApi>>(responseData);
-
+                    string responseData = response.Content.ReadAsStringAsync().Result;
+                    var result = JsonConvert.DeserializeObject<NPSettlementResponseViewModel>(responseData);
                     if (result.Data.Any())
                     {
-                        List<TEntity> dataEntities = _mapper.Map<List<TEntity>>(result.Data);
+                        List<SettlementEntity> dataEntities =
+                            _mapper.Map<List<SettlementEntity>>(result.Data);
 
-                        dbSet.AddRange(dataEntities);
+                        _context.Settlements.AddRange(dataEntities);
                         _context.SaveChanges();
-
                         page++;
                     }
                     else
@@ -111,14 +108,54 @@ namespace WebRozetka.Services
                 }
                 else
                 {
-                    Console.WriteLine($"Error: {response.StatusCode}");
+                    Console.WriteLine($"Error novaposhta: {response.StatusCode}");
                 }
             }
         }
-    }
 
-    public class ApiResponse<T>
-    {
-        public List<T> Data { get; set; }
+        public void GetWarehouses()
+        {
+            string key = _configuration.GetValue<string>("NovaposhtaKey");
+            int page = 1;
+            while (true)
+            {
+                NPWarehouseRequestViewModel model = new NPWarehouseRequestViewModel
+                {
+                    ApiKey = key,
+                    ModelName = "Address",
+                    CalledMethod = "getWarehouses",
+                    MethodProperties = new NPWarehouseProperties
+                    {
+                        Page = page
+                    }
+                };
+
+                string json = JsonConvert.SerializeObject(model);
+                HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = _httpClient.PostAsync("https://api.novaposhta.ua/v2.0/json/", content).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseData = response.Content.ReadAsStringAsync().Result;
+                    var result = JsonConvert.DeserializeObject<NPWarehouseResponseViewModel>(responseData);
+                    if (result.Data.Any())
+                    {
+                        List<WarehouseEntity> dataEntities =
+                            _mapper.Map<List<WarehouseEntity>>(result.Data);
+
+                        _context.Warehouses.AddRange(dataEntities);
+                        _context.SaveChanges();
+                        page++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Error novaposhta: {response.StatusCode}");
+                }
+            }
+        }
     }
 }

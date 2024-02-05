@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using WebRozetka.Data.Entities.Identity;
 using WebRozetka.Data;
 using WebRozetka.Services;
-using WebRozetka.Models.Addres;
+using WebRozetka.Models.Address;
 using Microsoft.EntityFrameworkCore;
+using WebRozetka.Data.Entities.Addres;
 
 namespace WebRozetka.Controllers
 {
@@ -27,54 +28,55 @@ namespace WebRozetka.Controllers
         [HttpGet("areas")]
         public async Task<IActionResult> GetAreas()
         {
-            var areas = _mapper.Map<List<AreaNPViewModel>>(await _context.Areas.ToListAsync());
+            var areas = _mapper.Map<List<AreaViewModel>>(await _context.Areas.ToListAsync());
 
             return Ok(areas);
         }
 
         [HttpGet("settlements")]
-        public async Task<IActionResult> GetSettlements([FromQuery] string areaRef, string search = "")
+        public async Task<IActionResult> GetSettlements([FromQuery] int areaId, string search = "")
         {
-            var entities = _context.Settlements
-               .Where(x => x.AreaId == areaRef && (string.IsNullOrEmpty(search) || x.Description.ToLower().StartsWith(search.ToLower())))
+            var entities = await _context.Settlements
+               .Where(x => x.AreaId == areaId && (string.IsNullOrEmpty(search) || x.Description.ToLower().StartsWith(search.ToLower())))
                .OrderBy(x => x.Description)
                .Take(20)
-               .ToList();
+               .ToListAsync();
 
-
-            var settlements = _mapper.Map<List<SettlementNPViewModel>>(entities);
+            var settlements = _mapper.Map<List<SettlementViewModel>>(entities);
 
             return Ok(settlements);
         }
 
 
         [HttpGet("warehouses")]
-        public async Task<IActionResult> GetWarehouses([FromQuery] string settlementRef, string search = "")
+        public async Task<IActionResult> GetWarehouses([FromQuery] int settlementId, string search = "")
         {
-
             var entities = _context.Warehouses
-                .Where(x => x.SettlementId == settlementRef && (string.IsNullOrEmpty(search) || x.Description.ToLower().Contains(search.ToLower())))
+                .Where(x => x.SettlementId == settlementId && (string.IsNullOrEmpty(search) || x.Description.ToLower().Contains(search.ToLower())))
                 .OrderBy(x => x.Number)
                 .Take(20)
                 .ToList();
 
-            var warehouses = _mapper.Map<List<WarehouseNPViewModel>>(entities);
+            var warehouses = _mapper.Map<List<WarehouseViewModel>>(entities);
 
             return Ok(warehouses);
         }
 
-        [HttpPost("refresh")]
-        public async Task<IActionResult> RefreshAddress()
+
+        [HttpGet("warehouse-detail")]
+        public async Task<IActionResult> GetWarehousesDetail([FromQuery] int warehouseId)
         {
-            NovaPoshtaService novaPoshtaService = new NovaPoshtaService(_mapper, _context);
 
-            //await novaPoshtaService.GetNPAreas();
-            //await novaPoshtaService.GetNPSettlements();
-            //await novaPoshtaService.GetNPWarehouses();
 
-            return Ok();
+
+            var entities = _context.Warehouses
+                .Where(x => x.Id == warehouseId)
+                .SingleOrDefault();
+
+
+            var warehouse = _mapper.Map<WarehouseFullViewModel>(entities);
+
+            return Ok(warehouse);
         }
-
-
     }
 }

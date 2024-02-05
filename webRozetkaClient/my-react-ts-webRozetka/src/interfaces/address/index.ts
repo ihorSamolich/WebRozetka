@@ -1,14 +1,16 @@
 export interface IAddressArea {
-    ref: string
+    id: number
     description: string
 }
 
 export interface IAddressSettlement {
-    ref: string
+    id: number
     description: string
 }
 
 export interface IAddressWarehouse {
-    ref: string
-    description: string
+    id: number,
+    description: string,
+    longitude: number,
+    latitude: number,
 }

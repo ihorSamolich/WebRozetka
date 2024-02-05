@@ -20,9 +20,9 @@ const defaultFormData : IOrder = {
         email: '',
     },
     delivery: {
-        areaRef: '',
-        settlementRef: '',
-        warehouseRef: '',
+        areaId: 0,
+        settlementId: 0,
+        warehouseId: 0,
     },
     payment: {
         paymentType: '',

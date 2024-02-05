@@ -1,3 +1,4 @@
+using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -61,7 +62,14 @@ namespace WebRozetka
             });
             // -- Authorize на Swagger
 
-            builder.Services.AddAutoMapper(typeof(AppMapProfile));
+
+            builder.Services.AddScoped(provider => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AppMapProfile(provider.GetService<AppEFContext>()));
+            }).CreateMapper());
+
+
+
             builder.Services.AddCors();
 
             builder.Services.AddFluentValidationAutoValidation();
@@ -70,6 +78,8 @@ namespace WebRozetka
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
+            builder.Services.AddScoped<INovaPoshtaService, NovaPoshtaService>();
+
 
 
             // IDENTITY SETTINGS
@@ -89,6 +99,7 @@ namespace WebRozetka
 
 
             // JWT SETTINGS
+            #region
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
             var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("JwtSecretKey")));
@@ -112,7 +123,7 @@ namespace WebRozetka
                     ValidateIssuer = false,
                 };
             });
-            // -- JWT SETTINGS
+            #endregion
 
 
             var app = builder.Build();

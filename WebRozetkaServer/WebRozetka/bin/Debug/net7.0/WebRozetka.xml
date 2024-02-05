@@ -4,52 +4,28 @@
         <name>WebRozetka</name>
     </assembly>
     <members>
-        <member name="T:WebRozetka.Migrations.Creadestarttables">
+        <member name="T:WebRozetka.Migrations.CreateDb">
             <inheritdoc />
         </member>
-        <member name="M:WebRozetka.Migrations.Creadestarttables.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+        <member name="M:WebRozetka.Migrations.CreateDb.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
             <inheritdoc />
         </member>
-        <member name="M:WebRozetka.Migrations.Creadestarttables.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+        <member name="M:WebRozetka.Migrations.CreateDb.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
             <inheritdoc />
         </member>
-        <member name="M:WebRozetka.Migrations.Creadestarttables.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:WebRozetka.Migrations.CreateDb.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
-        <member name="T:WebRozetka.Migrations.Orderandaddressarelinked">
+        <member name="T:WebRozetka.Migrations.Addlocationtowarehouseentity">
             <inheritdoc />
         </member>
-        <member name="M:WebRozetka.Migrations.Orderandaddressarelinked.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+        <member name="M:WebRozetka.Migrations.Addlocationtowarehouseentity.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
             <inheritdoc />
         </member>
-        <member name="M:WebRozetka.Migrations.Orderandaddressarelinked.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+        <member name="M:WebRozetka.Migrations.Addlocationtowarehouseentity.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
             <inheritdoc />
         </member>
-        <member name="M:WebRozetka.Migrations.Orderandaddressarelinked.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="T:WebRozetka.Migrations.Changeordercontacntentity">
-            <inheritdoc />
-        </member>
-        <member name="M:WebRozetka.Migrations.Changeordercontacntentity.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:WebRozetka.Migrations.Changeordercontacntentity.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:WebRozetka.Migrations.Changeordercontacntentity.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="T:WebRozetka.Migrations.Changesomeordercontacntentity">
-            <inheritdoc />
-        </member>
-        <member name="M:WebRozetka.Migrations.Changesomeordercontacntentity.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:WebRozetka.Migrations.Changesomeordercontacntentity.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:WebRozetka.Migrations.Changesomeordercontacntentity.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:WebRozetka.Migrations.Addlocationtowarehouseentity.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
         <member name="P:WebRozetka.Models.Account.LoginViewModel.Email">

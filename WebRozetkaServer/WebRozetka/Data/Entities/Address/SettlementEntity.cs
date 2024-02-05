@@ -8,13 +8,14 @@ namespace WebRozetka.Data.Entities.Addres
     public class SettlementEntity
     {
         [Key]
+        public int Id { get; set; }
+        [Required, StringLength(200)]
         public string Ref { get; set; }
-        [Required]
+        [Required, StringLength(200)]
         public string Description { get; set; }
-
-        public string AreaId { get; set; }
-        public virtual AreasEntity Area { get; set; }
-
+        [ForeignKey("Area")]
+        public int AreaId { get; set; }
+        public virtual AreaEntity Area { get; set; }
         public virtual ICollection<WarehouseEntity> Warehouses { get; set; }
     }
 }

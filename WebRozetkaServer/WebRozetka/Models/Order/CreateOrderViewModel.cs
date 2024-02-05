@@ -12,9 +12,9 @@
 
     public class DepartmentData
     {
-        public string AreaRef { get; set; }
-        public string SettlementRef { get; set; }
-        public string WarehouseRef { get; set; }
+        public int AreaId { get; set; }
+        public int SettlementId { get; set; }
+        public int WarehouseId { get; set; }
     }
 
     public class PaymentData

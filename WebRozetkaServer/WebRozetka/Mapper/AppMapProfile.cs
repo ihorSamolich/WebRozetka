@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using WebRozetka.Data;
 using WebRozetka.Data.Entities.Addres;
 using WebRozetka.Data.Entities.Category;
 using WebRozetka.Data.Entities.Identity;
@@ -8,7 +9,8 @@ using WebRozetka.Data.Entities.Product;
 using WebRozetka.Helpers;
 using WebRozetka.Mapper.Converters;
 using WebRozetka.Models.Account;
-using WebRozetka.Models.Addres;
+using WebRozetka.Models.Address;
+using WebRozetka.Models.Basket;
 using WebRozetka.Models.Category;
 using WebRozetka.Models.Order;
 using WebRozetka.Models.Product;
@@ -17,8 +19,11 @@ namespace WebRozetka.Mapper
 {
     public class AppMapProfile : Profile
     {
-        public AppMapProfile()
+        private readonly AppEFContext _context;
+        public AppMapProfile(AppEFContext context)
         {
+            _context = context;
+
             CreateMap<CategoryCreateViewModel, CategoryEntity>()
                 .AfterMap((src, dest) =>
                 {
@@ -43,23 +48,22 @@ namespace WebRozetka.Mapper
                     dest.DateCreated = DateTime.UtcNow;
                 });
 
-            CreateMap<SettlementNPViewModel, SettlementEntity>()
-                .ForMember(dest => dest.AreaId, opt => opt.MapFrom(src => src.Area))
+            CreateMap<NPAreaItemViewModel, AreaEntity>();
+
+            CreateMap<AreaEntity, AreaViewModel>();
+
+            CreateMap<NPSettlementItemViewModel, SettlementEntity>()
+                .ForMember(dest => dest.AreaId, opt => opt.MapFrom(src => _context.Areas.Where(x => x.Ref == src.Area).Select(x => x.Id).SingleOrDefault()))
                 .ForMember(dest => dest.Area, opt => opt.Ignore());
+            CreateMap<SettlementEntity, SettlementViewModel>();
 
-            CreateMap<SettlementEntity, SettlementNPViewModel>();
+            CreateMap<NPWarehouseItemViewModel, WarehouseEntity>()
+              .ForMember(dest => dest.SettlementId, opt => opt.MapFrom(src => _context.Settlements.Where(x => x.Ref == src.SettlementRef).Select(x => x.Id).SingleOrDefault()))
+              .ForMember(dest => dest.Settlement, opt => opt.Ignore());
 
+            CreateMap<WarehouseEntity, WarehouseViewModel>();
 
-            CreateMap<WarehouseNPViewModel, WarehouseEntity>()
-                .ForMember(dest => dest.SettlementId, opt => opt.MapFrom(src => src.SettlementRef))
-                .ForMember(dest => dest.Settlement, opt => opt.Ignore());
-
-            CreateMap<WarehouseEntity, WarehouseNPViewModel>();
-
-
-
-            CreateMap<AreaNPViewModel, AreasEntity>();
-            CreateMap<AreasEntity, AreaNPViewModel>();
+            CreateMap<WarehouseEntity, WarehouseFullViewModel>();
 
             CreateMap<BasketEntity, BasketItemViewModel>()
                .ForMember(x => x.ProductName, opt => opt.MapFrom(x => x.Product.Name))

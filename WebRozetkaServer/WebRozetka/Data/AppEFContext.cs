@@ -28,7 +28,7 @@ namespace WebRozetka.Data
         public DbSet<OrderStatusEntity> OrderStatuses { get; set; }
         public DbSet<OrderContactInfoEntity> OrderContactInfos { get; set; }
 
-        public DbSet<AreasEntity> Areas { get; set; }
+        public DbSet<AreaEntity> Areas { get; set; }
         public DbSet<SettlementEntity> Settlements { get; set; }
         public DbSet<WarehouseEntity> Warehouses { get; set; }
 

@@ -22,7 +22,7 @@ namespace WebRozetka.Data.Entities.Order
         public virtual OrderEntity Order { get; set; }
 
         [ForeignKey("Warehouses")]
-        public string WarehousesId { get; set; }
+        public int WarehousesId { get; set; }
         public virtual WarehouseEntity Warehouses { get; set; }
     }
 }

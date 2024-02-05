@@ -10,5 +10,6 @@ import ProductPictures from  'components/ProductPictures';
 import ProductDescriptions from  'components/ProductDescriptions';
 import CompanyInformation from 'components/CompanyInformation';
 import Layout from 'components/Layout';
+import ModalMap from 'components/ModalMap';
 
-export {Layout, SiteSearch, CompanyInformation, ItemsNotFound, CategoryCard, RequireAuth, ProductDescriptions, ProductPictures, ServerError, SkeletonCategoryCard, TopHeader, SitePagination };
+export {Layout,ModalMap, SiteSearch, CompanyInformation, ItemsNotFound, CategoryCard, RequireAuth, ProductDescriptions, ProductPictures, ServerError, SkeletonCategoryCard, TopHeader, SitePagination };

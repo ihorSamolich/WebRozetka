@@ -4,6 +4,7 @@ using System.Data;
 using WebRozetka.Constants;
 using WebRozetka.Data.Entities.Identity;
 using WebRozetka.Data.Entities.Order;
+using WebRozetka.Interfaces;
 
 namespace WebRozetka.Data
 {
@@ -14,11 +15,13 @@ namespace WebRozetka.Data
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var service = scope.ServiceProvider;
-                //Отримую посилання на наш контекст
+
                 var context = service.GetRequiredService<AppEFContext>();
 
                 var userManager = service.GetRequiredService<UserManager<UserEntity>>();
                 var roleManager = service.GetRequiredService<RoleManager<RoleEntity>>();
+                var novaPoshta = service.GetRequiredService<INovaPoshtaService>();
+
 
                 context.Database.Migrate();
 
@@ -79,6 +82,20 @@ namespace WebRozetka.Data
                     context.SaveChanges();
                 }
 
+                if (!context.Areas.Any())
+                {
+                    novaPoshta.GetAreas();
+                }
+
+                if (!context.Settlements.Any())
+                {
+                    novaPoshta.GetSettlements();
+                }
+
+                if (!context.Warehouses.Any())
+                {
+                    novaPoshta.GetWarehouses();
+                }
             }
         }
     }

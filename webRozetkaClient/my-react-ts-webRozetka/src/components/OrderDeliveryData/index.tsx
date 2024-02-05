@@ -1,8 +1,17 @@
-import React, {useState} from 'react';
-import {Button, Form, Select, SelectProps} from 'antd';
-import {fetchSettlementsOptions, fetchWarehousesOptions, useAreas} from 'hooks/address';
+import React, {useEffect, useState} from 'react';
+import {Button, Form, Row, Select} from 'antd';
+import {
+    fetchSettlementsOptions, fetchWarehousesDetail,
+    fetchWarehousesOptions,
+    useAreas,
+    useWarehouses,
+    useWarehousesDetail,
+} from 'hooks/address';
 import {IOrderDelivery} from 'interfaces/order';
 import DebounceSelect from 'components/DebounceSelect';
+import { EnvironmentOutlined } from '@ant-design/icons';
+import ModalMap from 'components/ModalMap';
+import {IAddressWarehouse} from 'interfaces/address';
 
 interface IOrderDeliveryDataProps {
     updateFormData: (stepName: string, values: IOrderDelivery) => void;
@@ -10,26 +19,52 @@ interface IOrderDeliveryDataProps {
 }
 
 const OrderDeliveryData: React.FC<IOrderDeliveryDataProps> = ({ updateFormData, next }) => {
-    const [area, setArea] = useState<string>('');
-    const [settlement, setSettlement] = useState<string>('');
-    const [warehouse, setWarehouse] = useState<string>('');
-
+    const [area, setArea] = useState<number | null>(null);
+    const [settlement, setSettlement] = useState<number| null>(null);
+    const [warehouse, setWarehouse] = useState<number| null>(null);
+    const [warehouseDetail, setWarehouseDetail] = useState<IAddressWarehouse | null>(null);
     const { data: areas } = useAreas();
+    const [openMap, setOpenMap] = useState<boolean>(false);
 
-    const handleChangeArea = (value: string) => {
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (warehouse) {
+                const res = await fetchWarehousesDetail(warehouse);
+
+                console.log('res');
+                console.log(res);
+
+                setWarehouseDetail(res);
+            }
+        };
+
+        fetchData();
+    }, [warehouse]);
+
+
+
+    const handleToggleMap = () => {
+        setOpenMap(prev => !prev);
+    };
+
+    const handleChangeArea = (value: number) => {
         setArea(value);
     };
 
-    const handleChangeSettlement = (selected: SelectProps) => {
-        setSettlement(selected.value);
+    const handleChangeSettlement = (value : number) => {
+        setSettlement(value);
     };
 
-    const handleChangeWarehouse = (selected: SelectProps) => {
-        setWarehouse(selected.value);
+    const handleChangeWarehouse = (value: number) => {
+        setWarehouse(value);
     };
 
-    const handleFinishDeliveryData = () =>{
-        updateFormData('delivery', {areaRef: area, settlementRef: settlement, warehouseRef: warehouse});
+    const handleFinishDeliveryData = (values : IOrderDelivery) =>{
+
+        console.log({...values});
+
+        updateFormData('delivery', {...values});
         next();
     };
 
@@ -39,19 +74,22 @@ const OrderDeliveryData: React.FC<IOrderDeliveryDataProps> = ({ updateFormData, 
             layout="vertical"
             onFinish={handleFinishDeliveryData}
         >
-            <Form.Item name={'areaRef'} label="Ваше область" rules={[{ required: true }]}>
+            <Form.Item name={'areaId'} label="Ваше область" rules={[{ required: true }]}>
                 <Select
                     showSearch
+                    value={area}
+
                     style={{ width: '100%' }}
                     placeholder="Оберіть область..."
                     filterOption={(input, option) => (option?.label.toLowerCase() ?? '').includes(input.toLowerCase())}
                     onChange={handleChangeArea}
                     options={areas?.map((area) => {
-                        return { value: area.ref, label: area.description };
+                        return { value: area.id, label: area.description };
                     })}
                 />
             </Form.Item>
-            <Form.Item name={'settlementRef'} label="Ваше місто" rules={[{ required: true }]}>
+
+            <Form.Item name={'settlementId'} label="Ваше місто" rules={[{ required: true }]}>
                 <DebounceSelect
                     showSearch
                     value={settlement}
@@ -63,7 +101,9 @@ const OrderDeliveryData: React.FC<IOrderDeliveryDataProps> = ({ updateFormData, 
                     }}
                 />
             </Form.Item>
-            <Form.Item name={'warehouseRef'} label="Номер відділення" rules={[{ required: true }]}>
+
+
+            <Form.Item name={'warehouseId'} label="Номер відділення" rules={[{ required: true }]}>
                 <DebounceSelect
                     showSearch
                     value={warehouse}
@@ -76,9 +116,21 @@ const OrderDeliveryData: React.FC<IOrderDeliveryDataProps> = ({ updateFormData, 
                 />
             </Form.Item>
 
+            <Row>
+                {
+                    warehouse && <Button icon={<EnvironmentOutlined/>} type="link" onClick={handleToggleMap}>
+                        {openMap ? 'Згорнути карту' : 'Показати на карті'}
+                    </Button>
+                }
+
+                { openMap && <ModalMap warehouse = {warehouseDetail}/>}
+            </Row>
+
             <Button type="primary" htmlType="submit">
                 Далі
             </Button>
+
+            {}
         </Form>
     );
 };

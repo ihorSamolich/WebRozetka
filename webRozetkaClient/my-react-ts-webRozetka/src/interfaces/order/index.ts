@@ -10,9 +10,9 @@ export interface IOrderProduct {
 }
 
 export interface IOrderDelivery {
-    areaRef: string,
-    settlementRef: string,
-    warehouseRef: string,
+    areaId: number,
+    settlementId: number,
+    warehouseId: number,
 }
 
 export interface IOrderPayment {

@@ -15,7 +15,6 @@ const Basket : React.FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-
     const handleClearBasket = () => {
         dispatch(clearBasket());
     };

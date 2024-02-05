@@ -11,7 +11,7 @@ interface DebounceSelectProps<ValueType = any> {
     debounceTimeout?: number;
     style?: React.CSSProperties;
 }
-const DebounceSelect: React.FC<DebounceSelectProps> = ({ fetchOptions, debounceTimeout = 800, ...props }) => {
+const DebounceSelect: React.FC<DebounceSelectProps> = ({ fetchOptions, debounceTimeout = 500, ...props }) => {
     const [options, setOptions] = useState<SelectProps[]>([]);
     const fetchRef = useRef(0);
 
@@ -32,10 +32,9 @@ const DebounceSelect: React.FC<DebounceSelectProps> = ({ fetchOptions, debounceT
 
     return (
         <Select
-            labelInValue
             filterOption={false}
             onSearch={debounceFetcher}
-            notFoundContent={ <Empty  description="Введіть дані!" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+            notFoundContent={ <Empty  description="Введіть дані для пошуку!" />}
             {...props}
             options={options}
         />

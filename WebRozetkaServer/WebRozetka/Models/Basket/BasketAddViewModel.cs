@@ -1,4 +1,4 @@
-﻿namespace WebRozetka.Models.Order
+﻿namespace WebRozetka.Models.Basket
 {
     public class BasketAddViewModel
     {
