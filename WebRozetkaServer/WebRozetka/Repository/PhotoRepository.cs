@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebRozetka.Data;
+using WebRozetka.Data.Entities.Category;
 using WebRozetka.Data.Entities.Photo;
 using WebRozetka.Interfaces.Repo;
+using WebRozetka.Models;
 
 namespace WebRozetka.Repository
 {
@@ -13,27 +15,24 @@ namespace WebRozetka.Repository
         {
             _context = context;
         }
-        async public Task<PhotoEntity> AddAsync(PhotoEntity entity)
-        {
-            try
-            {
-                await _context.Set<PhotoEntity>().AddAsync(entity);
-                await _context.SaveChangesAsync();
 
-                return entity;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+        public PhotoEntity AddAsync(PhotoEntity entity)
+        {
+            _context.Set<PhotoEntity>().Add(entity);
+            return entity;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public void DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<PhotoEntity>> GetAllAsync()
+        public IQueryable<PhotoEntity> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<PhotoEntity> GetAll(QueryParameters queryParameters)
         {
             throw new NotImplementedException();
         }
@@ -48,14 +47,16 @@ namespace WebRozetka.Repository
             throw new NotImplementedException();
         }
 
-        public Task<List<PhotoEntity>> GetPagedAllAsync(int page, int pageSize, string search = "")
+        public async Task<bool> Save()
+        {
+            return (await _context.SaveChangesAsync() >= 0);
+        }
+
+        public PhotoEntity Update(PhotoEntity entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PhotoEntity> UpdateAsync(PhotoEntity entity)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

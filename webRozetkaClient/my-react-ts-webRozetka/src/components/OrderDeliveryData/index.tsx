@@ -4,8 +4,6 @@ import {
     fetchSettlementsOptions, fetchWarehousesDetail,
     fetchWarehousesOptions,
     useAreas,
-    useWarehouses,
-    useWarehousesDetail,
 } from 'hooks/address';
 import {IOrderDelivery} from 'interfaces/order';
 import DebounceSelect from 'components/DebounceSelect';
@@ -123,7 +121,7 @@ const OrderDeliveryData: React.FC<IOrderDeliveryDataProps> = ({ updateFormData, 
                     </Button>
                 }
 
-                { openMap && <ModalMap warehouse = {warehouseDetail}/>}
+                { openMap && warehouseDetail && <ModalMap warehouse = {warehouseDetail}/>}
             </Row>
 
             <Button type="primary" htmlType="submit">

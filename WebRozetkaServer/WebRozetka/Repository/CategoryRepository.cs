@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using WebRozetka.Data;
 using WebRozetka.Data.Entities.Category;
 using WebRozetka.Interfaces.Repo;
+using WebRozetka.Models;
 
 namespace WebRozetka.Repository
 {
@@ -15,69 +16,52 @@ namespace WebRozetka.Repository
             _context = context;
         }
 
-        public Task<CategoryEntity> GetByIdAsync(int id)
+        public async Task<CategoryEntity> GetByIdAsync(int id)
         {
-            return _context.Set<CategoryEntity>().Where(x => !x.IsDeleted && x.Id == id).FirstOrDefaultAsync();
+            return await _context.Set<CategoryEntity>().Where(x => !x.IsDeleted && x.Id == id).FirstOrDefaultAsync();
         }
 
-        public Task<List<CategoryEntity>> GetAllAsync()
+        public IQueryable<CategoryEntity> GetAll()
         {
-            return _context.Set<CategoryEntity>().Where(x => !x.IsDeleted).ToListAsync();
+            return _context.Set<CategoryEntity>().Where(x => !x.IsDeleted);
+        }
+        public IQueryable<CategoryEntity> GetAll(QueryParameters queryParameters)
+        {
+            IQueryable<CategoryEntity> entities = _context.Set<CategoryEntity>().Where(x => !x.IsDeleted).OrderBy(x => x.Id);
+
+            if (!queryParameters.Query.IsNullOrEmpty())
+            {
+                entities = entities.Where(x => x.Name.ToLower().Contains(queryParameters.Query.ToLower()));
+            }
+
+            return entities
+                .Skip(queryParameters.PageCount * (queryParameters.Page - 1))
+                .Take(queryParameters.PageCount);
         }
 
-        public async Task<CategoryEntity> AddAsync(CategoryEntity entity)
+        public CategoryEntity AddAsync(CategoryEntity entity)
         {
-            try
-            {
-                await _context.Set<CategoryEntity>().AddAsync(entity);
-                await _context.SaveChangesAsync();
-
-                return entity;
-            }
-            catch (Exception)
-            {
-                return entity;
-            }
+            _context.Set<CategoryEntity>().Add(entity);
+            return entity;
         }
 
-        public async Task<CategoryEntity> UpdateAsync(CategoryEntity entity)
+        public async void DeleteAsync(int id)
         {
-            try
-            {
-                _context.Set<CategoryEntity>().Update(entity);
-                await _context.SaveChangesAsync();
-                return entity;
-            }
-            catch
-            {
-                return null;
-            }
-        }
+            var entity = await GetByIdAsync(id);
 
-        public async Task<bool> DeleteAsync(int id)
-        {
-            try
+            if (entity != null)
             {
-                var entity = await GetByIdAsync(id);
-
-                if (entity != null)
-                {
-                    entity.IsDeleted = true;
-                    await _context.SaveChangesAsync();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch
-            {
-                return false;
+                entity.IsDeleted = true;
             }
         }
 
-        public Task<List<CategoryEntity>> GetPagedAllAsync(int page, int pageSize, string search = "")
+        public CategoryEntity Update(CategoryEntity entity)
+        {
+            _context.Set<CategoryEntity>().Update(entity);
+            return entity;
+        }
+
+        public Task<int> GetCountAsync(string search = "")
         {
             var entities = _context.Set<CategoryEntity>().Where(x => !x.IsDeleted);
 
@@ -86,27 +70,12 @@ namespace WebRozetka.Repository
                 entities = entities.Where(x => x.Name.ToLower().Contains(search.ToLower()));
             }
 
-            return entities
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            return entities.CountAsync();
         }
 
-
-        public async Task<int> GetCountAsync(string search = "")
+        public async Task<bool> Save()
         {
-            var entities = _context.Set<CategoryEntity>().Where(x => !x.IsDeleted);
-
-            if (!search.IsNullOrEmpty())
-            {
-                if (!search.IsNullOrEmpty())
-                {
-                    entities = entities.Where(x => x.Name.ToLower().Contains(search.ToLower()));
-                }
-            }
-
-            var count = await entities.CountAsync();
-            return count;
+            return (await _context.SaveChangesAsync() >= 0);
         }
     }
 }

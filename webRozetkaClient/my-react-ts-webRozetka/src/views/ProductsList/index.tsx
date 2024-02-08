@@ -27,7 +27,7 @@ const ProductsList : React.FC = () => {
                 )
             )}
 
-            <SitePagination page={1} pageSize={8} totalItems={items.length} setPage={()=>{}} setPageSize={()=>{}} />
+            <SitePagination page={1} pageSize={4} totalItems={items.length} setPage={()=>{}} setPageSize={()=>{}} />
         </Row>
     );
 };

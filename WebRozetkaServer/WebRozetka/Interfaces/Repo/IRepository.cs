@@ -1,14 +1,17 @@
-﻿namespace WebRozetka.Interfaces.Repo
+﻿using WebRozetka.Models;
+
+namespace WebRozetka.Interfaces.Repo
 {
     public interface IRepository<T>
     {
         Task<T> GetByIdAsync(int id);
-        Task<List<T>> GetAllAsync();
+        IQueryable<T> GetAll();
+        IQueryable<T> GetAll(QueryParameters queryParameters);
         Task<int> GetCountAsync(string search = "");
-        Task<List<T>> GetPagedAllAsync(int page, int pageSize, string search = "");
-        Task<T> AddAsync(T entity);
-        Task<T> UpdateAsync(T entity);
-        Task<bool> DeleteAsync(int id);
+        T AddAsync(T entity);
+        T Update(T entity);
+        void DeleteAsync(int id);
+        Task<bool> Save();
     }
 
 }

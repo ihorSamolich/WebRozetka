@@ -3,6 +3,7 @@ using WebRozetka.Data;
 using WebRozetka.Data.Entities.Category;
 using WebRozetka.Data.Entities.Product;
 using WebRozetka.Interfaces.Repo;
+using WebRozetka.Models;
 
 namespace WebRozetka.Repository
 {
@@ -15,59 +16,50 @@ namespace WebRozetka.Repository
             _context = context;
         }
 
-        Task<List<ProductEntity>> IRepository<ProductEntity>.GetAllAsync()
+        public ProductEntity AddAsync(ProductEntity entity)
         {
-            return _context.Set<ProductEntity>().Include(x => x.Photos).Where(x => !x.IsDeleted).ToListAsync();
+            _context.Set<ProductEntity>().Add(entity);
+            return entity;
         }
 
-        Task<List<ProductEntity>> IProductRepository.GetByCategoriesAsync(int category)
+        public void DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<ProductEntity> GetAll()
+        {
+            return _context.Set<ProductEntity>().Where(x => !x.IsDeleted);
+        }
+
+        public IQueryable<ProductEntity> GetAll(QueryParameters queryParameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<ProductEntity> GetByCategory(int category)
         {
             return _context.Set<ProductEntity>()
-                .Include(x => x.Photos)
-                .Where(x => !x.IsDeleted && x.CategoryId == category)
-                .ToListAsync();
+               .Include(x => x.Photos)
+               .Where(x => !x.IsDeleted && x.CategoryId == category);
         }
 
-        Task<ProductEntity> IRepository<ProductEntity>.GetByIdAsync(int id)
+        public async Task<ProductEntity> GetByIdAsync(int id)
         {
-            return _context.Set<ProductEntity>()
-                .Include(x => x.Photos)
-                .Where(x => !x.IsDeleted && x.Id == id)
-                .FirstOrDefaultAsync();
+            return await _context.Set<ProductEntity>().Where(x => !x.IsDeleted && x.Id == id).FirstOrDefaultAsync();
         }
 
-        async Task<ProductEntity> IRepository<ProductEntity>.AddAsync(ProductEntity entity)
-        {
-            try
-            {
-                await _context.Products.AddAsync(entity);
-                await _context.SaveChangesAsync();
-
-                return entity;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-
-        Task<bool> IRepository<ProductEntity>.DeleteAsync(int id)
+        public Task<int> GetCountAsync(string search = "")
         {
             throw new NotImplementedException();
         }
 
-        Task<int> IRepository<ProductEntity>.GetCountAsync(string search)
+        public async Task<bool> Save()
         {
-            throw new NotImplementedException();
+            return (await _context.SaveChangesAsync() >= 0);
         }
 
-        Task<List<ProductEntity>> IRepository<ProductEntity>.GetPagedAllAsync(int page, int pageSize, string search)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ProductEntity> UpdateAsync(ProductEntity entity)
+        public ProductEntity Update(ProductEntity entity)
         {
             throw new NotImplementedException();
         }

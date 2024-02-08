@@ -4,6 +4,6 @@ namespace WebRozetka.Interfaces.Repo
 {
     public interface IProductRepository : IRepository<ProductEntity>
     {
-        Task<List<ProductEntity>> GetByCategoriesAsync(int category);
+        IQueryable<ProductEntity> GetByCategory(int category);
     }
 }

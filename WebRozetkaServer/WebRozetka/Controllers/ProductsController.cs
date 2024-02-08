@@ -36,34 +36,27 @@ namespace WebRozetka.Controllers
             _photoRepository = photoRepository;
         }
 
-        // GET: api/Products
         [HttpGet]
         public async Task<IActionResult> GetProducts()
         {
             try
             {
-                var productViewModels = _mapper.Map<List<ProductViewModel>>(await _productRepository.GetAllAsync());
-
-                if (productViewModels == null)
-                {
-                    return NotFound("No products found.");
-                }
+                var productViewModels = _mapper.Map<List<ProductViewModel>>(_productRepository.GetAll());
 
                 return Ok(productViewModels);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, "Сталася помилка при створенні продукту: " + ex.Message);
             }
         }
 
-
         [HttpGet("category/{categoryId}")]
-        public async Task<IActionResult> GetProducts(int categoryId)
+        public async Task<IActionResult> GetProductsByCategory(int categoryId)
         {
             try
             {
-                var productViewModels = _mapper.Map<List<ProductViewModel>>(await _productRepository.GetByCategoriesAsync(categoryId));
+                var productViewModels = _mapper.Map<List<ProductViewModel>>(_productRepository.GetByCategory(categoryId));
 
                 if (productViewModels == null)
                 {
@@ -72,9 +65,9 @@ namespace WebRozetka.Controllers
 
                 return Ok(productViewModels);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, "Сталася помилка при створенні продукту: " + ex.Message);
             }
         }
 
@@ -83,39 +76,42 @@ namespace WebRozetka.Controllers
         {
             try
             {
-                var productViewModel = _mapper.Map<ProductViewModel>(await _productRepository.GetByIdAsync(id));
+                var product = _mapper.Map<ProductViewModel>(await _productRepository.GetByIdAsync(id));
 
-                if (productViewModel == null)
+                if (product == null)
                 {
                     return NotFound("No product found.");
                 }
 
-                return Ok(productViewModel);
+                return Ok(product);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, "Сталася помилка при створенні продукту: " + ex.Message);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromForm] ProductCreateViewModel newProduct)
+        public async Task<IActionResult> CreateProduct([FromForm] ProductCreateViewModel model)
         {
-            if (newProduct == null)
+            if (model == null)
             {
                 return BadRequest("Новий продукт є пустим!");
             }
 
             try
             {
-                var product = await _productRepository.AddAsync(_mapper.Map<ProductEntity>(newProduct));
+                var product = _productRepository.AddAsync(_mapper.Map<ProductEntity>(model));
+                await _productRepository.Save();
 
-                foreach (var image in newProduct.Images)
+                foreach (var image in model.Images)
                 {
                     var imagePath = await ImageWorker.SaveImageAsync(image);
 
-                    await _photoRepository.AddAsync(new PhotoEntity { FilePath = imagePath, ProductId = product.Id });
+                    _photoRepository.AddAsync(new PhotoEntity { FilePath = imagePath, ProductId = product.Id });
                 }
+
+                await _photoRepository.Save();
 
                 return Ok();
             }

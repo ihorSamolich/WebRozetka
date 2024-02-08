@@ -43,7 +43,7 @@ const CategoryCard : React.FC<ICategoryItem> = (props) => {
                             <Button type="link" danger icon={<DeleteOutlined />} />
                         </Popconfirm>
 
-                        <Link style={{width: 'auto'}} to={`/categories/products-category/${id}`}>
+                        <Link style={{width: 'auto'}} to={`${id}/products`}>
                             <Button type="primary" >
                                 Переглянути товари
                             </Button>

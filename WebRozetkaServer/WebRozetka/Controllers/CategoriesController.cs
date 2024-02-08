@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebRozetka.Data.Entities.Category;
 using WebRozetka.Helpers;
 using WebRozetka.Interfaces.Repo;
+using WebRozetka.Models;
 using WebRozetka.Models.Category;
 
 namespace WebRozetka.Controllers
@@ -23,95 +24,133 @@ namespace WebRozetka.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCategoriesSearchPagedList([FromQuery] int page = 1, int pageSize = 4, string search = "")
+        public async Task<IActionResult> GetCategories([FromQuery] QueryParameters queryParameters)
         {
-            var count = await _categoryRepository.GetCountAsync(search);
-            var items = await _categoryRepository.GetPagedAllAsync(page, pageSize, search);
+            try
+            {
+                var count = await _categoryRepository.GetCountAsync(queryParameters.Query);
+                var items = _categoryRepository.GetAll(queryParameters);
 
-            return Ok(new { count, items });
+                return Ok(new { count, items });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Помилка сервера: " + ex.Message);
+            }
         }
 
         [HttpGet("names")]
         public async Task<IActionResult> GetCategoriesNames()
         {
-            var items = await _categoryRepository.GetAllAsync();
+            try
+            {
+                var items = _categoryRepository.GetAll();
 
-            var result = items.Select(item => new { item.Name, item.Id });
+                var result = items.Select(item => new { item.Name, item.Id });
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Помилка сервера: " + ex.Message);
+            }
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategoryById(int id)
         {
-            var item = await _categoryRepository.GetByIdAsync(id);
-
-            if (item == null)
+            try
             {
-                return NotFound("Категорію не знайдено!");
-            }
+                var item = await _categoryRepository.GetByIdAsync(id);
 
-            return Ok(item);
+                if (item == null)
+                {
+                    return NotFound("Категорію не знайдено!");
+                }
+
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Помилка сервера: " + ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CategoryCreateViewModel model)
         {
-            var item = _mapper.Map<CategoryEntity>(model);
-            var newEntity = await _categoryRepository.AddAsync(item);
-
-            if (newEntity == null)
+            try
             {
-                return BadRequest("Помилка створення категорії!");
-            }
+                var item = _mapper.Map<CategoryEntity>(model);
+                var newEntity = _categoryRepository.AddAsync(item);
+                await _categoryRepository.Save();
 
-            return Ok(item);
+                if (newEntity == null)
+                {
+                    return BadRequest("Помилка створення категорії!");
+                }
+
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Помилка сервера: " + ex.Message);
+            }
         }
 
         [HttpPut]
         public async Task<IActionResult> Edit([FromForm] CategoryEditViewModel model)
         {
-            var item = await _categoryRepository.GetByIdAsync(model.Id);
-
-            if (item == null)
+            try
             {
-                return NotFound("Категорію не знайдено!");
-            }
+                var item = await _categoryRepository.GetByIdAsync(model.Id);
 
-            if (model.Image != null)
-            {
-                ImageWorker.RemoveImage(item.Image);
-                item.Image = await ImageWorker.SaveImageAsync(model.Image);
-            }
+                if (item == null)
+                {
+                    return NotFound("Категорію не знайдено!");
+                }
 
-            item.Name = model.Name;
-            item.Description = model.Description;
+                if (model.Image != null)
+                {
+                    ImageWorker.RemoveImage(item.Image);
+                    item.Image = await ImageWorker.SaveImageAsync(model.Image);
+                }
 
-            var updatedItem = await _categoryRepository.UpdateAsync(item);
+                item.Name = model.Name;
+                item.Description = model.Description;
 
-            if (updatedItem != null)
-            {
+                var updatedItem = _categoryRepository.Update(item);
+                await _categoryRepository.Save();
+
                 return Ok(item);
             }
-            else
+            catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, "Помилка сервера: " + ex.Message);
             }
-
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _categoryRepository.DeleteAsync(id);
-
-            if (!result)
+            try
             {
-                return BadRequest("Помилка видалення категорії!");
-            }
+                _categoryRepository.DeleteAsync(id);
 
-            return Ok("Категорія успішно видалена!");
+                var result = await _categoryRepository.Save();
+
+                if (!result)
+                {
+                    return BadRequest("Помилка видалення категорії!");
+                }
+
+                return Ok("Категорія успішно видалена!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Помилка сервера: " + ex.Message);
+
+            }
         }
     }
 }

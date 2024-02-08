@@ -1,10 +1,20 @@
 import {ICategoriesData, ICategoryCreate, ICategoryItem, ICategoryName, ICategoryUpdate} from 'interfaces/categories';
 import {apiClient} from 'utils/api/apiClient.ts';
 import {useQuery, useMutation, useQueryClient} from 'react-query';
+import {IQueryParameters} from 'interfaces/IQueryParameters.ts';
 
 const fetchCategories = async (page: number, pageSize: number, search: string): Promise<ICategoriesData> => {
-    const response = await apiClient
-        .get(`/api/categories?page=${page}&pageSize=${pageSize}${search ? `&search=${search}`:''}`);
+
+    const queryParams : IQueryParameters = {
+        page: page,
+        pageCount: pageSize,
+        query: search,
+        orderBy: '',
+    };
+
+    const response = await apiClient.get('/api/categories', {
+        params: queryParams,
+    });
 
     return response.data as ICategoriesData;
 };

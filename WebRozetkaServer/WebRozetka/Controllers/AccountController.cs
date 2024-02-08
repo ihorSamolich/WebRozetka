@@ -39,9 +39,9 @@ namespace WebRozetka.Controllers
                 var token = await _jwtTokenService.CreateTokenAsync(user);
                 return Ok(new { token });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest("Повилка авторизації");
+                return BadRequest("Помилка авторизації: " + ex);
 
             }
         }
@@ -81,7 +81,7 @@ namespace WebRozetka.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Помилка авторизації: " + ex);
             }
         }
     }

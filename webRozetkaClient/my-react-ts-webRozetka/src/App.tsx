@@ -41,7 +41,7 @@ const App : React.FC = () => {
                             <Route path="?page=:pageNumber" element={<CategoriesList/>}/>
                             <Route path="create" element={<CategoryCreate/>}/>
                             <Route path="edit/:id" element={<CategoryEdit/>}/>
-                            <Route path="products-category/:categoryId" element={<ProductsList/>}/>
+                            <Route path=":categoryId/products" element={<ProductsList/>}/>
                         </Route>
 
                         <Route path="product/">
