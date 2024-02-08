@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WebRozetka")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+80473b84596b32e08631bba03ade5513ce0a0f21")]
 [assembly: System.Reflection.AssemblyProductAttribute("WebRozetka")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WebRozetka")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
