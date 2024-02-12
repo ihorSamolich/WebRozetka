@@ -9,15 +9,30 @@ export interface IProductState {
 }
 
 export interface IProductItem {
-    id: number,
+    id?: number | undefined;
     name: string,
-    price: number,
+    price: string,
     description: string,
     country: string | null,
     manufacturer: string | null,
     quantity: number,
     discount: number,
     photos: string[],
+    categoryId: number,
+}
+
+export interface IProductEdit {
+    id?: number | undefined;
+    name: string,
+    price: string,
+    description: string,
+    country: string | null,
+    manufacturer: string | null,
+    quantity: number,
+    discount: number,
+    newPhotos: File[] | null,
+    oldPhotos: string[] | null,
+    categoryId: number,
 }
 
 export interface IProductCreate {

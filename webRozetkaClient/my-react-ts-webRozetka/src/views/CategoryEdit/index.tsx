@@ -53,6 +53,8 @@ const CategoryEdit : React.FC = () => {
     const handlePreview = () => {
         const file : File = form.getFieldValue('image');
 
+        console.log(file);
+
         if (file) {
             setPreviewImage(URL.createObjectURL(file as RcFile));
         } else {

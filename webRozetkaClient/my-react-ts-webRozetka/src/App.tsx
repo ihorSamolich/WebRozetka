@@ -1,6 +1,19 @@
 import React, {useEffect} from 'react';
 import {Route, Routes} from 'react-router-dom';
-import {Login, ProductCreate, ProductsList, Home, NotFound, CategoriesList, CategoryEdit, CategoryCreate, Registration, ProductDetail,CreateOrder} from 'views';
+import {
+    Login,
+    ProductCreate,
+    ProductsList,
+    Home,
+    NotFound,
+    CategoriesList,
+    CategoryEdit,
+    CategoryCreate,
+    Registration,
+    ProductDetail,
+    CreateOrder,
+    ProductEdit,
+} from 'views';
 import { RequireAuth, Layout as SiteLayout} from 'components';
 import {autoLogin} from 'store/accounts/accounts.slice.ts';
 import {useAppDispatch} from 'hooks/redux';
@@ -47,6 +60,7 @@ const App : React.FC = () => {
                         <Route path="product/">
                             <Route path=":productId" element={<ProductDetail/>}/>
                             <Route path="create" element={<ProductCreate/>}/>
+                            <Route path="edit/:productId" element={<ProductEdit/>}/>
                         </Route>
 
                         <Route path="checkout/">

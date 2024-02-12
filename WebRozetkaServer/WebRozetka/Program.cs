@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -70,7 +71,34 @@ namespace WebRozetka
 
 
 
-            builder.Services.AddCors();
+            ////builder.Services.AddCors();
+            ////builder.Services.AddCors(options =>
+            ////{
+            ////    options.AddDefaultPolicy(
+            ////        policy =>
+            ////        {
+            ////            policy
+            ////                .AllowAnyOrigin()
+            ////                .AllowAnyMethod()
+            ////                .AllowAnyHeader();
+            ////        });
+            ////});
+
+
+            //builder.Services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllowSpecificOrigins",
+            //        builder =>
+            //        {
+            //            builder.WithOrigins("http://localhost:5173")
+            //                .AllowAnyHeader()
+            //                .AllowAnyMethod();
+            //        });
+            //});
+
+
+            //-----------
+
 
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
@@ -126,6 +154,7 @@ namespace WebRozetka
             #endregion
 
 
+
             var app = builder.Build();
 
             // Конфігурація Сваггера.
@@ -150,13 +179,15 @@ namespace WebRozetka
                 RequestPath = "/images"
             });
 
-            // Налаштування CORS
+            //Налаштування CORS
             app.UseCors(options => options
-                .WithOrigins(new[] { "http://localhost:5173" })
+                .WithOrigins(new[] { "http://localhost:5173", "http://localhost:5135" })
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
             );
+
+
             // -- Налаштування CORS
 
             app.UseAuthentication();

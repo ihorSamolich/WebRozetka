@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
 import {Divider, Row, Col, Flex, Typography, Button, Rate} from 'antd';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from 'hooks/redux';
 import {getProductById} from 'store/products/products.actions.ts';
 import {CompanyInformation, ProductDescriptions, ProductPictures} from 'components/index.ts';
-import {ExclamationCircleOutlined, ShoppingCartOutlined, CarOutlined} from '@ant-design/icons';
+import {ExclamationCircleOutlined, ShoppingCartOutlined, CarOutlined, EditOutlined} from '@ant-design/icons';
 import { Descriptions } from 'antd';
 import type { DescriptionsProps } from 'antd';
 import {IProductItem} from 'interfaces/product';
@@ -27,7 +27,6 @@ const deliveryInfo: DescriptionsProps['items'] = [
         </ul>,
     },
 ];
-
 const defaultProductData : IProductItem = {
     name: 'Без назви',
     description: 'Немає опису',
@@ -44,6 +43,7 @@ const ProductDetail : React.FC = () => {
     const {productId} = useParams();
     const dispatch = useAppDispatch();
     const {selectedItem} = useAppSelector(state => state.product);
+    const navigate = useNavigate();
 
     const {
         name,
@@ -67,6 +67,9 @@ const ProductDetail : React.FC = () => {
         }
     };
 
+    const handleEditProduct = () => {
+        navigate(`/product/edit/${productId}`);
+    };
 
     return (
         <>
@@ -80,7 +83,11 @@ const ProductDetail : React.FC = () => {
 
                     <Col style={{paddingLeft: 20}} span={16}>
                         <Flex justify={'space-between'}>
-                            <Title style={{marginBottom: 0}} level={2}>{name}</Title>
+                            <Row>
+                                <Title style={{marginBottom: 0}} level={2}>{name}</Title>
+                                <EditOutlined onClick={handleEditProduct} style={{marginLeft: 5, color: 'blue', cursor: 'pointer'}} />
+                            </Row>
+
                             <Flex gap={20}>
                                 <Title level={2} type={'success'} style={{margin: '0px'}}>{price.toFixed(2)} грн</Title>
                                 {

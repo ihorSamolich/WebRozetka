@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using WebRozetka.Data.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace WebRozetka.Models.Product
 {
-    public class ProductViewModel
+    public class ProductEditViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -14,6 +13,10 @@ namespace WebRozetka.Models.Product
         public int Quantity { get; set; }
         public decimal Discount { get; set; }
         public int CategoryId { get; set; }
-        public List<string> Photos { get; set; }
+        public List<string> oldPhotos { get; set; }
+
+        [BindProperty(Name = "newPhotos[]")]
+        public List<IFormFile> newPhotos { get; set; }
+
     }
 }

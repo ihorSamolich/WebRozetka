@@ -5,6 +5,6 @@ namespace WebRozetka.Interfaces.Repo
 {
     public interface IPhotoRepository : IRepository<PhotoEntity>
     {
-
+        IQueryable<PhotoEntity> GetAllByProduct(int productId);
     }
 }

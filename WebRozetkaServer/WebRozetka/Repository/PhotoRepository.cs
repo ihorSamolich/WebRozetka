@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using WebRozetka.Data;
 using WebRozetka.Data.Entities.Category;
 using WebRozetka.Data.Entities.Photo;
@@ -24,7 +25,12 @@ namespace WebRozetka.Repository
 
         public void DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var photo = _context.Set<PhotoEntity>().Find(id);
+
+            if (photo != null)
+            {
+                _context.Set<PhotoEntity>().Remove(photo);
+            }
         }
 
         public IQueryable<PhotoEntity> GetAll()
@@ -37,9 +43,14 @@ namespace WebRozetka.Repository
             throw new NotImplementedException();
         }
 
-        public Task<PhotoEntity> GetByIdAsync(int id)
+        public IQueryable<PhotoEntity> GetAllByProduct(int productId)
         {
-            throw new NotImplementedException();
+            return _context.Set<PhotoEntity>().Where(x => x.ProductId == productId);
+        }
+
+        public async Task<PhotoEntity> GetByIdAsync(int id)
+        {
+            return await _context.Set<PhotoEntity>().Where(x => x.Id == id).SingleOrDefaultAsync();
         }
 
         public Task<int> GetCountAsync(string search = "")

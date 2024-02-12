@@ -46,7 +46,10 @@ namespace WebRozetka.Repository
 
         public async Task<ProductEntity> GetByIdAsync(int id)
         {
-            return await _context.Set<ProductEntity>().Where(x => !x.IsDeleted && x.Id == id).FirstOrDefaultAsync();
+            return await _context.Set<ProductEntity>()
+                .Include(x => x.Photos)
+                .Where(x => !x.IsDeleted && x.Id == id)
+                .SingleOrDefaultAsync();
         }
 
         public Task<int> GetCountAsync(string search = "")
@@ -61,7 +64,8 @@ namespace WebRozetka.Repository
 
         public ProductEntity Update(ProductEntity entity)
         {
-            throw new NotImplementedException();
+            _context.Set<ProductEntity>().Update(entity);
+            return entity;
         }
     }
 }

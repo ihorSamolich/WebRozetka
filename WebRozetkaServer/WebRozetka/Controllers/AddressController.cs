@@ -8,11 +8,13 @@ using WebRozetka.Services;
 using WebRozetka.Models.Address;
 using Microsoft.EntityFrameworkCore;
 using WebRozetka.Data.Entities.Addres;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebRozetka.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
 
     public class AddressController : ControllerBase
     {

@@ -120,5 +120,51 @@ namespace WebRozetka.Controllers
                 return StatusCode(500, "Сталася помилка при створенні продукту: " + ex.Message);
             }
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateProduct([FromForm] ProductEditViewModel model)
+        {
+            if (model == null)
+            {
+                return BadRequest("Новий продукт є пустим!");
+            }
+
+            try
+            {
+                var product = _productRepository.Update(_mapper.Map<ProductEntity>(model));
+                await _productRepository.Save();
+
+                var oldPhotos = _photoRepository.GetAllByProduct(model.Id);
+
+                if (oldPhotos != null)
+                {
+                    foreach (var photo in oldPhotos)
+                    {
+                        if (!model.oldPhotos.Any(x => x == photo.FilePath))
+                        {
+                            _photoRepository.DeleteAsync(photo.Id);
+                            ImageWorker.RemoveImage(photo.FilePath);
+                        }
+                    }
+                }
+                if (model.newPhotos != null)
+                {
+                    foreach (var image in model.newPhotos)
+                    {
+                        var imagePath = await ImageWorker.SaveImageAsync(image);
+
+                        _photoRepository.AddAsync(new PhotoEntity { FilePath = imagePath, ProductId = product.Id });
+                    }
+                }
+
+                await _photoRepository.Save();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Сталася помилка при створенні продукту: " + ex.Message);
+            }
+        }
     }
 }

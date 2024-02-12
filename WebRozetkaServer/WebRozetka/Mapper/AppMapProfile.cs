@@ -40,6 +40,9 @@ namespace WebRozetka.Mapper
             CreateMap<ProductEntity, ProductViewModel>()
                .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Photos));
 
+            CreateMap<ProductViewModel, ProductEntity>()
+                .ForMember(dest => dest.Photos, opt => opt.Ignore());
+
             CreateMap<ProductCreateViewModel, ProductEntity>()
                 .ForMember(dest => dest.Photos, opt => opt.Ignore())
                 .AfterMap((src, dest) =>
@@ -47,6 +50,9 @@ namespace WebRozetka.Mapper
                     dest.IsDeleted = false;
                     dest.DateCreated = DateTime.UtcNow;
                 });
+
+            CreateMap<ProductEditViewModel, ProductEntity>()
+                .ForMember(dest => dest.Photos, opt => opt.Ignore());
 
             CreateMap<NPAreaItemViewModel, AreaEntity>();
 

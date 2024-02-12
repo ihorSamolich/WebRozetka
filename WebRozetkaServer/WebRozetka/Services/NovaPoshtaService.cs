@@ -53,9 +53,16 @@ namespace WebRozetka.Services
 
                 if (result.Data.Any())
                 {
-                    List<AreaEntity> dataEntities = _mapper.Map<List<AreaEntity>>(result.Data);
-                    _context.Areas.AddRange(dataEntities);
-                    _context.SaveChanges();
+                    foreach (var item in result.Data)
+                    {
+                        var entity = _context.Areas.SingleOrDefault(x => x.Ref == item.Ref);
+                        if (entity == null)
+                        {
+                            entity = _mapper.Map<AreaEntity>(item);
+                            _context.Areas.Add(entity);
+                            _context.SaveChanges();
+                        }
+                    }
                 }
                 else
                 {
@@ -94,10 +101,15 @@ namespace WebRozetka.Services
                     var result = JsonConvert.DeserializeObject<NPSettlementResponseViewModel>(responseData);
                     if (result.Data.Any())
                     {
-                        List<SettlementEntity> dataEntities =
-                            _mapper.Map<List<SettlementEntity>>(result.Data);
-
-                        _context.Settlements.AddRange(dataEntities);
+                        foreach (var item in result.Data)
+                        {
+                            var entity = _context.Settlements.SingleOrDefault(x => x.Ref == item.Ref);
+                            if (entity == null)
+                            {
+                                entity = _mapper.Map<SettlementEntity>(item);
+                                _context.Settlements.Add(entity);
+                            }
+                        }
                         _context.SaveChanges();
                         page++;
                     }
@@ -139,10 +151,15 @@ namespace WebRozetka.Services
                     var result = JsonConvert.DeserializeObject<NPWarehouseResponseViewModel>(responseData);
                     if (result.Data.Any())
                     {
-                        List<WarehouseEntity> dataEntities =
-                            _mapper.Map<List<WarehouseEntity>>(result.Data);
-
-                        _context.Warehouses.AddRange(dataEntities);
+                        foreach (var item in result.Data)
+                        {
+                            var entity = _context.Warehouses.SingleOrDefault(x => x.Ref == item.Ref);
+                            if (entity == null)
+                            {
+                                entity = _mapper.Map<WarehouseEntity>(item);
+                                _context.Warehouses.Add(entity);
+                            }
+                        }
                         _context.SaveChanges();
                         page++;
                     }

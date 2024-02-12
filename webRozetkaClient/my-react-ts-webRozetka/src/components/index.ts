@@ -11,5 +11,6 @@ import ProductDescriptions from  'components/ProductDescriptions';
 import CompanyInformation from 'components/CompanyInformation';
 import Layout from 'components/Layout';
 import ModalMap from 'components/ModalMap';
+import DraggableUploadListItemProps from 'components/DraggableUploadListItem';
 
-export {Layout,ModalMap, SiteSearch, CompanyInformation, ItemsNotFound, CategoryCard, RequireAuth, ProductDescriptions, ProductPictures, ServerError, SkeletonCategoryCard, TopHeader, SitePagination };
+export {Layout,ModalMap,DraggableUploadListItemProps, SiteSearch, CompanyInformation, ItemsNotFound, CategoryCard, RequireAuth, ProductDescriptions, ProductPictures, ServerError, SkeletonCategoryCard, TopHeader, SitePagination };

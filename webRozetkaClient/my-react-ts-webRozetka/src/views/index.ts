@@ -9,5 +9,6 @@ import ProductCreate from  'views/ProductCreate';
 import CreateOrder from  'views/CreateOrder';
 import ProductsList from 'views/ProductsList';
 import Login from 'views/Login';
+import ProductEdit from 'views/ProductEdit';
 
-export {Login, ProductsList, CategoriesList, CategoryCreate, CategoryEdit,CreateOrder, Home, NotFound,Registration, ProductDetail, ProductCreate};
+export {Login, ProductEdit, ProductsList, CategoriesList, CategoryCreate, CategoryEdit,CreateOrder, Home, NotFound,Registration, ProductDetail, ProductCreate};

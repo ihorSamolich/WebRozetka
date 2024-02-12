@@ -1,7 +1,13 @@
 import {AnyAction, AsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {Status} from 'utils/enums';
 import {IProductState} from 'interfaces/product';
-import {addProduct, getProductById, getProducts, getProductsByCategory} from 'store/products/products.actions.ts';
+import {
+    addProduct,
+    getProductById,
+    getProducts,
+    getProductsByCategory,
+    updateProduct,
+} from 'store/products/products.actions.ts';
 
 // eslint-disable-next-line
 type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
@@ -55,6 +61,12 @@ export const productSlice = createSlice({
             .addCase(addProduct.pending, (state) => {
                 state.items = [];
                 state.selectedItem = null;
+                state.status = Status.LOADING;
+            })
+            .addCase(updateProduct.fulfilled, (state) => {
+                state.status = Status.SUCCESS;
+            })
+            .addCase(updateProduct.pending, (state) => {
                 state.status = Status.LOADING;
             })
             .addMatcher(isRejectedAction, (state,action) => {
