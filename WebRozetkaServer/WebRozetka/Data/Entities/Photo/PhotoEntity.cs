@@ -12,6 +12,10 @@ namespace WebRozetka.Data.Entities.Photo
         [Required]
         [MaxLength(255)]
         public string FilePath { get; set; }
+
+        [Required]
+        public int Priority { get; set; }
+
         [Required]
         public int ProductId { get; set; }
         public virtual ProductEntity Product { get; set; }

@@ -67,6 +67,9 @@ export const updateProduct = createAsyncThunk<IProductItem, IProductEdit>(
     'product/updateProduct',
     async (payload,{rejectWithValue}) => {
         try {
+
+            console.log(payload);
+
             const response
                 = await apiClient.put<IProductItem>('/api/products', payload,
                     {

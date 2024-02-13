@@ -47,7 +47,7 @@ namespace WebRozetka.Repository
         public async Task<ProductEntity> GetByIdAsync(int id)
         {
             return await _context.Set<ProductEntity>()
-                .Include(x => x.Photos)
+                .Include(x => x.Photos.OrderBy(p => p.Priority))
                 .Where(x => !x.IsDeleted && x.Id == id)
                 .SingleOrDefaultAsync();
         }

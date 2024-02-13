@@ -21,6 +21,11 @@ export interface IProductItem {
     categoryId: number,
 }
 
+export interface IProductEditPhoto{
+    photo: string | undefined,
+    priority: number,
+}
+
 export interface IProductEdit {
     id?: number | undefined;
     name: string,
@@ -30,8 +35,8 @@ export interface IProductEdit {
     manufacturer: string | null,
     quantity: number,
     discount: number,
-    newPhotos: File[] | null,
-    oldPhotos: string[] | null,
+    newPhotos: IProductEditPhoto[] | null,
+    oldPhotos: IProductEditPhoto[] | null,
     categoryId: number,
 }
 

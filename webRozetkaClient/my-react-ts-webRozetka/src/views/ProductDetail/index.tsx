@@ -28,12 +28,13 @@ const deliveryInfo: DescriptionsProps['items'] = [
     },
 ];
 const defaultProductData : IProductItem = {
+    categoryId: 0,
     name: 'Без назви',
     description: 'Немає опису',
     discount: 0,
     id: 0,
     photos: [],
-    price: 0,
+    price: '0',
     quantity: 0,
     country: null,
     manufacturer: null,
@@ -62,7 +63,7 @@ const ProductDetail : React.FC = () => {
 
     const handleAddProductToBasket = (event: React.MouseEvent) => {
         event.stopPropagation();
-        if (selectedItem) {
+        if (selectedItem?.id) {
             dispatch(addToBasket({productId: selectedItem.id, count: 1}));
         }
     };
@@ -89,11 +90,11 @@ const ProductDetail : React.FC = () => {
                             </Row>
 
                             <Flex gap={20}>
-                                <Title level={2} type={'success'} style={{margin: '0px'}}>{price.toFixed(2)} грн</Title>
+                                <Title level={2} type={'success'} style={{margin: '0px'}}>{Number(price).toFixed(2)} грн</Title>
                                 {
                                     discount > 0 &&
                                     <Title level={5} style={{margin: '0px'}} delete type="danger">
-                                        {(price / (1 - discount / 100)).toFixed(2)}{' грн'}
+                                        {(Number(price) / (1 - discount / 100)).toFixed(2)}{' грн'}
                                     </Title>
                                 }
                             </Flex>
@@ -134,7 +135,7 @@ const ProductDetail : React.FC = () => {
                         <ProductDescriptions
                             name={name}
                             description={description}
-                            price = {price}
+                            price = {Number(price)}
                             country = {country}
                             manufacturer ={manufacturer}
                         />

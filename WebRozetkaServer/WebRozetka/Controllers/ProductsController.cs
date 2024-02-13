@@ -136,24 +136,29 @@ namespace WebRozetka.Controllers
 
                 var oldPhotos = _photoRepository.GetAllByProduct(model.Id);
 
+
                 if (oldPhotos != null)
                 {
                     foreach (var photo in oldPhotos)
                     {
-                        if (!model.oldPhotos.Any(x => x == photo.FilePath))
+                        if (!model.OldPhotos.Any(x => x.Photo == photo.FilePath))
                         {
                             _photoRepository.DeleteAsync(photo.Id);
                             ImageWorker.RemoveImage(photo.FilePath);
                         }
+                        else
+                        {
+                            photo.Priority = model.OldPhotos.SingleOrDefault(x => x.Photo == photo.FilePath).Priority;
+                        }
                     }
                 }
-                if (model.newPhotos != null)
+                if (model.NewPhotos != null)
                 {
-                    foreach (var image in model.newPhotos)
+                    foreach (var image in model.NewPhotos)
                     {
-                        var imagePath = await ImageWorker.SaveImageAsync(image);
+                        var imagePath = await ImageWorker.SaveImageAsync(image.Photo);
 
-                        _photoRepository.AddAsync(new PhotoEntity { FilePath = imagePath, ProductId = product.Id });
+                        _photoRepository.AddAsync(new PhotoEntity { FilePath = imagePath, ProductId = product.Id, Priority = image.Priority });
                     }
                 }
 

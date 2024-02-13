@@ -23,7 +23,7 @@ import {unwrapResult} from '@reduxjs/toolkit';
 import {useNotification} from 'hooks/notification';
 import {PlusOutlined} from '@ant-design/icons';
 import {APP_ENV} from 'env/index.ts';
-import {IProductEdit, IProductItem} from 'interfaces/product';
+import {IProductEdit, IProductEditPhoto, IProductItem} from 'interfaces/product';
 import type { DragEndEvent } from '@dnd-kit/core';
 import {
     arrayMove,
@@ -61,15 +61,15 @@ const ProductEdit : React.FC = () => {
 
     const onFinish = async (values: IProductEdit) => {
 
-        const oldPhotos : string[] = [];
-        const  newPhotos: File[] = [];
+        const oldPhotos : IProductEditPhoto[] = [];
+        const newPhotos: IProductEditPhoto[] = [];
 
         for (let i = 0; i < fileList.length; i++) {
             if (!fileList[i].size){
-                oldPhotos.push(fileList[i].name);
+                oldPhotos.push({photo: fileList[i].name, priority: i});
             }
             else {
-                newPhotos.push(fileList[i].originFileObj as File);
+                newPhotos.push({photo: fileList[i].thumbUrl, priority: i});
             }
         }
 
