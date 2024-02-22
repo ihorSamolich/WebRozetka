@@ -48,10 +48,22 @@ const items: MenuProps['items'] = [
         ],
     },
     {
-        key: '/products',
+        key: '/products/',
         icon: <AppstoreOutlined/>,
         label: 'Products',
         children: [
+            {
+                key: '/products',
+                icon: <AppstoreAddOutlined/>,
+                label: (
+                    <NavLink
+                        to="/product"
+                        style={{color: 'inherit', textDecoration: 'none'}}
+                    >
+                        All product
+                    </NavLink>
+                ),
+            },
             {
                 key: '/product/create',
                 icon: <AppstoreAddOutlined/>,

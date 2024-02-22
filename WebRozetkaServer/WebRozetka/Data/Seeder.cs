@@ -87,15 +87,15 @@ namespace WebRozetka.Data
                     novaPoshta.GetAreas();
                 }
 
-                if (!context.Settlements.Any())
-                {
-                    novaPoshta.GetSettlements();
-                }
+                //if (!context.Settlements.Any())
+                //{
+                //    novaPoshta.GetSettlements();
+                //}
 
-                if (!context.Warehouses.Any())
-                {
-                    novaPoshta.GetWarehouses();
-                }
+                //if (!context.Warehouses.Any())
+                //{
+                //    novaPoshta.GetWarehouses();
+                //}
             }
         }
     }

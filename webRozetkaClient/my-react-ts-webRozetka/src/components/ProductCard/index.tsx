@@ -28,7 +28,7 @@ const ProductCard : React.FC<IProductItem> = (props) => {
     };
 
     return (
-        <Col style={{padding: 10}} xxl={3} xl={4} lg={6} md={8} sm={12}>
+        <Col style={{padding: 10}} xxl={4} lg={6} md={8} sm={12}>
             <Badge.Ribbon
                 text={discount > 0 ? `Знижка - ${discount} %` : 'Вигідна пропозиція!'}
                 color={discount > 0 ? 'red' : 'green'}

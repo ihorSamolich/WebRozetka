@@ -1,8 +1,10 @@
 import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import {Navigation, Pagination} from 'swiper/modules';
+
 import {Flex, Image} from 'antd';
 import {APP_ENV} from 'env/index.ts';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import {Navigation, Pagination} from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
 
 interface IProductPicturesProps{

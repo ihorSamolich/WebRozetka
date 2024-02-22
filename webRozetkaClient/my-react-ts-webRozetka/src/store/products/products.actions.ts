@@ -1,14 +1,18 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {apiClient} from 'utils/api/apiClient.ts';
 import {handleAxiosError} from 'utils/errors/handleAxiosError.ts';
-import {IProductCreate, IProductEdit, IProductItem} from 'interfaces/product';
+import {IProductCreate, IProductData, IProductEdit, IProductItem} from 'interfaces/product';
+import {IQueryParameters} from 'interfaces/IQueryParameters.ts';
 
-export const getProducts = createAsyncThunk(
+export const getProducts = createAsyncThunk<IProductData, IQueryParameters>(
     'product/getProducts',
-    async (_,{rejectWithValue}) => {
+    async (queryParams,{rejectWithValue}) => {
+
         try {
             const response
-                = await apiClient.get<IProductItem[]>('/api/products');
+                = await apiClient.get<IProductData>('/api/products',{
+                    params: queryParams,
+                });
 
             return response.data;
         }  catch (error) {

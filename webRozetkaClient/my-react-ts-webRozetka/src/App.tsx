@@ -21,6 +21,7 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import {ReactQueryDevtools} from 'react-query/devtools';
 import {isTokenActive} from 'utils/storage/isTokenActive.ts';
 import {getLocalStorage} from 'utils/storage/localStorageUtils.ts';
+import ProductsAll from 'views/ProductsAll';
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ const App : React.FC = () => {
                         </Route>
 
                         <Route path="product/">
+                            <Route index element={<ProductsAll/>}/>
                             <Route path=":productId" element={<ProductDetail/>}/>
                             <Route path="create" element={<ProductCreate/>}/>
                             <Route path="edit/:productId" element={<ProductEdit/>}/>

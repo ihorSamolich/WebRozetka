@@ -29,7 +29,9 @@ namespace WebRozetka.Repository
 
         public IQueryable<ProductEntity> GetAll()
         {
-            return _context.Set<ProductEntity>().Where(x => !x.IsDeleted);
+            return _context.Set<ProductEntity>()
+                 .Include(x => x.Photos)
+                 .Where(x => !x.IsDeleted);
         }
 
         public IQueryable<ProductEntity> GetAll(QueryParameters queryParameters)

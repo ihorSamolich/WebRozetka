@@ -1,5 +1,9 @@
 import {Status} from 'utils/enums';
 
+export interface IProductData {
+    items: IProductItem[],
+    count: number,
+}
 export interface IProductState {
     items: IProductItem[],
     totalItems: number,

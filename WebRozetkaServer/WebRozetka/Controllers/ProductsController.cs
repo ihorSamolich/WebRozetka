@@ -19,7 +19,7 @@ namespace WebRozetka.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
@@ -70,6 +70,25 @@ namespace WebRozetka.Controllers
                 return StatusCode(500, "Сталася помилка при створенні продукту: " + ex.Message);
             }
         }
+
+
+        [HttpGet("hot-sales")]
+        public async Task<IActionResult> GetHotSalesProducts()
+        {
+            try
+            {
+                var productViewModels = _mapper.Map<List<ProductViewModel>>(_productRepository.GetAll());
+
+                var res = productViewModels.OrderByDescending(x => x.Discount).Where(x => x.Discount > 0 && x.Quantity > 1).Take(20);
+
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Сталася помилка при створенні продукту: " + ex.Message);
+            }
+        }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductById(int id)

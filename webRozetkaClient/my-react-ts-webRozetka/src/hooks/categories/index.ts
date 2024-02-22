@@ -9,7 +9,6 @@ const fetchCategories = async (page: number, pageSize: number, search: string): 
         page: page,
         pageCount: pageSize,
         query: search,
-        orderBy: '',
     };
 
     const response = await apiClient.get('/api/categories', {
